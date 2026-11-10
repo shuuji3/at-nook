@@ -74,7 +74,7 @@ export const CoverRoute = () => {
         disabled={!profile.data || opening}
         onClick={open}
       >
-        [open notebook]
+        open notebook
       </button>
     </section>
   );

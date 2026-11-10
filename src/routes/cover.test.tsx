@@ -46,7 +46,7 @@ describe("cover", () => {
     await user.type(screen.getByLabelText("handle"), "@bsky.app");
 
     expect(await screen.findByText("Bluesky")).toBeTruthy();
-    const button = screen.getByRole("button", { name: "[open notebook]" });
+    const button = screen.getByRole("button", { name: "open notebook" });
     expect(button).toBeEnabled();
 
     await user.click(button);
@@ -61,7 +61,7 @@ describe("cover", () => {
     await user.type(screen.getByLabelText("handle"), "missing.test");
 
     expect(await screen.findByText("this handle could not be found")).toBeTruthy();
-    expect(screen.getByRole("button", { name: "[open notebook]" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "open notebook" })).toBeDisabled();
   });
 
   it("never queries junk input", async () => {
@@ -79,7 +79,7 @@ describe("cover", () => {
     await settle(500);
 
     expect(queryFn).not.toHaveBeenCalled();
-    expect(screen.getByRole("button", { name: "[open notebook]" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "open notebook" })).toBeDisabled();
   });
 
   it("reports a failed sign-in", () => {
