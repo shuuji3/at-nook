@@ -1,0 +1,11 @@
+{
+  "client_id": "https://bluesky-notebook-reader.shuuji3.xyz/oauth-client-metadata.json",
+  "client_name": "bluesky notebook reader",
+  "application_type": "web",
+  "grant_types": ["authorization_code", "refresh_token"],
+  "response_types": ["code"],
+  "scope": "atproto",
+  "redirect_uris": ["https://bluesky-notebook-reader.shuuji3.xyz/oauth/callback"],
+  "token_endpoint_auth_method": "none",
+  "dpop_bound_access_tokens": true
+}
