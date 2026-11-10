@@ -3,7 +3,7 @@ import { useState } from "react";
 import { GroupSidebar, type Group } from "../components/group-sidebar";
 import { PersonTile } from "../components/person-tile";
 import { profileHref } from "../lib/format";
-import { followsQuery, listsQuery } from "../lib/queries";
+import { followsQuery, listQuery, listsQuery } from "../lib/queries";
 import { useSession } from "../lib/session";
 
 const FOLLOWING = "following";
@@ -21,22 +21,31 @@ export const ShelfRoute = () => {
     ...listsQuery(session?.did ?? ""),
     enabled: Boolean(session),
   });
+  const list = useInfiniteQuery({
+    ...listQuery(selected === FOLLOWING ? "" : selected),
+    enabled: Boolean(session) && selected !== FOLLOWING,
+  });
 
   if (!session) {
     return null;
   }
 
-  const people = follows.data?.pages.flatMap((page) => page.follows) ?? [];
+  const curating = selected !== FOLLOWING;
+  const followsPeople = follows.data?.pages.flatMap((page) => page.follows) ?? [];
+  const members = list.data?.pages.flatMap((page) => page.items.map((item) => item.subject)) ?? [];
+  const people = curating ? members : followsPeople;
   const curationLists = lists.data?.pages.flatMap((page) => page.lists) ?? [];
 
   const groups: Group[] = [
     { id: FOLLOWING, label: "following" },
-    ...curationLists.map((list) => ({
-      id: list.uri,
-      label: list.name,
-      count: list.listItemCount,
+    ...curationLists.map((entry) => ({
+      id: entry.uri,
+      label: entry.name,
+      count: entry.listItemCount,
     })),
   ];
+
+  const active = curating ? list : follows;
 
   return (
     <section className="shelf">
@@ -45,24 +54,26 @@ export const ShelfRoute = () => {
 
         <div className="shelf-page">
           <div className="shelf-grid">
-            <PersonTile
-              profile={{ did: session.did, handle: session.handle }}
-              href={profileHref(session.handle)}
-              caption="your notebook"
-            />
+            {!curating ? (
+              <PersonTile
+                profile={{ did: session.did, handle: session.handle }}
+                href={profileHref(session.handle)}
+                caption="your notebook"
+              />
+            ) : null}
             {people.map((profile) => (
               <PersonTile key={profile.did} profile={profile} href={profileHref(profile.handle)} />
             ))}
           </div>
 
-          {follows.isPending ? <p className="shelf-note">finding notebooks…</p> : null}
-          {follows.isError ? <p className="shelf-note">the shelf could not be reached</p> : null}
-          {follows.hasNextPage ? (
+          {active.isPending ? <p className="shelf-note">finding notebooks…</p> : null}
+          {active.isError ? <p className="shelf-note">the shelf could not be reached</p> : null}
+          {active.hasNextPage ? (
             <button
               className="page-turn"
               type="button"
-              disabled={follows.isFetchingNextPage}
-              onClick={() => void follows.fetchNextPage()}
+              disabled={active.isFetchingNextPage}
+              onClick={() => void active.fetchNextPage()}
             >
               more notebooks
             </button>

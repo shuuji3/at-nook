@@ -1,16 +1,19 @@
 import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vite-plus/test";
 
 const mocks = vi.hoisted(() => ({
   useSession: vi.fn(),
   followsQuery: vi.fn(),
   listsQuery: vi.fn(),
+  listQuery: vi.fn(),
 }));
 
 vi.mock("../lib/session", () => ({ useSession: mocks.useSession }));
 vi.mock("../lib/queries", () => ({
   followsQuery: mocks.followsQuery,
   listsQuery: mocks.listsQuery,
+  listQuery: mocks.listQuery,
 }));
 
 import { renderWithProviders } from "../test/render";
@@ -43,6 +46,12 @@ beforeEach(() => {
       ],
     }),
   );
+  mocks.listQuery.mockReturnValue(
+    page("list", {
+      list: { name: "for me", listItemCount: 1 },
+      items: [{ subject: { did: "did:plc:b", handle: "bob.test", displayName: "Bob" } }],
+    }),
+  );
 });
 
 describe("shelf", () => {
@@ -57,6 +66,16 @@ describe("shelf", () => {
     renderWithProviders(<ShelfRoute />);
 
     expect(await screen.findByText("Alice")).toBeTruthy();
+  });
+
+  it("swaps the people when another group is chosen", async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<ShelfRoute />);
+
+    await user.click(await screen.findByRole("button", { name: /for me/ }));
+
+    expect(await screen.findByText("Bob")).toBeTruthy();
+    expect(screen.queryByText("Alice")).toBeNull();
   });
 
   it("reports an unreachable shelf", async () => {
