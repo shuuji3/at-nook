@@ -81,13 +81,13 @@ describe("entry", () => {
     expect(screen.getByRole("article")).toBeTruthy();
   });
 
-  it("clips the reply target above the writing", () => {
+  it("links the reply target above the writing", () => {
     renderWithProviders(
       <Entry
         item={makeItem({ text: "my reply", createdAt: "2026-11-08T12:33:58.545Z" }, undefined, {
           parent: {
             $type: "app.bsky.feed.defs#postView",
-            uri: "at://p",
+            uri: "at://did:plc:a/app.bsky.feed.post/9",
             author: { handle: "p.test", displayName: "Pat" },
             record: { text: "parent text", createdAt: "2026-11-07T10:00:00.000Z" },
           },
@@ -96,7 +96,11 @@ describe("entry", () => {
       />,
     );
 
-    expect(screen.getByText("parent text")).toBeTruthy();
+    expect(screen.getByRole("link", { name: "@p.test" })).toHaveAttribute(
+      "href",
+      "https://bsky.app/profile/p.test/post/9",
+    );
+    expect(screen.queryByText("parent text")).toBeNull();
     expect(screen.getByText("my reply")).toBeTruthy();
   });
 
