@@ -46,6 +46,8 @@ describe("entry", () => {
     );
 
     expect(screen.getByText("hello")).toBeTruthy();
+    expect(screen.getByText("2026-11-08 (Sun)")).toBeTruthy();
+    expect(screen.getByText("12:33")).toBeTruthy();
     expect(screen.getAllByRole("img")).toHaveLength(4);
     expect(screen.getByAltText("first caption")).toBeTruthy();
     expect(screen.getByText("fourth caption")).toBeTruthy();

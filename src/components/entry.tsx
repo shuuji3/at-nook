@@ -8,6 +8,7 @@ import { RichText } from "./rich-text";
 interface EntryProps {
   item: AppBskyFeedDefs.FeedViewPost;
   index: number;
+  showDate?: boolean;
 }
 
 const readRecord = (record: unknown): { text: string; createdAt?: string; facets?: unknown } => {
@@ -29,7 +30,7 @@ const readRecord = (record: unknown): { text: string; createdAt?: string; facets
 };
 
 /** One dated diary entry: the writing, then whatever was pasted beside it. */
-export const Entry = ({ item, index }: EntryProps) => {
+export const Entry = ({ item, index, showDate = true }: EntryProps) => {
   const post = item.post;
   const { text, createdAt, facets } = readRecord(post.record);
   const stamp = createdAt ? splitTimestamp(createdAt) : null;
@@ -43,7 +44,7 @@ export const Entry = ({ item, index }: EntryProps) => {
     <article className="entry" data-entry={index}>
       {stamp ? (
         <time className="entry-time" dateTime={createdAt}>
-          <span className="entry-date">{stamp.date}</span>
+          {showDate ? <span className="entry-date">{stamp.date}</span> : null}
           <span className="entry-clock">{stamp.time}</span>
         </time>
       ) : null}

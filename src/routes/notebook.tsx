@@ -4,7 +4,7 @@ import { useParams } from "react-router";
 import { Entry } from "../components/entry";
 import { NotebookHeader } from "../components/notebook-header";
 import { NotebookShell } from "../components/notebook-shell";
-import { documentTitle } from "../lib/format";
+import { documentTitle, dayOf } from "../lib/format";
 import { authorFeedQuery, profileQuery } from "../lib/queries";
 
 /** One person's notebook: header band plus written entries. */
@@ -42,13 +42,23 @@ export const NotebookRoute = () => {
     .flatMap((page) => page.feed)
     .filter((item) => !item.reason);
 
+  // the date is written once per day; same-day entries only carry the time
+  let previousDay = "";
+  const dated = entries.map((item) => {
+    const record = item.post.record as { createdAt?: unknown };
+    const day = typeof record.createdAt === "string" ? dayOf(record.createdAt) : "";
+    const showDate = day !== "" && day !== previousDay;
+    previousDay = day;
+    return { item, showDate };
+  });
+
   return (
     <NotebookShell activeActor={profile.data.handle}>
       <NotebookHeader profile={profile.data} />
 
       <div className="entries">
-        {entries.map((item, index) => (
-          <Entry key={item.post.uri} item={item} index={index} />
+        {dated.map(({ item, showDate }, index) => (
+          <Entry key={item.post.uri} item={item} index={index} showDate={showDate} />
         ))}
       </div>
 

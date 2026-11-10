@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vite-plus/test";
 import {
   coverHue,
+  dayOf,
   documentTitle,
   listHref,
   listUri,
@@ -29,8 +30,12 @@ describe("format", () => {
 
   it("splits a timestamp into date and time", () => {
     const result = splitTimestamp("2026-11-08T12:33:58.545Z", "UTC");
-    expect(result.date).toBe("nov 8, 2026");
+    expect(result.date).toBe("2026-11-08 (Sun)");
     expect(result.time).toBe("12:33");
+  });
+
+  it("reads the calendar day of a timestamp", () => {
+    expect(dayOf("2026-11-08T23:59:00.000Z", "UTC")).toBe("2026-11-08");
   });
 
   it("keeps rotations in range and deterministic", () => {

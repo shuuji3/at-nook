@@ -25,14 +25,10 @@ export const rkeyFromUri = (uri: string): string => uri.split("/").at(-1) ?? "";
 export const splitTimestamp = (iso: string, timeZone?: string): { date: string; time: string } => {
   const date = new Date(iso);
   return {
-    date: new Intl.DateTimeFormat("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
+    date: `${dayOf(iso, timeZone)} (${new Intl.DateTimeFormat("en-US", {
+      weekday: "short",
       timeZone,
-    })
-      .format(date)
-      .toLowerCase(),
+    }).format(date)})`,
     time: new Intl.DateTimeFormat("en-GB", {
       hour: "2-digit",
       minute: "2-digit",
@@ -41,6 +37,15 @@ export const splitTimestamp = (iso: string, timeZone?: string): { date: string; 
     }).format(date),
   };
 };
+
+/** The calendar day of a timestamp, used to show the date once per day. */
+export const dayOf = (iso: string, timeZone?: string): string =>
+  new Intl.DateTimeFormat("en-CA", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    timeZone,
+  }).format(new Date(iso));
 
 export const rotationFor = (seed: string, index: number): number => {
   const value = hash(`${seed}:${index}`) / 0xffffffff;
