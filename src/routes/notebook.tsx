@@ -5,11 +5,14 @@ import { Entry } from "../components/entry";
 import { NotebookHeader } from "../components/notebook-header";
 import { NotebookShell } from "../components/notebook-shell";
 import { documentTitle, dayOf } from "../lib/format";
+import { useRulingSnap } from "../lib/use-ruling-snap";
 import { authorFeedQuery, profileQuery } from "../lib/queries";
 
 /** One person's notebook: header band plus written entries. */
 export const NotebookRoute = () => {
   const { actor = "" } = useParams<{ actor: string }>();
+
+  const headerRef = useRulingSnap<HTMLDivElement>();
 
   const profile = useQuery(profileQuery(actor));
   const feed = useInfiniteQuery({
@@ -54,7 +57,9 @@ export const NotebookRoute = () => {
 
   return (
     <NotebookShell>
-      <NotebookHeader profile={profile.data} />
+      <div className="header-snap" ref={headerRef}>
+        <NotebookHeader profile={profile.data} />
+      </div>
 
       <div className="entries">
         {dated.map(({ item, showDate }, index) => (
