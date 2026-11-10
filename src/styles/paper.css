@@ -349,8 +349,8 @@
 
 .header-handle {
   margin: 0;
-  font-family: var(--font-ui);
-  font-size: 15px;
+  font-family: var(--font-hand);
+  font-size: 20px;
   line-height: var(--line-height);
   color: var(--ink-soft);
 }
