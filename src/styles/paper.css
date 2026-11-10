@@ -472,7 +472,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: calc(var(--line-height) - 1.25rem + 1rem) calc(26px + 1rem);
-  margin-top: calc(var(--line-height) - 1.25rem);
+  margin-top: calc(var(--line-height) - 0.25rem);
 }
 
 .photo {
