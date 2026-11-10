@@ -39,25 +39,38 @@ export const EmbedNote = ({ embed, seed }: EmbedNoteProps) => {
     case "external":
       return (
         <a className="note note-external" href={embed.uri} target="_blank" rel="noreferrer">
+          <span className="note-body">
+            <span className="note-title">{embed.title || embed.uri}</span>
+            {embed.description ? (
+              <span className="note-description">{embed.description}</span>
+            ) : null}
+          </span>
           {embed.thumb ? (
             <img className="note-thumb" src={embed.thumb} alt="" loading="lazy" decoding="async" />
           ) : null}
-          <span className="note-title">{embed.title || embed.uri}</span>
-          {embed.description ? <span className="note-description">{embed.description}</span> : null}
         </a>
       );
 
     case "quote": {
       const stamp = embed.createdAt ? splitTimestamp(embed.createdAt) : null;
+      const href = profileHref(embed.handle);
 
       return (
         <blockquote className={`note note-quote note-quote-${embed.variant}`}>
           {embed.handle ? (
             <p className="note-quote-author">
-              <Link className="note-quote-name" to={profileHref(embed.handle)}>
-                {embed.displayName ?? embed.handle}
-              </Link>{" "}
-              <span className="note-quote-handle">@{embed.handle}</span>
+              {embed.displayName ? (
+                <>
+                  <Link className="note-quote-name" to={href}>
+                    {embed.displayName}
+                  </Link>
+                  <span className="note-quote-handle">@{embed.handle}</span>
+                </>
+              ) : (
+                <Link className="note-quote-name" to={href}>
+                  @{embed.handle}
+                </Link>
+              )}
               {stamp ? (
                 <a
                   className="note-quote-time"

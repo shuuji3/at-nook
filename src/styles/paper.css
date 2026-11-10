@@ -12,7 +12,7 @@
   --page-pad: 56px;
   /* gap between the red margin line and the writing */
   --text-pad: calc(var(--page-pad) + 24px);
-  --page-width: 760px;
+  --page-width: 960px;
 }
 
 /* the closed notebook */
@@ -226,7 +226,6 @@
   min-height: 190px;
   padding: 14px 12px 14px 26px;
   border-radius: 2px 6px 6px 2px;
-  text-decoration: none;
   color: var(--ink);
   background-image:
     linear-gradient(180deg, hsl(var(--cover-hue) 55% 76%), hsl(var(--cover-hue) 48% 62%)),
@@ -322,7 +321,7 @@
 .header-banner img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .header-face {
@@ -406,7 +405,6 @@
   line-height: var(--line-height);
   color: var(--ink-soft);
   text-align: right;
-  text-decoration: none;
 }
 
 .entry-body {
@@ -566,8 +564,8 @@
 /* clippings: links and quotes */
 .note {
   display: block;
-  margin: var(--line-height) 0 0;
-  padding: 0 var(--line-height);
+  margin: var(--line-height) 0.5rem 0;
+  padding: 0.25rem var(--line-height);
   border-left: 3px solid var(--margin-red);
   background: rgba(43, 58, 85, 0.05);
   font-family: var(--font-hand);
@@ -575,6 +573,33 @@
   line-height: var(--line-height);
   color: var(--ink);
   text-decoration: none;
+}
+
+.note a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.note-external {
+  display: flex;
+  gap: var(--line-height);
+  align-items: flex-start;
+  flex-wrap: nowrap;
+}
+
+.note-body {
+  display: grid;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.note-thumb {
+  flex: 0 0 auto;
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  order: 2;
 }
 
 .note-title {
@@ -589,36 +614,29 @@
   overflow-wrap: anywhere;
 }
 
-.note-thumb {
-  display: block;
-  float: right;
-  width: 96px;
-  height: 96px;
-  margin: 0 0 8px 12px;
-  object-fit: cover;
-}
-
 .note-quote {
-  margin: var(--line-height) 0 0;
-  padding: 0 var(--line-height);
+  margin: var(--line-height) 0.5rem 0;
+  padding: 0.25rem var(--line-height);
   border-left: 3px solid var(--ink-soft);
   background: rgba(43, 58, 85, 0.05);
 }
 
 .note-quote-reply {
-  border-left-style: dashed;
-  background: rgba(43, 58, 85, 0.03);
+  border-left-color: var(--margin-red);
 }
 
 .note-quote-author {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 0 8px;
   margin: 0;
   font-family: var(--font-hand);
   font-size: 17px;
   line-height: var(--line-height);
   color: var(--ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .note-quote-handle,
@@ -672,12 +690,6 @@
 
   .entry {
     grid-template-columns: 1fr;
-  }
-
-  .entry-time time {
-    grid-auto-flow: column;
-    justify-content: start;
-    gap: 8px;
   }
 }
 
