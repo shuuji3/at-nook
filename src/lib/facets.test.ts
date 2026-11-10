@@ -23,6 +23,22 @@ describe("toFacetSegments", () => {
     ]);
   });
 
+  it("splits a link facet carried under index", () => {
+    const text = "see example.com now";
+    const segments = toFacetSegments(text, [
+      {
+        index: { byteStart: 4, byteEnd: 15 },
+        features: [{ $type: "app.bsky.richtext.facet#link", uri: "https://example.com" }],
+      },
+    ]);
+
+    expect(segments).toEqual([
+      { text: "see " },
+      { text: "example.com", href: "https://example.com", kind: "link" },
+      { text: " now" },
+    ]);
+  });
+
   it("splits a mention and a tag", () => {
     const text = "hi @alice.test #bluesky";
     const segments = toFacetSegments(text, [

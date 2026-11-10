@@ -46,7 +46,9 @@ const readRange = (facet: unknown): FacetRange | null => {
     return null;
   }
 
-  const { byteStart, byteEnd } = facet;
+  // facets carry their offsets under "index"; tolerate a flat shape too
+  const index = isRecord(facet.index) ? facet.index : facet;
+  const { byteStart, byteEnd } = index;
   if (typeof byteStart !== "number" || typeof byteEnd !== "number" || byteEnd <= byteStart) {
     return null;
   }
