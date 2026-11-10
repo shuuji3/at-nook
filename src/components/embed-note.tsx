@@ -91,7 +91,7 @@ export const EmbedNote = ({ embed, seed, postDay }: EmbedNoteProps) => {
                   <>
                     <Link className="note-quote-name" to={href}>
                       {embed.displayName}
-                    </Link>
+                    </Link>{" "}
                     <span className="note-quote-handle">@{embed.handle}</span>
                   </>
                 ) : (

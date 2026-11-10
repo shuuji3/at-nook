@@ -649,7 +649,6 @@
 .note-quote-author {
   display: flex;
   flex-wrap: nowrap;
-  gap: 0 8px;
   margin: 0;
   font-family: var(--font-hand);
   font-size: 17px;
