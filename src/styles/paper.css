@@ -463,8 +463,8 @@
 .photos {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--line-height) 26px;
-  margin-top: var(--line-height);
+  gap: calc(var(--line-height) * 2) 26px;
+  margin-top: calc(var(--line-height) * 2);
 }
 
 .photo {
