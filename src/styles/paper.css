@@ -564,7 +564,7 @@
 /* clippings: links and quotes */
 .note {
   display: block;
-  margin: var(--line-height) 0.5rem 0;
+  margin: calc(var(--line-height) - 0.25rem) 0.5rem;
   padding: 0.25rem var(--line-height);
   border-left: 3px solid var(--margin-red);
   background: rgba(43, 58, 85, 0.05);
@@ -615,7 +615,7 @@
 }
 
 .note-quote {
-  margin: var(--line-height) 0.5rem 0;
+  margin: calc(var(--line-height) - 0.25rem) 0.5rem;
   padding: 0.25rem var(--line-height);
   border-left: 3px solid var(--ink-soft);
   background: rgba(43, 58, 85, 0.05);
@@ -635,8 +635,17 @@
   line-height: var(--line-height);
   color: var(--ink-soft);
   white-space: nowrap;
+}
+
+.note-quote-who {
+  flex: 0 1 auto;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.note-quote-time {
+  flex: 0 0 auto;
 }
 
 .note-quote-handle,
@@ -698,10 +707,23 @@
     --page-pad: 24px;
   }
 
+  .entry {
+    gap: 0;
+  }
+
+  .note {
+    padding-inline: 8px;
+  }
+
+  .note-quote-author {
+    font-size: 15px;
+  }
+
   .header-face {
     grid-template-columns: 1fr;
+    gap: var(--line-height) 0;
     align-items: start;
-    margin-top: -32px;
+    margin-top: calc(var(--line-height) * -1);
   }
 
   .photo-image,
