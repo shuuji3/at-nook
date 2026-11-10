@@ -1,26 +1,24 @@
 import { useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import type { EmbedImage } from "../lib/embed";
-import { tapeHue, tapeTilt } from "../lib/format";
-
 interface PhotoProps {
   image: EmbedImage;
-  index: number;
-  seed: string;
-  /** the photo's own tilt, already made distinct within its post */
+  /** per-photo values, spread apart within the post */
   tilt: number;
   nudge: number;
+  tapeTilt: number;
+  tapeHue: number;
 }
 
 /** A photo taped into the page; tap to enlarge it, tap again to put it back. */
-export const Photo = ({ image, index, seed, tilt, nudge }: PhotoProps) => {
+export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => {
   const [zoomed, setZoomed] = useState(false);
 
   const style = {
     "--tilt": `${tilt}deg`,
     "--nudge": `${nudge}px`,
-    "--tape-tilt": `${tapeTilt(seed, index)}deg`,
-    "--tape-hue": tapeHue(seed, index),
+    "--tape-tilt": `${tapeTilt}deg`,
+    "--tape-hue": tapeHue,
   } as CSSProperties;
 
   const frame = (extra: string, content: React.ReactNode) => (

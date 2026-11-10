@@ -52,20 +52,38 @@ export const rotationFor = (seed: string, index: number): number => {
   return Math.round((value * 4 - 2) * 10) / 10;
 };
 
-/**
- * One tilt per item, deterministic but re-selected when two items in the same
- * group would land on the same angle.
- */
-export const pickTilts = (seed: string, keys: string[]): number[] => {
-  const used = new Set<number>();
+const roundTo = (value: number, step: number): number => Math.round(value / step) * step;
 
-  return keys.map((key, index) => {
-    let tilt = rotationFor(`${seed}:${key}`, index);
-    for (let attempt = 1; used.has(tilt) && attempt <= 40; attempt += 1) {
-      tilt = rotationFor(`${seed}:${key}`, index + attempt);
+interface SpreadOptions {
+  min: number;
+  max: number;
+  step: number;
+  /** minimum distance to any already-picked value */
+  gap: number;
+}
+
+/**
+ * One value per key, deterministic yet spread apart: a value is re-drawn until it
+ * is at least `gap` away from every value already picked for this group.
+ */
+export const pickSpread = (seed: string, keys: string[], options: SpreadOptions): number[] => {
+  const { min, max, step, gap } = options;
+  const span = max - min;
+  const picked: number[] = [];
+
+  return keys.map((key) => {
+    let value = roundTo(min + (hash(`${seed}:${key}`) / 0xffffffff) * span, step);
+
+    for (let attempt = 1; attempt <= 64; attempt += 1) {
+      const clash = picked.some((other) => Math.abs(other - value) < gap);
+      if (!clash) {
+        break;
+      }
+      value = roundTo(min + (hash(`${seed}:${key}:${attempt}`) / 0xffffffff) * span, step);
     }
-    used.add(tilt);
-    return tilt;
+
+    picked.push(value);
+    return value;
   });
 };
 

@@ -10,10 +10,10 @@ describe("photo", () => {
     renderWithProviders(
       <Photo
         image={{ fullsize: "f", thumb: "t", alt: "a caption" }}
-        index={0}
-        seed="at://p"
         tilt={1.2}
         nudge={6}
+        tapeTilt={3}
+        tapeHue={200}
       />,
     );
 

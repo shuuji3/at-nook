@@ -7,7 +7,7 @@ import {
   listUri,
   profileHref,
   rkeyFromUri,
-  pickTilts,
+  pickSpread,
   rotationFor,
   splitTimestamp,
   stripAt,
@@ -46,15 +46,25 @@ describe("format", () => {
     expect(coverHue("did:plc:abc")).toBe(coverHue("did:plc:abc"));
   });
 
-  it("gives every photo in a post its own tilt", () => {
-    const tilts = pickTilts("at://post/1", ["a", "b", "c", "d"]);
+  it("keeps every photo in a post clearly apart", () => {
+    const keys = ["a", "b", "c", "d"];
+    const tilts = pickSpread("at://post/1", keys, { min: -2, max: 2, step: 0.1, gap: 0.6 });
+    const nudges = pickSpread("at://post/1", keys, { min: -8, max: 8, step: 0.1, gap: 3 });
 
-    expect(new Set(tilts).size).toBe(tilts.length);
-    expect(tilts).toEqual(pickTilts("at://post/1", ["a", "b", "c", "d"]));
+    for (let i = 0; i < keys.length; i += 1) {
+      for (let j = i + 1; j < keys.length; j += 1) {
+        expect(Math.abs((tilts[i] ?? 0) - (tilts[j] ?? 0))).toBeGreaterThanOrEqual(0.6);
+        expect(Math.abs((nudges[i] ?? 0) - (nudges[j] ?? 0))).toBeGreaterThanOrEqual(3);
+      }
+    }
+    expect(tilts).toEqual(
+      pickSpread("at://post/1", keys, { min: -2, max: 2, step: 0.1, gap: 0.6 }),
+    );
   });
 
-  it("re-selects when two photos would share a tilt", () => {
-    const tilts = pickTilts("at://post/1", ["same", "same", "same"]);
+  it("spreads identical keys apart", () => {
+    const keys = ["same", "same", "same"];
+    const tilts = pickSpread("at://post/1", keys, { min: -2, max: 2, step: 0.1, gap: 0.6 });
 
     expect(new Set(tilts).size).toBe(3);
   });

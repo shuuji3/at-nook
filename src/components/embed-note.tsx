@@ -2,11 +2,11 @@ import { Link } from "react-router";
 import type { EmbedView } from "../lib/embed";
 import {
   dayOf,
-  offsetFor,
-  pickTilts,
+  pickSpread,
   profileHref,
   rkeyFromUri,
   splitTimestamp,
+  tapeHue,
 } from "../lib/format";
 import { Photo } from "./photo";
 import { RichText } from "./rich-text";
@@ -27,11 +27,11 @@ export const EmbedNote = ({ embed, seed, postDay }: EmbedNoteProps) => {
 
   switch (embed.kind) {
     case "images": {
-      // each photo gets its own tilt, re-selected if two would collide
-      const tilts = pickTilts(
-        seed,
-        embed.images.map((image) => image.fullsize || image.thumb),
-      );
+      // every photo in the post gets its own tilt, nudge and tape angle
+      const keys = embed.images.map((image) => image.fullsize || image.thumb);
+      const tilts = pickSpread(seed, keys, { min: -2, max: 2, step: 0.1, gap: 0.6 });
+      const nudges = pickSpread(seed, keys, { min: -8, max: 8, step: 0.1, gap: 3 });
+      const tapes = pickSpread(seed, keys, { min: -8, max: 8, step: 0.1, gap: 3 });
 
       return (
         <div className="photos">
@@ -39,10 +39,10 @@ export const EmbedNote = ({ embed, seed, postDay }: EmbedNoteProps) => {
             <Photo
               key={`${image.thumb}-${index}`}
               image={image}
-              index={index}
-              seed={seed}
               tilt={tilts[index] ?? 0}
-              nudge={offsetFor(seed, index)}
+              nudge={nudges[index] ?? 0}
+              tapeTilt={tapes[index] ?? 0}
+              tapeHue={tapeHue(seed, index)}
             />
           ))}
         </div>
