@@ -342,7 +342,7 @@
 .header-title {
   display: flex;
   align-items: flex-start;
-  gap: 0.4em;
+  gap: 0.5em;
 }
 
 .header-handle {
