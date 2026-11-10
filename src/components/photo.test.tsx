@@ -1,0 +1,20 @@
+import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, it } from "vite-plus/test";
+import { renderWithProviders } from "../test/render";
+import { Photo } from "./photo";
+
+describe("photo", () => {
+  it("enlarges on tap and puts the print back on the second tap", async () => {
+    const user = userEvent.setup();
+    renderWithProviders(
+      <Photo image={{ fullsize: "f", thumb: "t", alt: "a caption" }} index={0} seed="at://p" />,
+    );
+
+    await user.click(screen.getByRole("button", { name: "a caption" }));
+    expect(screen.getByRole("button", { name: "close photo" })).toBeTruthy();
+
+    await user.click(screen.getByRole("button", { name: "close photo" }));
+    expect(screen.queryByRole("button", { name: "close photo" })).toBeNull();
+  });
+});
