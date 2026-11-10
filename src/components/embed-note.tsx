@@ -29,9 +29,10 @@ export const EmbedNote = ({ embed, seed, postDay }: EmbedNoteProps) => {
     case "images": {
       // every photo in the post gets its own tilt, nudge and tape angle
       const keys = embed.images.map((image) => image.fullsize || image.thumb);
+      // a different salt per property so the angles do not all correlate
       const tilts = pickSpread(seed, keys, { min: -2, max: 2, step: 0.1, gap: 0.6 });
-      const nudges = pickSpread(seed, keys, { min: -8, max: 8, step: 0.1, gap: 3 });
-      const tapes = pickSpread(seed, keys, { min: -8, max: 8, step: 0.1, gap: 3 });
+      const nudges = pickSpread(`${seed}:nudge`, keys, { min: -8, max: 8, step: 0.1, gap: 3 });
+      const tapes = pickSpread(`${seed}:tape`, keys, { min: -8, max: 8, step: 0.1, gap: 3 });
 
       return (
         <div className="photos">

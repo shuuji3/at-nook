@@ -52,7 +52,8 @@ export const rotationFor = (seed: string, index: number): number => {
   return Math.round((value * 4 - 2) * 10) / 10;
 };
 
-const roundTo = (value: number, step: number): number => Math.round(value / step) * step;
+const roundTo = (value: number, step: number): number =>
+  Number((Math.round(value / step) * step).toFixed(2));
 
 interface SpreadOptions {
   min: number;
