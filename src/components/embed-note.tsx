@@ -3,6 +3,7 @@ import type { EmbedView } from "../lib/embed";
 import { profileHref, rkeyFromUri, splitTimestamp } from "../lib/format";
 import { Photo } from "./photo";
 import { RichText } from "./rich-text";
+import { VideoPrint } from "./video-print";
 
 interface EmbedNoteProps {
   embed: EmbedView;
@@ -27,17 +28,12 @@ export const EmbedNote = ({ embed, seed }: EmbedNoteProps) => {
 
     case "video":
       return embed.thumbnail ? (
-        <div className="photos">
-          <Photo
-            image={{
-              fullsize: embed.thumbnail,
-              thumb: embed.thumbnail,
-              alt: embed.alt ? `video — ${embed.alt}` : "video",
-            }}
-            index={0}
-            seed={seed}
-          />
-        </div>
+        <VideoPrint
+          thumbnail={embed.thumbnail}
+          playlist={embed.playlist}
+          alt={embed.alt}
+          seed={seed}
+        />
       ) : null;
 
     case "external":
