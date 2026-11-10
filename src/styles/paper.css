@@ -369,7 +369,7 @@
 /* written entries */
 .entries {
   display: grid;
-  gap: 0;
+  gap: calc(var(--line-height) * 2);
   padding: 0 var(--page-pad) 0 var(--text-pad);
 }
 
