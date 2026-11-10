@@ -422,6 +422,21 @@
   white-space: pre-wrap;
 }
 
+.entry-reply {
+  margin: 0;
+  font-family: var(--font-hand);
+  font-size: 20px;
+  line-height: var(--line-height);
+  color: var(--ink-soft);
+  overflow-wrap: anywhere;
+}
+
+.entry-reply a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .page-turn {
   display: block;
   margin: 28px auto 0;
@@ -649,12 +664,22 @@
 .note-quote-author {
   display: flex;
   flex-wrap: nowrap;
+  gap: 0 0.5em;
   margin: 0;
+  overflow: hidden;
   font-family: var(--font-hand);
   font-size: 17px;
   line-height: var(--line-height);
   color: var(--ink-soft);
   white-space: nowrap;
+}
+
+.note-quote-handle {
+  color: var(--ink-soft);
+}
+
+.note-quote-time {
+  color: var(--ink-soft);
 }
 
 .note-quote-who {

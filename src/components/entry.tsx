@@ -1,10 +1,10 @@
 import type { AppBskyFeedDefs } from "@atcute/bluesky";
+import { Link } from "react-router";
 import { toEmbedView, toReplyView } from "../lib/embed";
-import { dayOf, rkeyFromUri, splitTimestamp } from "../lib/format";
+import { dayOf, profileHref, rkeyFromUri, splitTimestamp } from "../lib/format";
 import { useRulingSnap } from "../lib/use-ruling-snap";
 import { EmbedNote } from "./embed-note";
 import { RichText } from "./rich-text";
-
 interface EntryProps {
   item: AppBskyFeedDefs.FeedViewPost;
   index: number;
@@ -38,6 +38,7 @@ export const Entry = ({ item, index, showDate = true }: EntryProps) => {
   const quote = embed?.kind === "quote" ? embed : null;
   const media = embed && embed.kind !== "quote" ? embed : null;
   const reply = toReplyView(item.reply);
+  const replyHandle = reply?.kind === "quote" ? reply.handle : "";
   const embedRef = useRulingSnap<HTMLDivElement>();
   const entryRef = useRulingSnap<HTMLElement>();
   const postDay = createdAt ? dayOf(createdAt) : undefined;
@@ -61,6 +62,12 @@ export const Entry = ({ item, index, showDate = true }: EntryProps) => {
       <div className="entry-body">
         {reply ? <EmbedNote embed={reply} seed={post.uri} postDay={postDay} /> : null}
         {quote ? <EmbedNote embed={quote} seed={post.uri} postDay={postDay} /> : null}
+
+        {replyHandle ? (
+          <p className="entry-reply">
+            <Link to={profileHref(replyHandle)}>@{replyHandle}</Link>
+          </p>
+        ) : null}
 
         {text ? (
           <p className="entry-text">
