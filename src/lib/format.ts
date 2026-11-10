@@ -48,8 +48,25 @@ export const dayOf = (iso: string, timeZone?: string): string =>
   }).format(new Date(iso));
 
 export const rotationFor = (seed: string, index: number): number => {
-  const value = hash(`${seed}:tilt:${index}`) / 0xffffffff;
-  return Math.round((value * 8 - 4) * 10) / 10;
+  const value = hash(`${seed}:${index}`) / 0xffffffff;
+  return Math.round((value * 4 - 2) * 10) / 10;
+};
+
+/**
+ * One tilt per item, deterministic but re-selected when two items in the same
+ * group would land on the same angle.
+ */
+export const pickTilts = (seed: string, keys: string[]): number[] => {
+  const used = new Set<number>();
+
+  return keys.map((key, index) => {
+    let tilt = rotationFor(`${seed}:${key}`, index);
+    for (let attempt = 1; used.has(tilt) && attempt <= 40; attempt += 1) {
+      tilt = rotationFor(`${seed}:${key}`, index + attempt);
+    }
+    used.add(tilt);
+    return tilt;
+  });
 };
 
 /** A hand-pasted tape angle, in degrees, deterministic per photo. */

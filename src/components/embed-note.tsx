@@ -1,6 +1,13 @@
 import { Link } from "react-router";
 import type { EmbedView } from "../lib/embed";
-import { dayOf, profileHref, rkeyFromUri, splitTimestamp } from "../lib/format";
+import {
+  dayOf,
+  offsetFor,
+  pickTilts,
+  profileHref,
+  rkeyFromUri,
+  splitTimestamp,
+} from "../lib/format";
 import { Photo } from "./photo";
 import { RichText } from "./rich-text";
 import { VideoPrint } from "./video-print";
@@ -19,14 +26,28 @@ export const EmbedNote = ({ embed, seed, postDay }: EmbedNoteProps) => {
   }
 
   switch (embed.kind) {
-    case "images":
+    case "images": {
+      // each photo gets its own tilt, re-selected if two would collide
+      const tilts = pickTilts(
+        seed,
+        embed.images.map((image) => image.fullsize || image.thumb),
+      );
+
       return (
         <div className="photos">
           {embed.images.map((image, index) => (
-            <Photo key={`${image.thumb}-${index}`} image={image} index={index} seed={seed} />
+            <Photo
+              key={`${image.thumb}-${index}`}
+              image={image}
+              index={index}
+              seed={seed}
+              tilt={tilts[index] ?? 0}
+              nudge={offsetFor(seed, index)}
+            />
           ))}
         </div>
       );
+    }
 
     case "video":
       return embed.thumbnail ? (

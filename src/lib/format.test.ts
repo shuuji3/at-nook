@@ -7,6 +7,7 @@ import {
   listUri,
   profileHref,
   rkeyFromUri,
+  pickTilts,
   rotationFor,
   splitTimestamp,
   stripAt,
@@ -43,6 +44,19 @@ describe("format", () => {
     expect(a).toBe(rotationFor("at://post/1", 0));
     expect(Math.abs(a)).toBeLessThanOrEqual(2);
     expect(coverHue("did:plc:abc")).toBe(coverHue("did:plc:abc"));
+  });
+
+  it("gives every photo in a post its own tilt", () => {
+    const tilts = pickTilts("at://post/1", ["a", "b", "c", "d"]);
+
+    expect(new Set(tilts).size).toBe(tilts.length);
+    expect(tilts).toEqual(pickTilts("at://post/1", ["a", "b", "c", "d"]));
+  });
+
+  it("re-selects when two photos would share a tilt", () => {
+    const tilts = pickTilts("at://post/1", ["same", "same", "same"]);
+
+    expect(new Set(tilts).size).toBe(3);
   });
 
   it("never drops the handle from the title", () => {

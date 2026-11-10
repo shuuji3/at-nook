@@ -8,7 +8,13 @@ describe("photo", () => {
   it("enlarges on tap and puts the print back on the second tap", async () => {
     const user = userEvent.setup();
     renderWithProviders(
-      <Photo image={{ fullsize: "f", thumb: "t", alt: "a caption" }} index={0} seed="at://p" />,
+      <Photo
+        image={{ fullsize: "f", thumb: "t", alt: "a caption" }}
+        index={0}
+        seed="at://p"
+        tilt={1.2}
+        nudge={6}
+      />,
     );
 
     await user.click(screen.getByRole("button", { name: "a caption" }));
