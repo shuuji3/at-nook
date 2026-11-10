@@ -355,6 +355,14 @@
   color: var(--ink-soft);
 }
 
+.header-pronouns {
+  margin: 0;
+  font-family: var(--font-hand);
+  font-size: 18px;
+  line-height: var(--line-height);
+  color: var(--ink-soft);
+}
+
 .header-bio {
   margin: 0;
   max-width: 60ch;

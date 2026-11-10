@@ -106,4 +106,15 @@ describe("notebook", () => {
 
     expect(await screen.findByText("the rest of the notebook is empty")).toBeTruthy();
   });
+
+  it("shows pronouns when the profile has them", async () => {
+    mocks.profileQuery.mockImplementation((actor: string) => ({
+      queryKey: ["profile", actor],
+      queryFn: async () => ({ ...profile, handle: actor, pronouns: "she/her" }),
+    }));
+
+    renderWithProviders(<App />, { route: "/profile/bsky.app" });
+
+    expect(await screen.findByText("she/her")).toBeTruthy();
+  });
 });

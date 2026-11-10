@@ -27,6 +27,7 @@ export const NotebookHeader = ({ profile }: NotebookHeaderProps) => {
         <div className="header-words">
           <h1 className="header-name">{name}</h1>
           <p className="header-handle">@{profile.handle}</p>
+          {profile.pronouns ? <p className="header-pronouns">{profile.pronouns}</p> : null}
           {profile.description ? <p className="header-bio">{profile.description}</p> : null}
         </div>
       </div>
