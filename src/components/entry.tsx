@@ -1,6 +1,7 @@
 import type { AppBskyFeedDefs } from "@atcute/bluesky";
 import { toEmbedView } from "../lib/embed";
 import { splitTimestamp } from "../lib/format";
+import { useRulingSnap } from "../lib/use-ruling-snap";
 import { EmbedNote } from "./embed-note";
 
 interface EntryProps {
@@ -29,6 +30,8 @@ const readRecord = (record: unknown): { text: string; createdAt?: string } => {
 export const Entry = ({ post, index }: EntryProps) => {
   const { text, createdAt } = readRecord(post.record);
   const stamp = createdAt ? splitTimestamp(createdAt) : null;
+  const embed = toEmbedView(post.embed);
+  const embedRef = useRulingSnap<HTMLDivElement>();
 
   return (
     <article className="entry" data-entry={index}>
@@ -41,7 +44,11 @@ export const Entry = ({ post, index }: EntryProps) => {
 
       <div className="entry-body">
         {text ? <p className="entry-text">{text}</p> : null}
-        <EmbedNote embed={toEmbedView(post.embed)} seed={post.uri} />
+        {embed ? (
+          <div className="embed-snap" ref={embedRef}>
+            <EmbedNote embed={embed} seed={post.uri} />
+          </div>
+        ) : null}
       </div>
     </article>
   );
