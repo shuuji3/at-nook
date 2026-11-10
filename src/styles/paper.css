@@ -256,12 +256,6 @@
   overflow-wrap: anywhere;
 }
 
-.mini-caption {
-  font-family: var(--font-hand);
-  font-size: 16px;
-  color: var(--ink-soft);
-}
-
 @media (prefers-reduced-motion: no-preference) {
   .mini-notebook:hover {
     transform: translateY(-3px) rotate(-0.6deg);

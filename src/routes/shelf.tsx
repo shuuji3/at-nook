@@ -54,13 +54,6 @@ export const ShelfRoute = () => {
 
         <div className="shelf-page">
           <div className="shelf-grid">
-            {!curating ? (
-              <PersonTile
-                profile={{ did: session.did, handle: session.handle }}
-                href={profileHref(session.handle)}
-                caption="your notebook"
-              />
-            ) : null}
             {people.map((profile) => (
               <PersonTile key={profile.did} profile={profile} href={profileHref(profile.handle)} />
             ))}
