@@ -74,7 +74,7 @@ export const authorFeedQuery = (actor: string) =>
           params: {
             actor: actor as ActorIdentifier,
             limit: 50,
-            filter: "posts_no_replies",
+            filter: "posts_with_replies",
             cursor: pageParam,
           },
         }),
