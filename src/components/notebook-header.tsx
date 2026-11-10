@@ -25,7 +25,7 @@ export const NotebookHeader = ({ profile }: NotebookHeaderProps) => {
 
       <div className="header-face">
         <span className="header-avatar">
-          <Avatar src={profile.avatar} alt={name} size={80} />
+          <Avatar src={profile.avatar} alt={name} size={88} />
         </span>
         <div className="header-words">
           <h1 className="header-name">{name}</h1>

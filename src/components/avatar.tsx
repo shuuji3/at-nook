@@ -1,20 +1,36 @@
+import type { CSSProperties } from "react";
+import { rotationFor } from "../lib/format";
+
 interface AvatarProps {
   src?: string;
   alt: string;
   size?: number;
 }
 
-/** A round print of a profile picture, or a paper stamp with the first letter. */
-export const Avatar = ({ src, alt, size = 44 }: AvatarProps) => {
-  const style = { width: size, height: size };
-
-  if (!src) {
-    return (
-      <span className="avatar avatar-fallback" style={style} aria-hidden="true">
+/** A profile picture pasted in like a small print: white border, slight tilt, no tape. */
+export const Avatar = ({ src, alt, size = 44 }: AvatarProps) => (
+  <span
+    className="avatar-print"
+    style={{ "--avatar-tilt": `${rotationFor(alt, 0)}deg` } as CSSProperties}
+  >
+    {src ? (
+      <img
+        className="avatar"
+        src={src}
+        alt=""
+        width={size}
+        height={size}
+        loading="lazy"
+        decoding="async"
+      />
+    ) : (
+      <span
+        className="avatar avatar-fallback"
+        style={{ width: size, height: size }}
+        aria-hidden="true"
+      >
         {(alt[0] ?? "?").toUpperCase()}
       </span>
-    );
-  }
-
-  return <img className="avatar" style={style} src={src} alt="" loading="lazy" decoding="async" />;
-};
+    )}
+  </span>
+);
