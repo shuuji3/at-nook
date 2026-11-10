@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router";
 import { App } from "./app";
 import "./styles/fonts.css";
+import "./styles/zen-kurenaido.css";
 import "./styles/global.css";
 import "./styles/paper.css";
 

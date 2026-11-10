@@ -22,6 +22,7 @@
 }
 
 :root {
-  --font-hand: "Shadows Into Light", cursive;
+  /* latin uses the handwriting font; japanese falls through to Zen Kurenaido */
+  --font-hand: "Shadows Into Light", "Zen Kurenaido", cursive;
   --font-ui: system-ui, sans-serif;
 }
