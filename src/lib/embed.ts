@@ -18,10 +18,13 @@ export type EmbedView =
     }
   | {
       kind: "quote";
+      variant: "reply" | "quote";
       uri: string;
       handle: string;
       displayName?: string;
+      createdAt?: string;
       text: string;
+      facets?: unknown;
     }
   | { kind: "unsupported" }
   | null;
@@ -85,14 +88,43 @@ export const toEmbedView = (embed: unknown): EmbedView => {
 
       return {
         kind: "quote",
+        variant: "quote",
         uri: readString(record.uri) ?? "",
         handle: readString(author.handle) ?? "",
         displayName: readString(author.displayName),
+        createdAt: readString(value.createdAt),
         text: readString(value.text) ?? "",
+        facets: value.facets,
       };
     }
 
     default:
       return { kind: "unsupported" };
   }
+};
+
+/** Reads the post a feed item replies to, so it can be clipped into the entry. */
+export const toReplyView = (reply: unknown): EmbedView => {
+  if (!isRecord(reply)) {
+    return null;
+  }
+
+  const parent = reply.parent;
+  if (!isRecord(parent) || parent.$type !== "app.bsky.feed.defs#postView") {
+    return null;
+  }
+
+  const author = isRecord(parent.author) ? parent.author : {};
+  const value = isRecord(parent.record) ? parent.record : {};
+
+  return {
+    kind: "quote",
+    variant: "reply",
+    uri: readString(parent.uri) ?? "",
+    handle: readString(author.handle) ?? "",
+    displayName: readString(author.displayName),
+    createdAt: readString(value.createdAt),
+    text: readString(value.text) ?? "",
+    facets: value.facets,
+  };
 };

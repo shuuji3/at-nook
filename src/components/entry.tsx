@@ -1,15 +1,15 @@
 import type { AppBskyFeedDefs } from "@atcute/bluesky";
-import { toEmbedView } from "../lib/embed";
+import { toEmbedView, toReplyView } from "../lib/embed";
 import { splitTimestamp } from "../lib/format";
 import { useRulingSnap } from "../lib/use-ruling-snap";
 import { EmbedNote } from "./embed-note";
 
 interface EntryProps {
-  post: AppBskyFeedDefs.PostView;
+  item: AppBskyFeedDefs.FeedViewPost;
   index: number;
 }
 
-const readRecord = (record: unknown): { text: string; createdAt?: string } => {
+const readRecord = (record: unknown): { text: string; createdAt?: string; facets?: unknown } => {
   if (typeof record !== "object" || record === null) {
     return { text: "" };
   }
@@ -23,14 +23,19 @@ const readRecord = (record: unknown): { text: string; createdAt?: string } => {
   return {
     text: typeof fields.text === "string" ? fields.text : "",
     createdAt,
+    facets: fields.facets,
   };
 };
 
 /** One dated diary entry: the writing, then whatever was pasted beside it. */
-export const Entry = ({ post, index }: EntryProps) => {
+export const Entry = ({ item, index }: EntryProps) => {
+  const post = item.post;
   const { text, createdAt } = readRecord(post.record);
   const stamp = createdAt ? splitTimestamp(createdAt) : null;
   const embed = toEmbedView(post.embed);
+  const quote = embed?.kind === "quote" ? embed : null;
+  const media = embed && embed.kind !== "quote" ? embed : null;
+  const reply = toReplyView(item.reply);
   const embedRef = useRulingSnap<HTMLDivElement>();
 
   return (
@@ -43,10 +48,14 @@ export const Entry = ({ post, index }: EntryProps) => {
       ) : null}
 
       <div className="entry-body">
+        {reply ? <EmbedNote embed={reply} seed={post.uri} /> : null}
+        {quote ? <EmbedNote embed={quote} seed={post.uri} /> : null}
+
         {text ? <p className="entry-text">{text}</p> : null}
-        {embed ? (
-          <div className="embed-snap" ref={embedRef}>
-            <EmbedNote embed={embed} seed={post.uri} />
+
+        {media ? (
+          <div className="entry-snap" ref={embedRef}>
+            <EmbedNote embed={media} seed={post.uri} />
           </div>
         ) : null}
       </div>

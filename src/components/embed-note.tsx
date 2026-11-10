@@ -47,7 +47,7 @@ export const EmbedNote = ({ embed, seed }: EmbedNoteProps) => {
 
     case "quote":
       return (
-        <blockquote className="note note-quote">
+        <blockquote className={`note note-quote note-quote-${embed.variant}`}>
           {embed.handle ? (
             <Link className="note-quote-author" to={profileHref(embed.handle)}>
               @{embed.handle}

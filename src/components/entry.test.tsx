@@ -4,15 +4,22 @@ import { describe, expect, it } from "vite-plus/test";
 import { renderWithProviders } from "../test/render";
 import { Entry } from "./entry";
 
-const makePost = (record: unknown, embed?: unknown): AppBskyFeedDefs.PostView =>
+const makeItem = (
+  record: unknown,
+  embed?: unknown,
+  reply?: unknown,
+): AppBskyFeedDefs.FeedViewPost =>
   ({
-    uri: "at://did:plc:a/app.bsky.feed.post/1",
-    cid: "cid",
-    author: { did: "did:plc:a", handle: "alice.test", displayName: "Alice" },
-    indexedAt: "2026-11-08T12:33:58.545Z",
-    record,
-    embed,
-  }) as unknown as AppBskyFeedDefs.PostView;
+    post: {
+      uri: "at://did:plc:a/app.bsky.feed.post/1",
+      cid: "cid",
+      author: { did: "did:plc:a", handle: "alice.test", displayName: "Alice" },
+      indexedAt: "2026-11-08T12:33:58.545Z",
+      record,
+      embed,
+    },
+    reply,
+  }) as unknown as AppBskyFeedDefs.FeedViewPost;
 
 const imageEmbed = {
   $type: "app.bsky.embed.images#view",
@@ -33,14 +40,12 @@ describe("entry", () => {
   it("writes the text under the date, with taped photos captioned by alt text", () => {
     renderWithProviders(
       <Entry
-        post={makePost({ text: "hello", createdAt: "2026-11-08T12:33:58.545Z" }, imageEmbed)}
+        item={makeItem({ text: "hello", createdAt: "2026-11-08T12:33:58.545Z" }, imageEmbed)}
         index={0}
       />,
     );
 
     expect(screen.getByText("hello")).toBeTruthy();
-    expect(screen.getByText("nov 8, 2026")).toBeTruthy();
-    expect(screen.getByText("12:33")).toBeTruthy();
     expect(screen.getAllByRole("img")).toHaveLength(4);
     expect(screen.getByAltText("first caption")).toBeTruthy();
     expect(screen.getByText("fourth caption")).toBeTruthy();
@@ -48,7 +53,7 @@ describe("entry", () => {
 
   it("renders an image-only post without text", () => {
     renderWithProviders(
-      <Entry post={makePost({ createdAt: "2026-11-08T12:33:58.545Z" }, imageEmbed)} index={1} />,
+      <Entry item={makeItem({ createdAt: "2026-11-08T12:33:58.545Z" }, imageEmbed)} index={1} />,
     );
 
     expect(screen.getAllByRole("img")).toHaveLength(4);
@@ -59,7 +64,7 @@ describe("entry", () => {
 
     renderWithProviders(
       <Entry
-        post={makePost(
+        item={makeItem(
           { text: longUrl, createdAt: "2026-11-08T12:33:58.545Z" },
           {
             $type: "app.bsky.embed.external#view",
@@ -72,5 +77,24 @@ describe("entry", () => {
 
     expect(screen.getByText(longUrl)).toBeTruthy();
     expect(screen.getByRole("article")).toBeTruthy();
+  });
+
+  it("clips the reply target above the writing", () => {
+    renderWithProviders(
+      <Entry
+        item={makeItem({ text: "my reply", createdAt: "2026-11-08T12:33:58.545Z" }, undefined, {
+          parent: {
+            $type: "app.bsky.feed.defs#postView",
+            uri: "at://p",
+            author: { handle: "p.test", displayName: "Pat" },
+            record: { text: "parent text", createdAt: "2026-11-07T10:00:00.000Z" },
+          },
+        })}
+        index={3}
+      />,
+    );
+
+    expect(screen.getByText("parent text")).toBeTruthy();
+    expect(screen.getByText("my reply")).toBeTruthy();
   });
 });

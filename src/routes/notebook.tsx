@@ -48,7 +48,7 @@ export const NotebookRoute = () => {
 
       <div className="entries">
         {entries.map((item, index) => (
-          <Entry key={item.post.uri} post={item.post} index={index} />
+          <Entry key={item.post.uri} item={item} index={index} />
         ))}
       </div>
 

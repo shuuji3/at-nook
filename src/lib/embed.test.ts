@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
-import { toEmbedView } from "./embed";
+import { toEmbedView, toReplyView } from "./embed";
 
 describe("toEmbedView", () => {
   it("returns null when there is no embed", () => {
@@ -63,11 +63,38 @@ describe("toEmbedView", () => {
       }),
     ).toEqual({
       kind: "quote",
+      variant: "quote",
       uri: "at://q",
       handle: "q.test",
       displayName: undefined,
+      createdAt: undefined,
       text: "quoted",
+      facets: undefined,
     });
+  });
+
+  it("maps a reply target from the feed item", () => {
+    expect(
+      toReplyView({
+        parent: {
+          $type: "app.bsky.feed.defs#postView",
+          uri: "at://p",
+          author: { handle: "p.test", displayName: "Pat" },
+          record: { text: "parent text", createdAt: "2026-11-08T12:33:58.545Z" },
+        },
+      }),
+    ).toEqual({
+      kind: "quote",
+      variant: "reply",
+      uri: "at://p",
+      handle: "p.test",
+      displayName: "Pat",
+      createdAt: "2026-11-08T12:33:58.545Z",
+      text: "parent text",
+      facets: undefined,
+    });
+    expect(toReplyView(undefined)).toBeNull();
+    expect(toReplyView({ parent: { $type: "app.bsky.feed.defs#notFoundPost" } })).toBeNull();
   });
 
   it("marks records that cannot be shown as unsupported", () => {

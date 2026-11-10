@@ -7,7 +7,7 @@ describe("embed note", () => {
   it("writes a quote without linking a missing author", () => {
     renderWithProviders(
       <EmbedNote
-        embed={{ kind: "quote", uri: "at://q", handle: "", text: "quoted" }}
+        embed={{ kind: "quote", variant: "quote", uri: "at://q", handle: "", text: "quoted" }}
         seed="at://q"
       />,
     );
@@ -21,6 +21,7 @@ describe("embed note", () => {
       <EmbedNote
         embed={{
           kind: "quote",
+          variant: "quote",
           uri: "at://q",
           handle: "q.test",
           text: "quoted",
