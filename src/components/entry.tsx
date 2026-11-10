@@ -1,6 +1,6 @@
 import type { AppBskyFeedDefs } from "@atcute/bluesky";
 import { toEmbedView, toReplyView } from "../lib/embed";
-import { splitTimestamp } from "../lib/format";
+import { splitTimestamp, rkeyFromUri } from "../lib/format";
 import { useRulingSnap } from "../lib/use-ruling-snap";
 import { EmbedNote } from "./embed-note";
 import { RichText } from "./rich-text";
@@ -43,10 +43,17 @@ export const Entry = ({ item, index, showDate = true }: EntryProps) => {
   return (
     <article className="entry" data-entry={index}>
       {stamp ? (
-        <time className="entry-time" dateTime={createdAt}>
-          {showDate ? <span className="entry-date">{stamp.date}</span> : null}
-          <span className="entry-clock">{stamp.time}</span>
-        </time>
+        <a
+          className="entry-time"
+          href={`https://bsky.app/profile/${post.author.handle}/post/${rkeyFromUri(post.uri)}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <time dateTime={createdAt}>
+            {showDate ? <span className="entry-date">{stamp.date}</span> : null}
+            <span className="entry-clock">{stamp.time}</span>
+          </time>
+        </a>
       ) : null}
 
       <div className="entry-body">

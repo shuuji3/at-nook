@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import type { EmbedView } from "../lib/embed";
-import { profileHref, splitTimestamp } from "../lib/format";
+import { profileHref, rkeyFromUri, splitTimestamp } from "../lib/format";
 import { Photo } from "./photo";
 import { RichText } from "./rich-text";
 
@@ -58,9 +58,14 @@ export const EmbedNote = ({ embed, seed }: EmbedNoteProps) => {
               </Link>{" "}
               <span className="note-quote-handle">@{embed.handle}</span>
               {stamp ? (
-                <time className="note-quote-time" dateTime={embed.createdAt}>
-                  {`${stamp.date} ${stamp.time}`}
-                </time>
+                <a
+                  className="note-quote-time"
+                  href={`https://bsky.app/profile/${embed.handle}/post/${rkeyFromUri(embed.uri)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <time dateTime={embed.createdAt}>{`${stamp.date} ${stamp.time}`}</time>
+                </a>
               ) : null}
             </p>
           ) : null}

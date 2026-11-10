@@ -396,6 +396,7 @@
   line-height: var(--line-height);
   color: var(--ink-soft);
   text-align: right;
+  text-decoration: none;
 }
 
 .entry-body {
