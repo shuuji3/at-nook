@@ -42,12 +42,23 @@
 }
 
 .cover-name-line {
-  position: relative;
   display: grid;
-  gap: 8px;
+  gap: 14px;
   width: min(460px, 88vw);
-  padding-bottom: 30px;
+  padding-bottom: 18px;
   border-bottom: 2px solid rgba(246, 234, 216, 0.6);
+}
+
+.cover-input-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.cover-at {
+  font-family: var(--font-hand);
+  font-size: 30px;
+  color: #ffe9b8;
 }
 
 .cover-label {
@@ -72,9 +83,7 @@
 }
 
 .cover-name {
-  position: absolute;
-  left: 4px;
-  bottom: 2px;
+  min-height: 34px;
   margin: 0;
   font-family: var(--font-hand);
   font-size: 30px;

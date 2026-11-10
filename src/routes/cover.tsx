@@ -46,14 +46,20 @@ export const CoverRoute = () => {
         <label className="cover-label" htmlFor="handle">
           handle
         </label>
-        <input
-          id="handle"
-          className="cover-input"
-          autoComplete="off"
-          spellCheck={false}
-          value={raw}
-          onChange={(event) => setRaw(event.target.value)}
-        />
+        <div className="cover-input-row">
+          <span className="cover-at" aria-hidden="true">
+            @
+          </span>
+          <input
+            id="handle"
+            className="cover-input"
+            autoComplete="off"
+            spellCheck={false}
+            placeholder="bsky.app"
+            value={raw}
+            onChange={(event) => setRaw(event.target.value)}
+          />
+        </div>
         <p className="cover-name" aria-live="polite">
           {profile.data ? (profile.data.displayName ?? profile.data.handle) : null}
         </p>
