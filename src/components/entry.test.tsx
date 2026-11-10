@@ -97,4 +97,28 @@ describe("entry", () => {
     expect(screen.getByText("parent text")).toBeTruthy();
     expect(screen.getByText("my reply")).toBeTruthy();
   });
+
+  it("links whoever is mentioned in the writing", () => {
+    renderWithProviders(
+      <Entry
+        item={makeItem({
+          text: "hi @alice.test",
+          createdAt: "2026-11-08T12:33:58.545Z",
+          facets: [
+            {
+              byteStart: 3,
+              byteEnd: 14,
+              features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:a" }],
+            },
+          ],
+        })}
+        index={4}
+      />,
+    );
+
+    expect(screen.getByRole("link", { name: "@alice.test" })).toHaveAttribute(
+      "href",
+      "/profile/did%3Aplc%3Aa",
+    );
+  });
 });

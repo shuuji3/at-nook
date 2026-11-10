@@ -3,6 +3,7 @@ import { toEmbedView, toReplyView } from "../lib/embed";
 import { splitTimestamp } from "../lib/format";
 import { useRulingSnap } from "../lib/use-ruling-snap";
 import { EmbedNote } from "./embed-note";
+import { RichText } from "./rich-text";
 
 interface EntryProps {
   item: AppBskyFeedDefs.FeedViewPost;
@@ -30,7 +31,7 @@ const readRecord = (record: unknown): { text: string; createdAt?: string; facets
 /** One dated diary entry: the writing, then whatever was pasted beside it. */
 export const Entry = ({ item, index }: EntryProps) => {
   const post = item.post;
-  const { text, createdAt } = readRecord(post.record);
+  const { text, createdAt, facets } = readRecord(post.record);
   const stamp = createdAt ? splitTimestamp(createdAt) : null;
   const embed = toEmbedView(post.embed);
   const quote = embed?.kind === "quote" ? embed : null;
@@ -51,7 +52,11 @@ export const Entry = ({ item, index }: EntryProps) => {
         {reply ? <EmbedNote embed={reply} seed={post.uri} /> : null}
         {quote ? <EmbedNote embed={quote} seed={post.uri} /> : null}
 
-        {text ? <p className="entry-text">{text}</p> : null}
+        {text ? (
+          <p className="entry-text">
+            <RichText text={text} facets={facets} />
+          </p>
+        ) : null}
 
         {media ? (
           <div className="entry-snap" ref={embedRef}>

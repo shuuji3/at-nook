@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import type { EmbedView } from "../lib/embed";
 import { profileHref, splitTimestamp } from "../lib/format";
 import { Photo } from "./photo";
+import { RichText } from "./rich-text";
 
 interface EmbedNoteProps {
   embed: EmbedView;
@@ -63,7 +64,11 @@ export const EmbedNote = ({ embed, seed }: EmbedNoteProps) => {
               ) : null}
             </p>
           ) : null}
-          {embed.text ? <p className="note-quote-text">{embed.text}</p> : null}
+          {embed.text ? (
+            <p className="note-quote-text">
+              <RichText text={embed.text} facets={embed.facets} />
+            </p>
+          ) : null}
         </blockquote>
       );
     }
