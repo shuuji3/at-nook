@@ -1,6 +1,6 @@
 import type { AppBskyFeedDefs } from "@atcute/bluesky";
 import { toEmbedView, toReplyView } from "../lib/embed";
-import { splitTimestamp, rkeyFromUri } from "../lib/format";
+import { dayOf, rkeyFromUri, splitTimestamp } from "../lib/format";
 import { useRulingSnap } from "../lib/use-ruling-snap";
 import { EmbedNote } from "./embed-note";
 import { RichText } from "./rich-text";
@@ -40,6 +40,7 @@ export const Entry = ({ item, index, showDate = true }: EntryProps) => {
   const reply = toReplyView(item.reply);
   const embedRef = useRulingSnap<HTMLDivElement>();
   const entryRef = useRulingSnap<HTMLElement>();
+  const postDay = createdAt ? dayOf(createdAt) : undefined;
 
   return (
     <article className="entry" data-entry={index} ref={entryRef}>
@@ -58,8 +59,8 @@ export const Entry = ({ item, index, showDate = true }: EntryProps) => {
       ) : null}
 
       <div className="entry-body">
-        {reply ? <EmbedNote embed={reply} seed={post.uri} /> : null}
-        {quote ? <EmbedNote embed={quote} seed={post.uri} /> : null}
+        {reply ? <EmbedNote embed={reply} seed={post.uri} postDay={postDay} /> : null}
+        {quote ? <EmbedNote embed={quote} seed={post.uri} postDay={postDay} /> : null}
 
         {text ? (
           <p className="entry-text">
@@ -69,7 +70,7 @@ export const Entry = ({ item, index, showDate = true }: EntryProps) => {
 
         {media ? (
           <div className="entry-snap" ref={embedRef}>
-            <EmbedNote embed={media} seed={post.uri} />
+            <EmbedNote embed={media} seed={post.uri} postDay={postDay} />
           </div>
         ) : null}
       </div>

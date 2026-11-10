@@ -48,8 +48,8 @@ export const dayOf = (iso: string, timeZone?: string): string =>
   }).format(new Date(iso));
 
 export const rotationFor = (seed: string, index: number): number => {
-  const value = hash(`${seed}:${index}`) / 0xffffffff;
-  return Math.round((value * 4 - 2) * 10) / 10;
+  const value = hash(`${seed}:tilt:${index}`) / 0xffffffff;
+  return Math.round((value * 8 - 4) * 10) / 10;
 };
 
 /** A hand-pasted tape angle, in degrees, deterministic per photo. */

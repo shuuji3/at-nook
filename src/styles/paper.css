@@ -407,6 +407,7 @@
 }
 
 .entry-body {
+  display: grid;
   min-width: 0;
   padding: 0;
 }
@@ -470,8 +471,8 @@
 .photos {
   display: flex;
   flex-wrap: wrap;
-  gap: calc(var(--line-height) - 1.25rem) 26px;
-  margin-top: calc(var(--line-height) - 0.25rem);
+  gap: calc(var(--line-height) - 1.25rem + 1rem) calc(26px + 1rem);
+  margin-top: calc(var(--line-height) - 1.25rem);
 }
 
 .photo {
@@ -536,6 +537,10 @@
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5);
 }
 
+.photo-zoom .photo-enlarged .photo-tape {
+  display: none;
+}
+
 .photo-zoom .photo-enlarged .photo-image {
   max-width: min(88vw, 1100px);
   max-height: 80vh;
@@ -579,8 +584,8 @@
 /* clippings: links and quotes */
 .note {
   display: block;
-  margin: calc(var(--line-height) - 1.25rem) 0.5rem;
-  padding: 1.25rem var(--line-height);
+  margin: calc(var(--line-height) - 1.25rem) 0.5rem calc(var(--line-height) - 0.75rem);
+  padding: 1.25rem var(--line-height) 0.75rem;
   border-left: 3px solid var(--margin-red);
   background: rgba(255, 255, 255, 0.6);
   font-family: var(--font-hand);
@@ -630,8 +635,8 @@
 }
 
 .note-quote {
-  margin: calc(var(--line-height) - 1.25rem) 0.5rem;
-  padding: 1.25rem var(--line-height);
+  margin: calc(var(--line-height) - 1.25rem) 0.5rem calc(var(--line-height) - 0.75rem);
+  padding: 1.25rem var(--line-height) 0.75rem;
   border-left: 3px solid var(--ink-soft);
   background: rgba(255, 255, 255, 0.6);
 }
@@ -664,7 +669,6 @@
 }
 
 .note-quote-handle {
-  margin-left: 0.35em;
   color: var(--ink-soft);
 }
 

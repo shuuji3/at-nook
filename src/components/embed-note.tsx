@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import type { EmbedView } from "../lib/embed";
-import { profileHref, rkeyFromUri, splitTimestamp } from "../lib/format";
+import { dayOf, profileHref, rkeyFromUri, splitTimestamp } from "../lib/format";
 import { Photo } from "./photo";
 import { RichText } from "./rich-text";
 import { VideoPrint } from "./video-print";
@@ -8,10 +8,12 @@ import { VideoPrint } from "./video-print";
 interface EmbedNoteProps {
   embed: EmbedView;
   seed: string;
+  /** the entry's own day, so a same-day quote does not repeat the date */
+  postDay?: string;
 }
 
 /** Pins whatever a post carried — photos, a video still, a link, or a quote. */
-export const EmbedNote = ({ embed, seed }: EmbedNoteProps) => {
+export const EmbedNote = ({ embed, seed, postDay }: EmbedNoteProps) => {
   if (!embed) {
     return null;
   }
@@ -55,6 +57,7 @@ export const EmbedNote = ({ embed, seed }: EmbedNoteProps) => {
 
     case "quote": {
       const stamp = embed.createdAt ? splitTimestamp(embed.createdAt) : null;
+      const sameDay = Boolean(embed.createdAt && postDay && dayOf(embed.createdAt) === postDay);
       const href = profileHref(embed.handle);
 
       return (
@@ -82,7 +85,9 @@ export const EmbedNote = ({ embed, seed }: EmbedNoteProps) => {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <time dateTime={embed.createdAt}>{`${stamp.date} ${stamp.time}`}</time>
+                  <time dateTime={embed.createdAt}>
+                    {sameDay ? stamp.time : `${stamp.date} ${stamp.time}`}
+                  </time>
                 </a>
               ) : null}
             </p>

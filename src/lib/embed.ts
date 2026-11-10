@@ -32,6 +32,7 @@ export type EmbedView =
       createdAt?: string;
       text: string;
       facets?: unknown;
+      media?: EmbedView;
     }
   | { kind: "unsupported" }
   | null;
@@ -93,30 +94,35 @@ export const toEmbedView = (embed: unknown): EmbedView => {
       };
     }
 
-    case "app.bsky.embed.record#view": {
-      const record = isRecord(embed.record) ? embed.record : null;
-      if (record?.$type !== "app.bsky.embed.record#viewRecord") {
-        return { kind: "unsupported" };
-      }
+    case "app.bsky.embed.record#view":
+      return readQuote(embed.record);
 
-      const author = isRecord(record.author) ? record.author : {};
-      const value = isRecord(record.value) ? record.value : {};
-
-      return {
-        kind: "quote",
-        variant: "quote",
-        uri: readString(record.uri) ?? "",
-        handle: readString(author.handle) ?? "",
-        displayName: readString(author.displayName),
-        createdAt: readString(value.createdAt),
-        text: readString(value.text) ?? "",
-        facets: value.facets,
-      };
-    }
+    case "app.bsky.embed.recordWithMedia#view":
+      return readQuote(embed.record);
 
     default:
       return { kind: "unsupported" };
   }
+};
+
+const readQuote = (record: unknown): EmbedView => {
+  if (!isRecord(record) || record.$type !== "app.bsky.embed.record#viewRecord") {
+    return { kind: "unsupported" };
+  }
+
+  const author = isRecord(record.author) ? record.author : {};
+  const value = isRecord(record.value) ? record.value : {};
+
+  return {
+    kind: "quote",
+    variant: "quote",
+    uri: readString(record.uri) ?? "",
+    handle: readString(author.handle) ?? "",
+    displayName: readString(author.displayName),
+    createdAt: readString(value.createdAt),
+    text: readString(value.text) ?? "",
+    facets: value.facets,
+  };
 };
 
 /** Reads the post a feed item replies to, so it can be clipped into the entry. */
