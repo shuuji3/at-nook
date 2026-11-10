@@ -24,15 +24,14 @@ describe("embed note", () => {
           variant: "quote",
           uri: "at://q",
           handle: "q.test",
+          displayName: "Q",
           text: "quoted",
         }}
         seed="at://q"
       />,
     );
 
-    expect(screen.getByRole("link", { name: "@q.test" })).toHaveAttribute(
-      "href",
-      "/profile/q.test",
-    );
+    expect(screen.getByRole("link", { name: "Q" })).toHaveAttribute("href", "/profile/q.test");
+    expect(screen.getByText("@q.test")).toBeTruthy();
   });
 });

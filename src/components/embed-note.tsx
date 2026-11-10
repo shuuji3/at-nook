@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import type { EmbedView } from "../lib/embed";
-import { profileHref } from "../lib/format";
+import { profileHref, splitTimestamp } from "../lib/format";
 import { Photo } from "./photo";
 
 interface EmbedNoteProps {
@@ -45,17 +45,28 @@ export const EmbedNote = ({ embed, seed }: EmbedNoteProps) => {
         </a>
       );
 
-    case "quote":
+    case "quote": {
+      const stamp = embed.createdAt ? splitTimestamp(embed.createdAt) : null;
+
       return (
         <blockquote className={`note note-quote note-quote-${embed.variant}`}>
           {embed.handle ? (
-            <Link className="note-quote-author" to={profileHref(embed.handle)}>
-              @{embed.handle}
-            </Link>
+            <p className="note-quote-author">
+              <Link className="note-quote-name" to={profileHref(embed.handle)}>
+                {embed.displayName ?? embed.handle}
+              </Link>{" "}
+              <span className="note-quote-handle">@{embed.handle}</span>
+              {stamp ? (
+                <time className="note-quote-time" dateTime={embed.createdAt}>
+                  {`${stamp.date} ${stamp.time}`}
+                </time>
+              ) : null}
+            </p>
           ) : null}
           {embed.text ? <p className="note-quote-text">{embed.text}</p> : null}
         </blockquote>
       );
+    }
 
     case "unsupported":
       return <p className="note note-unsupported">a clipping that could not be pasted</p>;

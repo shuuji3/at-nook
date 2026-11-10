@@ -574,9 +574,18 @@
 }
 
 .note-quote-author {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 8px;
+  margin: 0;
   font-family: var(--font-hand);
   font-size: 17px;
   line-height: var(--line-height);
+  color: var(--ink-soft);
+}
+
+.note-quote-handle,
+.note-quote-time {
   color: var(--ink-soft);
 }
 
