@@ -25,7 +25,7 @@ export const PersonTile = ({ profile, href, caption }: PersonTileProps) => (
   >
     <span className="mini-spine" aria-hidden="true" />
     <span className="mini-face">
-      <Avatar src={profile.avatar} alt={profile.displayName ?? profile.handle} size={40} />
+      <Avatar src={profile.avatar} alt={profile.displayName ?? profile.handle} size={64} />
       <span className="mini-name">{profile.displayName ?? profile.handle}</span>
       <span className="mini-handle">@{profile.handle}</span>
       {caption ? <span className="mini-caption">{caption}</span> : null}

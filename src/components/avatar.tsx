@@ -1,6 +1,3 @@
-import type { CSSProperties } from "react";
-import { rotationFor } from "../lib/format";
-
 interface AvatarProps {
   src?: string;
   alt: string;
@@ -9,10 +6,7 @@ interface AvatarProps {
 
 /** A profile picture pasted in like a small print: white border, slight tilt, no tape. */
 export const Avatar = ({ src, alt, size = 44 }: AvatarProps) => (
-  <span
-    className="avatar-print"
-    style={{ "--avatar-tilt": `${rotationFor(alt, 0)}deg` } as CSSProperties}
-  >
+  <span className="avatar-print">
     {src ? (
       <img
         className="avatar"

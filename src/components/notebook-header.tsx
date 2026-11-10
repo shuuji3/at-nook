@@ -31,8 +31,10 @@ export const NotebookHeader = ({ profile }: NotebookHeaderProps) => {
           <Avatar src={profile.avatar} alt={name} size={88} />
         </span>
         <div className="header-words">
-          <h1 className="header-name">{name}</h1>
-          <p className="header-handle">@{profile.handle}</p>
+          <h1 className="header-name">
+            {name}
+            <span className="header-handle">@{profile.handle}</span>
+          </h1>
           {profile.pronouns ? <p className="header-pronouns">{profile.pronouns}</p> : null}
           {profile.description ? (
             <p className="header-bio">
