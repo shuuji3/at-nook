@@ -27,12 +27,17 @@ export const EmbedNote = ({ embed, seed }: EmbedNoteProps) => {
 
     case "video":
       return embed.thumbnail ? (
-        <figure className="photo photo-video">
-          <img src={embed.thumbnail} alt="" loading="lazy" decoding="async" />
-          <span className="photo-play" aria-hidden="true">
-            ▶
-          </span>
-        </figure>
+        <div className="photos">
+          <Photo
+            image={{
+              fullsize: embed.thumbnail,
+              thumb: embed.thumbnail,
+              alt: embed.alt ? `video — ${embed.alt}` : "video",
+            }}
+            index={0}
+            seed={seed}
+          />
+        </div>
       ) : null;
 
     case "external":

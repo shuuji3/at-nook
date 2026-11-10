@@ -8,7 +8,7 @@ export interface EmbedImage {
 
 export type EmbedView =
   | { kind: "images"; images: EmbedImage[] }
-  | { kind: "video"; thumbnail?: string }
+  | { kind: "video"; thumbnail?: string; playlist?: string; alt?: string }
   | {
       kind: "external";
       uri: string;
@@ -64,7 +64,12 @@ export const toEmbedView = (embed: unknown): EmbedView => {
     }
 
     case "app.bsky.embed.video#view":
-      return { kind: "video", thumbnail: readString(embed.thumbnail) };
+      return {
+        kind: "video",
+        thumbnail: readString(embed.thumbnail),
+        playlist: readString(embed.playlist),
+        alt: readString(embed.alt),
+      };
 
     case "app.bsky.embed.external#view": {
       const external = isRecord(embed.external) ? embed.external : {};
