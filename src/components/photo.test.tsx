@@ -12,9 +12,11 @@ describe("photo", () => {
     );
 
     await user.click(screen.getByRole("button", { name: "a caption" }));
+    expect(screen.getByRole("dialog", { name: "photo" })).toBeTruthy();
     expect(screen.getByRole("button", { name: "close photo" })).toBeTruthy();
 
     await user.click(screen.getByRole("button", { name: "close photo" }));
     expect(screen.queryByRole("button", { name: "close photo" })).toBeNull();
+    expect(screen.queryByRole("dialog", { name: "photo" })).toBeNull();
   });
 });

@@ -11,10 +11,10 @@ describe("video print", () => {
       <VideoPrint thumbnail="t" playlist="https://video/x.m3u8" alt="a clip" seed="at://v" />,
     );
 
-    expect(screen.getByText("video — a clip")).toBeTruthy();
+    expect(screen.getByText("[video] a clip")).toBeTruthy();
     expect(container.querySelector("video")).toBeNull();
 
-    await user.click(screen.getByRole("button", { name: "video — a clip" }));
+    await user.click(screen.getByRole("button", { name: "[video] a clip" }));
 
     const video = container.querySelector("video");
     expect(video).toBeTruthy();
@@ -24,7 +24,7 @@ describe("video print", () => {
   it("keeps a still when the video has no playlist", () => {
     const { container } = renderWithProviders(<VideoPrint thumbnail="t" seed="at://v" />);
 
-    expect(screen.getByText("video")).toBeTruthy();
+    expect(screen.getByText("[video]")).toBeTruthy();
     expect(container.querySelector("video")).toBeNull();
   });
 });

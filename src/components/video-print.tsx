@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { rotationFor, tapeHue, tapeTilt } from "../lib/format";
 
 interface VideoPrintProps {
@@ -13,7 +13,43 @@ interface VideoPrintProps {
 /** A video taped in like a print; tap to play it in place, no enlargement. */
 export const VideoPrint = ({ thumbnail, playlist, alt, width, height, seed }: VideoPrintProps) => {
   const [playing, setPlaying] = useState(false);
-  const caption = alt ? `video — ${alt}` : "video";
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const caption = alt ? `[video] ${alt}` : "[video]";
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!playing || !playlist || !video) {
+      return;
+    }
+
+    // the url is an HLS playlist, which only Safari plays natively
+    if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = playlist;
+      return;
+    }
+
+    let hls: { destroy: () => void } | null = null;
+    let cancelled = false;
+
+    void import("hls.js").then(({ default: Hls }) => {
+      if (cancelled || !videoRef.current) {
+        return;
+      }
+      if (Hls.isSupported()) {
+        const instance = new Hls();
+        instance.loadSource(playlist);
+        instance.attachMedia(videoRef.current);
+        hls = instance;
+      } else {
+        videoRef.current.src = playlist;
+      }
+    });
+
+    return () => {
+      cancelled = true;
+      hls?.destroy();
+    };
+  }, [playing, playlist]);
 
   return (
     <div className="photos">
@@ -30,8 +66,8 @@ export const VideoPrint = ({ thumbnail, playlist, alt, width, height, seed }: Vi
         />
         {playing && playlist ? (
           <video
+            ref={videoRef}
             className="photo-video"
-            src={playlist}
             poster={thumbnail}
             controls
             autoPlay

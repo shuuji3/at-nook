@@ -13,27 +13,25 @@ interface PhotoProps {
 export const Photo = ({ image, index, seed }: PhotoProps) => {
   const [zoomed, setZoomed] = useState(false);
 
+  const style = {
+    "--tilt": `${rotationFor(seed, index)}deg`,
+    "--nudge": `${offsetFor(seed, index)}px`,
+    "--tape-tilt": `${tapeTilt(seed, index)}deg`,
+    "--tape-hue": tapeHue(seed, index),
+  } as CSSProperties;
+
+  const frame = (extra: string, content: React.ReactNode) => (
+    <figure className={`photo ${extra}`} style={style}>
+      <span className="photo-tape" aria-hidden="true" />
+      {content}
+      {image.alt ? <figcaption className="photo-caption">{image.alt}</figcaption> : null}
+    </figure>
+  );
+
   return (
     <>
-      <figure
-        className="photo"
-        style={
-          {
-            "--tilt": `${rotationFor(seed, index)}deg`,
-            "--nudge": `${offsetFor(seed, index)}px`,
-          } as CSSProperties
-        }
-      >
-        <span
-          className="photo-tape"
-          aria-hidden="true"
-          style={
-            {
-              "--tape-tilt": `${tapeTilt(seed, index)}deg`,
-              "--tape-hue": tapeHue(seed, index),
-            } as CSSProperties
-          }
-        />
+      {frame(
+        "",
         <button
           className="photo-button"
           type="button"
@@ -49,20 +47,23 @@ export const Photo = ({ image, index, seed }: PhotoProps) => {
             loading="lazy"
             decoding="async"
           />
-        </button>
-        {image.alt ? <figcaption className="photo-caption">{image.alt}</figcaption> : null}
-      </figure>
+        </button>,
+      )}
 
       {zoomed
         ? createPortal(
-            <button
-              className="photo-zoom"
-              type="button"
-              aria-label="close photo"
-              onClick={() => setZoomed(false)}
-            >
-              <img className="photo-zoom-image" src={image.fullsize} alt={image.alt} />
-            </button>,
+            <div className="photo-zoom" role="dialog" aria-label="photo">
+              {frame(
+                "photo-enlarged",
+                <img className="photo-image" src={image.fullsize} alt={image.alt} />,
+              )}
+              <button
+                className="photo-zoom-close"
+                type="button"
+                aria-label="close photo"
+                onClick={() => setZoomed(false)}
+              />
+            </div>,
             document.body,
           )
         : null}
