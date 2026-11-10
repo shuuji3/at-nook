@@ -324,8 +324,7 @@
   grid-template-columns: auto 1fr;
   gap: 16px;
   align-items: end;
-  padding: 0 var(--page-pad) var(--line-height) var(--text-pad);
-  margin-top: calc(var(--line-height) * -1);
+  padding: var(--line-height) var(--page-pad) var(--line-height) var(--text-pad);
 }
 
 .header-avatar {
