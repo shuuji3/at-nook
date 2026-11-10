@@ -4,13 +4,24 @@ import { beforeEach, describe, expect, it, vi } from "vite-plus/test";
 const mocks = vi.hoisted(() => ({
   useSession: vi.fn(),
   followsQuery: vi.fn(),
+  listsQuery: vi.fn(),
 }));
 
 vi.mock("../lib/session", () => ({ useSession: mocks.useSession }));
-vi.mock("../lib/queries", () => ({ followsQuery: mocks.followsQuery }));
+vi.mock("../lib/queries", () => ({
+  followsQuery: mocks.followsQuery,
+  listsQuery: mocks.listsQuery,
+}));
 
 import { renderWithProviders } from "../test/render";
 import { ShelfRoute } from "./shelf";
+
+const page = (key: string, value: unknown) => ({
+  queryKey: [key],
+  queryFn: async () => value,
+  initialPageParam: undefined,
+  getNextPageParam: () => undefined,
+});
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -20,49 +31,43 @@ beforeEach(() => {
     end: vi.fn(),
     refresh: vi.fn(),
   });
-  mocks.followsQuery.mockImplementation((did: string) => ({
-    queryKey: ["follows", did],
-    queryFn: async () => ({
-      follows: [
-        {
-          did: "did:plc:a",
-          handle: "alice.test",
-          displayName: "Alice",
-          avatar: undefined,
-        },
-      ],
-      cursor: undefined,
+  mocks.followsQuery.mockReturnValue(
+    page("follows", {
+      follows: [{ did: "did:plc:a", handle: "alice.test", displayName: "Alice" }],
     }),
-    initialPageParam: undefined,
-    getNextPageParam: () => undefined,
-  }));
+  );
+  mocks.listsQuery.mockReturnValue(
+    page("lists", {
+      lists: [
+        { uri: "at://did:plc:me/app.bsky.graph.list/for-me", name: "for me", listItemCount: 7 },
+      ],
+    }),
+  );
 });
 
 describe("shelf", () => {
-  it("shows your own notebook first, then the people you follow", async () => {
+  it("shows the following group and every list as groups", async () => {
     renderWithProviders(<ShelfRoute />);
 
-    expect(screen.getByRole("link", { name: /your notebook/ })).toHaveAttribute(
-      "href",
-      "/profile/me.test",
-    );
+    expect(await screen.findByRole("button", { name: /following/ })).toBeTruthy();
+    expect(await screen.findByRole("button", { name: /for me/ })).toBeTruthy();
+  });
+
+  it("opens the following group by default", async () => {
+    renderWithProviders(<ShelfRoute />);
+
     expect(await screen.findByText("Alice")).toBeTruthy();
-    expect(screen.getByText("@alice.test")).toBeTruthy();
-    expect(screen.getByRole("link", { name: /Alice/ })).toHaveAttribute(
-      "href",
-      "/profile/alice.test",
-    );
   });
 
   it("reports an unreachable shelf", async () => {
-    mocks.followsQuery.mockImplementation((did: string) => ({
-      queryKey: ["follows", did],
+    mocks.followsQuery.mockReturnValue({
+      queryKey: ["follows"],
       queryFn: async () => {
         throw new Error("offline");
       },
       initialPageParam: undefined,
       getNextPageParam: () => undefined,
-    }));
+    });
 
     renderWithProviders(<ShelfRoute />);
 
