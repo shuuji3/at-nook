@@ -52,6 +52,21 @@ export const rotationFor = (seed: string, index: number): number => {
   return Math.round((value * 4 - 2) * 10) / 10;
 };
 
+/** A hand-pasted tape angle, in degrees, deterministic per photo. */
+export const tapeTilt = (seed: string, index: number): number => {
+  const value = hash(`${seed}:tape:${index}`) / 0xffffffff;
+  return Math.round((value * 16 - 8) * 10) / 10;
+};
+
+/** A pastel hue for the tape, deterministic per photo. */
+export const tapeHue = (seed: string, index: number): number => hash(`${seed}:hue:${index}`) % 360;
+
+/** A small horizontal nudge for the print, in pixels. */
+export const offsetFor = (seed: string, index: number): number => {
+  const value = hash(`${seed}:x:${index}`) / 0xffffffff;
+  return Math.round((value * 16 - 8) * 10) / 10;
+};
+
 export const coverHue = (did: string): number => hash(did) % 360;
 
 export const documentTitle = (profile: { displayName?: string; handle: string }): string =>

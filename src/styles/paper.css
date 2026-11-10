@@ -476,25 +476,15 @@
   transform: rotate(var(--tilt, 0deg));
 }
 
-.photo::before,
-.photo::after {
-  content: "";
+.photo-tape {
   position: absolute;
-  top: -10px;
-  width: 54px;
-  height: 20px;
-  background: var(--tape);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
-}
-
-.photo::before {
-  left: -12px;
-  transform: rotate(-8deg);
-}
-
-.photo::after {
-  right: -12px;
-  transform: rotate(7deg);
+  top: -12px;
+  left: 50%;
+  width: 84px;
+  height: 26px;
+  transform: translateX(-50%) rotate(var(--tape-tilt, 0deg));
+  background: hsl(var(--tape-hue, 45) 75% 82%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.14);
 }
 
 .photo-image,
