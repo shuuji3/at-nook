@@ -44,6 +44,8 @@ export const Photo = ({ image, index, seed }: PhotoProps) => {
             className="photo-image"
             src={image.fullsize}
             alt={image.alt}
+            width={image.width}
+            height={image.height}
             loading="lazy"
             decoding="async"
           />

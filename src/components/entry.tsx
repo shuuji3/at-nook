@@ -39,9 +39,10 @@ export const Entry = ({ item, index, showDate = true }: EntryProps) => {
   const media = embed && embed.kind !== "quote" ? embed : null;
   const reply = toReplyView(item.reply);
   const embedRef = useRulingSnap<HTMLDivElement>();
+  const entryRef = useRulingSnap<HTMLElement>();
 
   return (
-    <article className="entry" data-entry={index}>
+    <article className="entry" data-entry={index} ref={entryRef}>
       {stamp ? (
         <a
           className="entry-time"

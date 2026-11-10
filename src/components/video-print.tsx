@@ -5,11 +5,13 @@ interface VideoPrintProps {
   thumbnail: string;
   playlist?: string;
   alt?: string;
+  width?: number;
+  height?: number;
   seed: string;
 }
 
 /** A video taped in like a print; tap to play it in place, no enlargement. */
-export const VideoPrint = ({ thumbnail, playlist, alt, seed }: VideoPrintProps) => {
+export const VideoPrint = ({ thumbnail, playlist, alt, width, height, seed }: VideoPrintProps) => {
   const [playing, setPlaying] = useState(false);
   const caption = alt ? `video — ${alt}` : "video";
 
@@ -47,6 +49,8 @@ export const VideoPrint = ({ thumbnail, playlist, alt, seed }: VideoPrintProps) 
               className="photo-image"
               src={thumbnail}
               alt={caption}
+              width={width}
+              height={height}
               loading="lazy"
               decoding="async"
             />

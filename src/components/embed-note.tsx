@@ -32,6 +32,8 @@ export const EmbedNote = ({ embed, seed }: EmbedNoteProps) => {
           thumbnail={embed.thumbnail}
           playlist={embed.playlist}
           alt={embed.alt}
+          width={embed.width}
+          height={embed.height}
           seed={seed}
         />
       ) : null;

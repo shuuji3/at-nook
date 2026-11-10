@@ -32,7 +32,14 @@ describe("toEmbedView", () => {
         thumbnail: "v",
         aspectRatio: { width: 1, height: 1 },
       }),
-    ).toEqual({ kind: "video", thumbnail: "v" });
+    ).toEqual({
+      kind: "video",
+      thumbnail: "v",
+      playlist: undefined,
+      alt: undefined,
+      width: 1,
+      height: 1,
+    });
   });
 
   it("maps an external link", () => {

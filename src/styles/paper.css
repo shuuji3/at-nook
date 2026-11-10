@@ -289,18 +289,12 @@
   margin-inline: auto;
   padding: 0 0 96px;
   background-color: var(--paper);
-  background-image:
-    repeating-linear-gradient(
-      180deg,
-      transparent 0 calc(var(--line-height) - 1px),
-      var(--rule) calc(var(--line-height) - 1px) var(--line-height)
-    ),
-    linear-gradient(
-      90deg,
-      transparent 0 calc(var(--page-pad) - 1px),
-      var(--margin-red) calc(var(--page-pad) - 1px) var(--page-pad),
-      transparent var(--page-pad)
-    );
+  background-image: linear-gradient(
+    90deg,
+    transparent 0 calc(var(--page-pad) - 1px),
+    var(--margin-red) calc(var(--page-pad) - 1px) var(--page-pad),
+    transparent var(--page-pad)
+  );
 }
 
 /* pasted-in front of a notebook */
@@ -345,10 +339,18 @@
   color: var(--ink);
 }
 
+.header-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4em;
+}
+
 .header-handle {
-  margin-left: 0.4em;
-  font-size: 0.6em;
+  font-family: var(--font-hand);
+  font-size: 22px;
+  line-height: var(--line-height);
   color: var(--ink-soft);
+  overflow-wrap: anywhere;
 }
 
 .header-pronouns {
@@ -373,6 +375,11 @@
   display: grid;
   gap: var(--line-height);
   padding: 0 var(--page-pad) 0 var(--text-pad);
+  background-image: repeating-linear-gradient(
+    180deg,
+    transparent 0 calc(var(--line-height) - 1px),
+    var(--rule) calc(var(--line-height) - 1px) var(--line-height)
+  );
 }
 
 .entry {
