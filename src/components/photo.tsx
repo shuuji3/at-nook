@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import type { EmbedImage } from "../lib/embed";
-import { rotationFor, tapeHue, tapeTilt } from "../lib/format";
+import { offsetFor, rotationFor, tapeHue, tapeTilt } from "../lib/format";
 
 interface PhotoProps {
   image: EmbedImage;
@@ -8,9 +8,17 @@ interface PhotoProps {
   seed: string;
 }
 
-/** A photo taped into the page, tilted and taped deterministically per photo. */
+/** A photo taped into the page, tilted, nudged and taped deterministically per photo. */
 export const Photo = ({ image, index, seed }: PhotoProps) => (
-  <figure className="photo" style={{ "--tilt": `${rotationFor(seed, index)}deg` } as CSSProperties}>
+  <figure
+    className="photo"
+    style={
+      {
+        "--tilt": `${rotationFor(seed, index)}deg`,
+        "--nudge": `${offsetFor(seed, index)}px`,
+      } as CSSProperties
+    }
+  >
     <span
       className="photo-tape"
       aria-hidden="true"
