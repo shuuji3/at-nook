@@ -216,65 +216,6 @@
   background: var(--paper-shadow);
 }
 
-.notebook:has(> .sidebar) {
-  grid-template-columns: 240px 1fr;
-}
-
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 20px 12px;
-  overflow-y: auto;
-  background: #efe6d3;
-  border-right: 1px solid rgba(43, 58, 85, 0.12);
-}
-
-.sidebar-row {
-  display: grid;
-  grid-template-columns: 34px 1fr;
-  gap: 10px;
-  align-items: center;
-  padding: 7px 8px;
-  text-decoration: none;
-  color: var(--ink);
-  border-radius: 4px;
-}
-
-.sidebar-row[aria-current="page"] {
-  background: rgba(43, 58, 85, 0.1);
-}
-
-.sidebar-mark {
-  display: grid;
-  place-items: center;
-  font-size: 20px;
-  color: var(--ink-soft);
-}
-
-.sidebar-text {
-  display: grid;
-  min-width: 0;
-}
-
-.sidebar-primary {
-  font-family: var(--font-hand);
-  font-size: 22px;
-  line-height: 1.2;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.sidebar-secondary {
-  font-family: var(--font-hand);
-  font-size: 16px;
-  color: var(--ink-soft);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .page {
   position: relative;
   width: 100%;
@@ -656,27 +597,6 @@
 }
 
 @media (max-width: 900px) {
-  .notebook:has(> .sidebar) {
-    grid-template-columns: 1fr;
-  }
-
-  .sidebar {
-    flex-direction: row;
-    gap: 8px;
-    overflow-x: auto;
-    border-right: none;
-    border-bottom: 1px solid rgba(43, 58, 85, 0.12);
-  }
-
-  .sidebar-row {
-    grid-template-columns: 28px auto;
-    white-space: nowrap;
-  }
-
-  .sidebar-secondary {
-    display: none;
-  }
-
   .entry {
     grid-template-columns: 1fr;
   }

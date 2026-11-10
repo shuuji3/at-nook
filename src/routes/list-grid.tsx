@@ -33,7 +33,7 @@ export const ListGridRoute = () => {
   const members = pages.flatMap((page) => page.items.map((item) => item.subject));
 
   return (
-    <NotebookShell activeListUri={uri}>
+    <NotebookShell>
       {list.data ? (
         <>
           <h1 className="list-title">{name}</h1>

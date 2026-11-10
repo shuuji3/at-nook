@@ -53,7 +53,7 @@ export const NotebookRoute = () => {
   });
 
   return (
-    <NotebookShell activeActor={profile.data.handle}>
+    <NotebookShell>
       <NotebookHeader profile={profile.data} />
 
       <div className="entries">
