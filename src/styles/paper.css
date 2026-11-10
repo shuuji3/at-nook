@@ -387,9 +387,14 @@
 
 .entry {
   display: grid;
-  grid-template-columns: 92px 1fr;
+  grid-template-columns: 132px 1fr;
   gap: 14px;
   align-items: start;
+}
+
+.entry-time time {
+  display: grid;
+  gap: 0;
 }
 
 .entry-time {
@@ -661,16 +666,18 @@
 }
 
 @media (max-width: 900px) {
+  .page {
+    overflow-x: clip;
+  }
+
   .entry {
     grid-template-columns: 1fr;
   }
 
-  .entry-time {
+  .entry-time time {
     grid-auto-flow: column;
     justify-content: start;
     gap: 8px;
-    padding-top: 8px;
-    text-align: left;
   }
 }
 

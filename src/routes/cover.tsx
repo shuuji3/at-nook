@@ -55,7 +55,6 @@ export const CoverRoute = () => {
             className="cover-input"
             autoComplete="off"
             spellCheck={false}
-            placeholder="bsky.app"
             value={raw}
             onChange={(event) => setRaw(event.target.value)}
           />
