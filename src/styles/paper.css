@@ -588,6 +588,7 @@
   padding: 1.25rem var(--line-height) 0.75rem;
   border-left: 3px solid var(--margin-red);
   background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 6px 12px rgba(43, 58, 85, 0.28);
   font-family: var(--font-hand);
   font-size: 20px;
   line-height: var(--line-height);
