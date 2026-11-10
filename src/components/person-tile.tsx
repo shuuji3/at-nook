@@ -16,18 +16,19 @@ interface PersonTileProps {
   caption?: string;
 }
 
-/** One person on the shelf or in a list, dressed in that person's cover colour. */
+/** One person as a little closed notebook standing on the shelf. */
 export const PersonTile = ({ profile, href, caption }: PersonTileProps) => (
   <Link
-    className="tile"
+    className="mini-notebook"
     to={href}
     style={{ "--cover-hue": coverHue(profile.did) } as CSSProperties}
   >
-    <span className="tile-avatar">
-      <Avatar src={profile.avatar} alt={profile.displayName ?? profile.handle} />
+    <span className="mini-spine" aria-hidden="true" />
+    <span className="mini-face">
+      <Avatar src={profile.avatar} alt={profile.displayName ?? profile.handle} size={40} />
+      <span className="mini-name">{profile.displayName ?? profile.handle}</span>
+      <span className="mini-handle">@{profile.handle}</span>
+      {caption ? <span className="mini-caption">{caption}</span> : null}
     </span>
-    <span className="tile-name">{profile.displayName ?? profile.handle}</span>
-    <span className="tile-handle">@{profile.handle}</span>
-    {caption ? <span className="tile-caption">{caption}</span> : null}
   </Link>
 );
