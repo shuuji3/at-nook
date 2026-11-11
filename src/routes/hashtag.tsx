@@ -18,7 +18,6 @@ export const HashtagRoute = () => {
   return (
     <NotebookShell>
       <h1 className="list-title">#{tag}</h1>
-      <p className="list-count">{items.length} posts</p>
 
       <div className="entries">
         {items.map((item, index) => (
