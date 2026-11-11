@@ -498,6 +498,7 @@
 
 .entry-time {
   display: grid;
+  justify-self: start;
   align-content: start;
   padding-top: 0;
   font-family: var(--font-hand);
@@ -846,6 +847,13 @@
 :where(a, button, input, [tabindex]):focus-visible {
   outline: 2px dashed #2b3a55;
   outline-offset: 3px;
+}
+
+@media (min-width: 901px) {
+  .note,
+  .note-quote {
+    max-width: 75%;
+  }
 }
 
 @media (max-width: 900px) {
