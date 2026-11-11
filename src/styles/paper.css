@@ -18,35 +18,120 @@
 /* the closed notebook */
 .cover {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 28px;
+  display: grid;
+  place-items: center;
   padding: 48px 24px;
+  background: var(--paper-shadow);
+}
+
+/* a closed book standing on the desk */
+.cover-book {
+  position: relative;
+  width: min(540px, 92vw);
+  height: min(720px, 88svh);
+  display: flex;
+  border-radius: 4px 14px 14px 4px;
   background-color: var(--cloth);
   background-image:
-    radial-gradient(ellipse at 20% 10%, rgba(255, 255, 255, 0.08), transparent 55%),
-    radial-gradient(ellipse at 80% 90%, rgba(0, 0, 0, 0.22), transparent 60%),
+    radial-gradient(ellipse at 25% 8%, rgba(255, 255, 255, 0.1), transparent 55%),
+    radial-gradient(ellipse at 85% 95%, rgba(0, 0, 0, 0.28), transparent 60%),
     repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.05) 0 2px, transparent 2px 5px);
+  box-shadow:
+    0 26px 50px rgba(43, 58, 85, 0.42),
+    inset -18px 0 26px -22px rgba(0, 0, 0, 0.75);
   color: #f6ead8;
 }
 
+/* the sewn edge of the binding */
+.cover-spine {
+  flex: 0 0 22px;
+  margin: 10px 0;
+  border-radius: 3px 0 0 3px;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.12) 70%, transparent);
+  box-shadow: inset -2px 0 3px rgba(0, 0, 0, 0.4);
+}
+
+.cover-face {
+  flex: 1 1 auto;
+  display: grid;
+  align-content: center;
+  gap: 18px;
+  padding: 44px 34px;
+}
+
 .cover-title {
+  height: 96px;
   margin: 0;
   font-family: var(--font-hand);
-  font-size: clamp(48px, 9vw, 96px);
+  font-size: 72px;
   font-weight: 400;
   letter-spacing: 0.04em;
   text-shadow: 0 2px 0 rgba(0, 0, 0, 0.25);
 }
 
 .cover-name-line {
+  position: relative;
   display: grid;
-  gap: 14px;
-  width: min(460px, 88vw);
-  padding-bottom: 18px;
+  gap: 10px;
+  padding-bottom: 14px;
   border-bottom: 2px solid rgba(246, 234, 216, 0.6);
+}
+
+/*
+ * the menu is a popover: it opens below the handle line, out of flow, so it
+ * cannot push the cover or grow the book
+ */
+.cover-candidates {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  margin: 6px 0 0;
+  padding: 6px;
+  list-style: none;
+  max-height: 190px;
+  overflow-y: auto;
+  border-radius: 6px;
+  background: #6d3833;
+  background-image: linear-gradient(180deg, #7a3f3a, #5d2e2a);
+  box-shadow: 0 14px 28px rgba(20, 12, 10, 0.45);
+}
+
+.cover-candidate {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 8px;
+  border-radius: 4px;
+  background: rgba(246, 234, 216, 0.08);
+  color: inherit;
+  font-family: var(--font-hand);
+  cursor: pointer;
+}
+
+.cover-candidate:hover,
+.cover-candidate[aria-selected="true"] {
+  background: rgba(246, 234, 216, 0.22);
+}
+
+.cover-candidate-name {
+  font-size: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cover-candidate-handle {
+  font-size: 15px;
+  opacity: 0.8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .cover-input-row {
@@ -82,15 +167,24 @@
   color: rgba(246, 234, 216, 0.4);
 }
 
+/* every block has a reserved height, so filling the name never shifts the cover */
+.cover-name-field {
+  display: grid;
+  gap: 4px;
+}
+
 .cover-name {
-  min-height: 34px;
+  height: 76px;
   margin: 0;
+  overflow: hidden;
   font-family: var(--font-hand);
-  font-size: 30px;
+  font-size: 32px;
+  line-height: 38px;
   color: #ffe9b8;
 }
 
 .cover-note {
+  min-height: 32px;
   margin: 0;
   font-family: var(--font-hand);
   font-size: 20px;
@@ -98,7 +192,8 @@
 }
 
 .cover-open {
-  padding: 10px 22px;
+  justify-self: center;
+  padding: 10px 26px;
   border: 2px solid rgba(246, 234, 216, 0.8);
   border-radius: 4px;
   background: transparent;
@@ -342,7 +437,13 @@
 .header-title {
   display: flex;
   align-items: flex-start;
-  gap: 0.5em;
+  gap: 0 0.5em;
+}
+
+.header-who {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0 0.35em;
 }
 
 .header-handle {
@@ -354,7 +455,6 @@
 }
 
 .header-pronouns {
-  margin: 0;
   font-family: var(--font-hand);
   font-size: 18px;
   line-height: var(--line-height);
@@ -492,6 +592,8 @@
 
 .photo {
   position: relative;
+  width: min(420px, 60vw);
+  max-width: 100%;
   margin: 0;
   padding: 0.75rem 1rem;
   background: #fff;
@@ -507,14 +609,14 @@
   width: 104px;
   height: 32px;
   transform: translateX(-50%) rotate(var(--tape-tilt, 0deg));
-  background: hsl(var(--tape-hue, 45) 75% 84% / 0.55);
+  background: hsl(var(--tape-hue, 45) 75% 84% / 0.65);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.14);
 }
 
 .photo-image,
 .photo img {
   display: block;
-  max-width: min(420px, 60vw);
+  width: 100%;
   height: auto;
 }
 
@@ -547,6 +649,8 @@
 }
 
 .photo-zoom .photo-enlarged {
+  width: auto;
+  max-width: 92vw;
   transform: none;
   margin-left: 0;
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5);
@@ -557,16 +661,16 @@
 }
 
 .photo-zoom .photo-enlarged .photo-image {
+  width: auto;
   max-width: min(88vw, 1100px);
   max-height: 80vh;
-  width: auto;
   height: auto;
   object-fit: contain;
 }
 
 .photo-video {
   display: block;
-  max-width: min(420px, 60vw);
+  width: 100%;
   height: auto;
   background: #000;
 }
@@ -588,7 +692,7 @@
 }
 
 .photo-caption {
-  max-width: min(420px, 60vw);
+  width: 100%;
   margin-top: 0;
   font-family: var(--font-hand);
   font-size: 18px;
@@ -599,8 +703,9 @@
 /* clippings: links and quotes */
 .note {
   display: block;
-  margin: calc(var(--line-height) - 1.25rem) 0.5rem calc(var(--line-height) - 0.75rem);
-  padding: 1.25rem var(--line-height) 0.75rem;
+  margin: calc(var(--line-height) - 1.25rem) calc(-1 * (var(--line-height) + 3px))
+    calc(var(--line-height) - 0.75rem) calc(-1 * (1rem + 3px));
+  padding: 1.25rem 1rem 0.75rem;
   border-left: 3px solid var(--margin-red);
   background: rgba(255, 255, 255, 0.6);
   box-shadow: 0 6px 12px rgba(43, 58, 85, 0.28);
@@ -651,8 +756,9 @@
 }
 
 .note-quote {
-  margin: calc(var(--line-height) - 1.25rem) 0.5rem calc(var(--line-height) - 0.75rem);
-  padding: 1.25rem var(--line-height) 0.75rem;
+  margin: calc(var(--line-height) - 1.25rem) calc(-1 * (var(--line-height) + 3px))
+    calc(var(--line-height) - 0.75rem) calc(-1 * (1rem + 3px));
+  padding: 1.25rem 1rem 0.75rem;
   border-left: 3px solid var(--ink-soft);
   background: rgba(255, 255, 255, 0.6);
 }
@@ -721,6 +827,8 @@
 
 .avatar {
   display: block;
+  width: var(--avatar-size, var(--avatar-default, 44px));
+  height: var(--avatar-size, var(--avatar-default, 44px));
   object-fit: cover;
 }
 
@@ -770,25 +878,80 @@
     --page-pad: 24px;
   }
 
-  .note {
-    padding-inline: 8px;
-  }
-
   .note-quote-author {
     font-size: 15px;
   }
 
   .header-face {
-    grid-template-columns: 1fr;
-    gap: var(--line-height) 0;
+    grid-template-columns: auto 1fr;
+    gap: var(--line-height);
     align-items: start;
-    margin-top: calc(var(--line-height) * -1);
+    margin-top: 0;
   }
 
-  .photo-image,
-  .photo img,
-  .photo-caption {
-    max-width: 78vw;
+  .header-words {
+    display: contents;
+  }
+
+  .header-bio {
+    grid-column: 1 / -1;
+  }
+
+  /* name and handle each on their own line */
+  .header-title {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  /* centre the prints like the post text block */
+  .entries {
+    padding-right: calc(var(--line-height) + 3px);
+  }
+
+  .note {
+    margin-inline: calc(-1 * (1rem + 3px));
+  }
+
+  .photos {
+    justify-content: center;
+  }
+
+  /* keep the rotated prints inside the page */
+  .photo {
+    width: min(420px, 84%);
+    margin-left: 0;
+  }
+
+  /* compact book spines */
+  .mini-notebook {
+    min-height: 0;
+    padding: 10px 8px 10px 18px;
+  }
+
+  .mini-notebook {
+    --avatar-size: 32px;
+  }
+
+  .mini-face {
+    gap: 4px;
+  }
+
+  .mini-name {
+    font-size: 16px;
+  }
+
+  .mini-handle {
+    font-size: 12px;
+  }
+
+  .mini-spine {
+    width: 9px;
+  }
+
+  .shelf-grid {
+    grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+    padding-inline: 0;
   }
 }
 
