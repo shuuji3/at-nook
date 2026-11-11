@@ -59,8 +59,6 @@ export const Entry = ({ item, index, showDate = true }: EntryProps) => {
       ) : null}
 
       <div className="entry-body">
-        {quote ? <EmbedNote embed={quote} seed={post.uri} postDay={postDay} /> : null}
-
         {replyTarget ? (
           <p className="entry-reply">
             <a
@@ -72,6 +70,8 @@ export const Entry = ({ item, index, showDate = true }: EntryProps) => {
             </a>
           </p>
         ) : null}
+
+        {quote ? <EmbedNote embed={quote} seed={post.uri} postDay={postDay} /> : null}
 
         {text ? (
           <p className="entry-text">
