@@ -436,8 +436,9 @@
 
 .header-title {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
-  gap: 0 0.5em;
+  gap: 0;
 }
 
 .header-who {
@@ -703,7 +704,7 @@
 /* clippings: links and quotes */
 .note {
   display: block;
-  margin: calc(var(--line-height) - 1.25rem) calc(-1 * (var(--line-height) + 3px))
+  margin: calc(var(--line-height) - 1.25rem) calc(-1 * var(--line-height))
     calc(var(--line-height) - 0.75rem) calc(-1 * (1rem + 3px));
   padding: 1.25rem 1rem 0.75rem;
   border-left: 3px solid var(--margin-red);
@@ -756,7 +757,7 @@
 }
 
 .note-quote {
-  margin: calc(var(--line-height) - 1.25rem) calc(-1 * (var(--line-height) + 3px))
+  margin: calc(var(--line-height) - 1.25rem) calc(-1 * var(--line-height))
     calc(var(--line-height) - 0.75rem) calc(-1 * (1rem + 3px));
   padding: 1.25rem 1rem 0.75rem;
   border-left: 3px solid var(--ink-soft);
@@ -897,16 +898,9 @@
     grid-column: 1 / -1;
   }
 
-  /* name and handle each on their own line */
-  .header-title {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0;
-  }
-
   /* centre the prints like the post text block */
   .entries {
-    padding-right: calc(var(--line-height) + 3px);
+    padding-right: calc(1rem + 3px);
   }
 
   .note {
