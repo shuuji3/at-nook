@@ -28,7 +28,7 @@ const readFeature = (feature: unknown): { kind: FacetKind; href: string } | null
         : null;
     case "app.bsky.richtext.facet#tag":
       return typeof feature.tag === "string"
-        ? { kind: "tag", href: `https://bsky.app/hashtag/${encodeURIComponent(feature.tag)}` }
+        ? { kind: "tag", href: `/hashtag/${encodeURIComponent(feature.tag)}` }
         : null;
     default:
       return null;

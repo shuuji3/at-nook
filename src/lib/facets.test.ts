@@ -61,7 +61,7 @@ describe("toFacetSegments", () => {
     });
     expect(segments[3]).toEqual({
       text: "#bluesky",
-      href: "https://bsky.app/hashtag/bluesky",
+      href: "/hashtag/bluesky",
       kind: "tag",
     });
   });

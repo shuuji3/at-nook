@@ -11,7 +11,7 @@ export const RichText = ({ text, facets }: RichTextProps) => (
   <>
     {toFacetSegments(text, facets).map((segment, index) =>
       segment.href ? (
-        segment.kind === "mention" ? (
+        segment.href.startsWith("/") ? (
           <Link className="rich-link" key={index} to={segment.href}>
             {segment.text}
           </Link>
