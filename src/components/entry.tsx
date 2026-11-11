@@ -67,7 +67,8 @@ export const Entry = ({ item, index, showDate = true }: EntryProps) => {
               rel="noreferrer"
             >
               @{replyTarget.handle}
-            </a>
+            </a>{" "}
+            ({replyTarget.displayName})
           </p>
         ) : null}
 

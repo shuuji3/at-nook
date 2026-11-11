@@ -86,14 +86,13 @@ export const EmbedNote = ({ embed, seed, postDay }: EmbedNoteProps) => {
         <blockquote className={`note note-quote note-quote-${embed.variant}`}>
           {embed.handle ? (
             <p className="note-quote-author">
+              quote from{" "}
               {embed.displayName ? (
                 <Link className="note-quote-name" to={href}>
                   {embed.displayName}
                 </Link>
               ) : null}
-              <Link className="note-quote-handle" to={href}>
-                @{embed.handle}
-              </Link>
+              @{embed.handle}
               {stamp ? (
                 <a
                   className="note-quote-time"
