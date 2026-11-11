@@ -32,6 +32,6 @@ describe("embed note", () => {
     );
 
     expect(screen.getByRole("link", { name: "Q" })).toHaveAttribute("href", "/profile/q.test");
-    expect(screen.getByText("@q.test")).toBeTruthy();
+    expect(screen.getByText(/quote from/)).toHaveTextContent(/@q\.test/);
   });
 });
