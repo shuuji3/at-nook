@@ -112,8 +112,7 @@ describe("entry", () => {
           createdAt: "2026-11-08T12:33:58.545Z",
           facets: [
             {
-              byteStart: 3,
-              byteEnd: 14,
+              index: { byteStart: 3, byteEnd: 14 },
               features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:a" }],
             },
           ],
