@@ -14,7 +14,7 @@ interface VideoPrintProps {
 export const VideoPrint = ({ thumbnail, playlist, alt, width, height, seed }: VideoPrintProps) => {
   const [playing, setPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const caption = alt ? `[video] ${alt}` : "[video]";
+  const label = alt && alt.trim().length > 0 ? alt : "video";
 
   useEffect(() => {
     const video = videoRef.current;
@@ -79,12 +79,12 @@ export const VideoPrint = ({ thumbnail, playlist, alt, width, height, seed }: Vi
             type="button"
             disabled={!playlist}
             onClick={() => setPlaying(true)}
-            aria-label={caption}
+            aria-label={label}
           >
             <img
               className="photo-image"
               src={thumbnail}
-              alt={caption}
+              alt={label}
               width={width}
               height={height}
               loading="lazy"
@@ -97,7 +97,6 @@ export const VideoPrint = ({ thumbnail, playlist, alt, width, height, seed }: Vi
             ) : null}
           </button>
         )}
-        <figcaption className="photo-caption">{caption}</figcaption>
       </figure>
     </div>
   );
