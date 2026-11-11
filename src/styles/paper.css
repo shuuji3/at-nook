@@ -1,5 +1,6 @@
 :root {
   --paper: #f7f1e3;
+  --placeholder: rgba(43, 58, 85, 0.04);
   --paper-shadow: #e3d9c4;
   --ink: #2b3a55;
   --ink-soft: #6b7690;
@@ -625,9 +626,10 @@
 
 .photo-button {
   display: block;
+  width: 100%;
   padding: 0;
   border: none;
-  background: transparent;
+  background-color: var(--placeholder);
   cursor: zoom-in;
 }
 
@@ -832,6 +834,7 @@
 
 .avatar {
   display: block;
+  background-color: var(--placeholder);
   width: var(--avatar-size, var(--avatar-default, 44px));
   height: var(--avatar-size, var(--avatar-default, 44px));
   object-fit: cover;
