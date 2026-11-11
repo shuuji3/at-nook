@@ -21,7 +21,7 @@ export const HashtagRoute = () => {
 
       <div className="entries">
         {items.map((item, index) => (
-          <Entry key={item.post.uri} item={item} index={index} />
+          <Entry key={item.post.uri} item={item} index={index} showAuthor />
         ))}
       </div>
 

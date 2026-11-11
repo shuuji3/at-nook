@@ -1,6 +1,7 @@
 import type { AppBskyFeedDefs } from "@atcute/bluesky";
+import { Link } from "react-router";
 import { toEmbedView, toReplyView } from "../lib/embed";
-import { dayOf, rkeyFromUri, splitTimestamp } from "../lib/format";
+import { dayOf, profileHref, rkeyFromUri, splitTimestamp } from "../lib/format";
 import { useRulingSnap } from "../lib/use-ruling-snap";
 import { EmbedNote } from "./embed-note";
 import { RichText } from "./rich-text";
@@ -8,6 +9,8 @@ interface EntryProps {
   item: AppBskyFeedDefs.FeedViewPost;
   index: number;
   showDate?: boolean;
+  /** pages that mix authors (a hashtag) need the author written above the entry */
+  showAuthor?: boolean;
 }
 
 const readRecord = (record: unknown): { text: string; createdAt?: string; facets?: unknown } => {
@@ -29,7 +32,7 @@ const readRecord = (record: unknown): { text: string; createdAt?: string; facets
 };
 
 /** One dated diary entry: the writing, then whatever was pasted beside it. */
-export const Entry = ({ item, index, showDate = true }: EntryProps) => {
+export const Entry = ({ item, index, showDate = true, showAuthor = false }: EntryProps) => {
   const post = item.post;
   const { text, createdAt, facets } = readRecord(post.record);
   const stamp = createdAt ? splitTimestamp(createdAt) : null;
@@ -59,6 +62,19 @@ export const Entry = ({ item, index, showDate = true }: EntryProps) => {
       ) : null}
 
       <div className="entry-body">
+        {showAuthor ? (
+          <p className="entry-author">
+            {post.author.displayName ? (
+              <Link className="note-quote-name" to={profileHref(post.author.handle)}>
+                {post.author.displayName}
+              </Link>
+            ) : null}
+            <Link className="note-quote-handle" to={profileHref(post.author.handle)}>
+              @{post.author.handle}
+            </Link>
+          </p>
+        ) : null}
+
         {replyTarget ? (
           <p className="entry-reply">
             <a
