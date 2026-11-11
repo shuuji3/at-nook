@@ -14,6 +14,8 @@ import {
   getSession,
   OAuthUserAgent,
 } from "@atcute/oauth-browser-client";
+import { OAUTH_SCOPE } from "./oauth-scope";
+import { setReader } from "./rpc";
 
 const DID_STORAGE_KEY = "notebook-reader:did";
 
@@ -37,13 +39,14 @@ export const oauthEndpoints = (origin: string): OAuthEndpoints => {
   if (LOOPBACK_HOSTS.has(url.hostname)) {
     const redirect_uri = `http://127.0.0.1:${url.port}/oauth/callback`;
     return {
-      client_id: `http://localhost?redirect_uri=${encodeURIComponent(redirect_uri)}&scope=atproto`,
+      client_id: `http://localhost?redirect_uri=${encodeURIComponent(redirect_uri)}&scope=${encodeURIComponent(OAUTH_SCOPE)}`,
       redirect_uri,
     };
   }
 
   return {
-    client_id: `${origin}/oauth-client-metadata.json`,
+    // ?v=2 busts the PDS's cached copy of the previous client metadata
+    client_id: `${origin}/oauth-client-metadata.json?v=2`,
     redirect_uri: `${origin}/oauth/callback`,
   };
 };
@@ -107,7 +110,7 @@ export const startLogin = async (identifier: string): Promise<URL> => {
 
   return await createAuthorizationUrl({
     target: { type: "account", identifier: identifier as ActorIdentifier },
-    scope: "atproto",
+    scope: OAUTH_SCOPE,
   });
 };
 
@@ -122,14 +125,19 @@ export const finishLogin = async (hash: string): Promise<{ did: string }> => {
   return { did };
 };
 
-/** Checks that a stored session is still usable, dropping it when it is not. */
+/**
+ * Resumes a stored session and arms the authenticated reader with it, dropping
+ * the session when it is no longer usable.
+ */
 export const resumeSession = async (did: string): Promise<boolean> => {
   ensureOAuth();
 
   try {
-    await getSession(did as Did);
+    const session = await getSession(did as Did);
+    setReader(new OAuthUserAgent(session));
     return true;
   } catch {
+    setReader(null);
     deleteStoredSession(did as Did);
     clearStoredDid();
     return false;
@@ -147,6 +155,7 @@ export const signOut = async (did: string): Promise<void> => {
     // clearing local state is what matters when the server is unreachable
   }
 
+  setReader(null);
   deleteStoredSession(did as Did);
   clearStoredDid();
 };

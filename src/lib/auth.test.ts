@@ -21,6 +21,7 @@ vi.mock("@atcute/oauth-browser-client", () => ({
   },
 }));
 
+import { OAUTH_SCOPE } from "./oauth-scope";
 import {
   clearStoredDid,
   finishLogin,
@@ -47,7 +48,7 @@ describe("auth", () => {
     expect(result).toBe(url);
     expect(mocks.createAuthorizationUrl).toHaveBeenCalledWith({
       target: { type: "account", identifier: "bsky.app" },
-      scope: "atproto",
+      scope: OAUTH_SCOPE,
     });
   });
 
@@ -89,8 +90,7 @@ describe("auth", () => {
 describe("oauth endpoints", () => {
   it("uses the loopback client id for a local dev origin", () => {
     expect(oauthEndpoints("http://127.0.0.1:12520")).toEqual({
-      client_id:
-        "http://localhost?redirect_uri=http%3A%2F%2F127.0.0.1%3A12520%2Foauth%2Fcallback&scope=atproto",
+      client_id: `http://localhost?redirect_uri=${encodeURIComponent("http://127.0.0.1:12520/oauth/callback")}&scope=${encodeURIComponent(OAUTH_SCOPE)}`,
       redirect_uri: "http://127.0.0.1:12520/oauth/callback",
     });
     expect(oauthEndpoints("http://localhost:12520").redirect_uri).toBe(
@@ -100,7 +100,7 @@ describe("oauth endpoints", () => {
 
   it("uses the public client metadata for any other origin", () => {
     expect(oauthEndpoints("https://bluesky-notebook-reader.shuuji3.xyz")).toEqual({
-      client_id: "https://bluesky-notebook-reader.shuuji3.xyz/oauth-client-metadata.json",
+      client_id: "https://bluesky-notebook-reader.shuuji3.xyz/oauth-client-metadata.json?v=2",
       redirect_uri: "https://bluesky-notebook-reader.shuuji3.xyz/oauth/callback",
     });
   });
@@ -109,10 +109,12 @@ describe("oauth endpoints", () => {
     const metadata = JSON.parse(readFileSync("public/oauth-client-metadata.json", "utf8")) as {
       client_id: string;
       redirect_uris: string[];
+      scope: string;
     };
     const endpoints = oauthEndpoints("https://bluesky-notebook-reader.shuuji3.xyz");
 
     expect(metadata.client_id).toBe(endpoints.client_id);
     expect(metadata.redirect_uris).toEqual([endpoints.redirect_uri]);
+    expect(metadata.scope).toBe(OAUTH_SCOPE);
   });
 });

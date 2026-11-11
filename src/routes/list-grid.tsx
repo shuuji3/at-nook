@@ -1,12 +1,15 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { PersonTile } from "../components/person-tile";
 import { NotebookShell } from "../components/notebook-shell";
 import { listUri, profileHref } from "../lib/format";
 import { listQuery, profileQuery } from "../lib/queries";
+import { useSession } from "../lib/session";
 
 /** A curation list: the people inside it, laid out like a shelf. */
 export const ListGridRoute = () => {
+  const { session } = useSession();
+
   const { actor = "", rkey = "" } = useParams<{
     actor: string;
     rkey: string;
@@ -19,6 +22,16 @@ export const ListGridRoute = () => {
     ...listQuery(uri),
     enabled: Boolean(uri),
   });
+
+  if (!session) {
+    return (
+      <NotebookShell>
+        <h1 className="page-note">
+          open the notebook from the <Link to="/">cover</Link> first
+        </h1>
+      </NotebookShell>
+    );
+  }
 
   if (profile.isPending) {
     return <p className="page-note">finding the notebook…</p>;

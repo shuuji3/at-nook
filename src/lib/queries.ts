@@ -1,17 +1,26 @@
 import { ok } from "@atcute/client";
 import type { ActorIdentifier, ResourceUri } from "@atcute/lexicons";
 import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
-import { rpc } from "./rpc";
+import { publicRpc, rpc } from "./rpc";
 
 const FIVE_MINUTES = 300_000;
 const ONE_MINUTE = 60_000;
+
+/** Handle candidates for the cover's input. A public read, no session needed. */
+export const actorCandidatesQuery = (q: string) =>
+  queryOptions({
+    queryKey: ["actorCandidates", q],
+    queryFn: () =>
+      ok(publicRpc.get("app.bsky.actor.searchActorsTypeahead", { params: { q, limit: 8 } })),
+    staleTime: ONE_MINUTE,
+  });
 
 export const profileQuery = (actor: string) =>
   queryOptions({
     queryKey: ["profile", actor],
     queryFn: () =>
       ok(
-        rpc.get("app.bsky.actor.getProfile", {
+        rpc().get("app.bsky.actor.getProfile", {
           params: { actor: actor as ActorIdentifier },
         }),
       ),
@@ -23,7 +32,7 @@ export const followsQuery = (did: string) =>
     queryKey: ["follows", did],
     queryFn: ({ pageParam }) =>
       ok(
-        rpc.get("app.bsky.graph.getFollows", {
+        rpc().get("app.bsky.graph.getFollows", {
           params: { actor: did as ActorIdentifier, limit: 50, cursor: pageParam },
         }),
       ),
@@ -37,7 +46,7 @@ export const listsQuery = (did: string) =>
     queryKey: ["lists", did],
     queryFn: ({ pageParam }) =>
       ok(
-        rpc.get("app.bsky.graph.getLists", {
+        rpc().get("app.bsky.graph.getLists", {
           params: {
             actor: did as ActorIdentifier,
             purposes: ["curatelist"],
@@ -56,7 +65,7 @@ export const listQuery = (uri: string) =>
     queryKey: ["list", uri],
     queryFn: ({ pageParam }) =>
       ok(
-        rpc.get("app.bsky.graph.getList", {
+        rpc().get("app.bsky.graph.getList", {
           params: { list: uri as ResourceUri, limit: 50, cursor: pageParam },
         }),
       ),
@@ -70,13 +79,27 @@ export const authorFeedQuery = (actor: string) =>
     queryKey: ["authorFeed", actor],
     queryFn: ({ pageParam }) =>
       ok(
-        rpc.get("app.bsky.feed.getAuthorFeed", {
+        rpc().get("app.bsky.feed.getAuthorFeed", {
           params: {
             actor: actor as ActorIdentifier,
             limit: 50,
             filter: "posts_with_replies",
             cursor: pageParam,
           },
+        }),
+      ),
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (last) => last.cursor,
+    staleTime: ONE_MINUTE,
+  });
+
+export const tagQuery = (tag: string) =>
+  infiniteQueryOptions({
+    queryKey: ["tag", tag],
+    queryFn: ({ pageParam }) =>
+      ok(
+        rpc().get("app.bsky.feed.searchPosts", {
+          params: { q: `#${tag}`, tag: [tag], limit: 50, sort: "latest", cursor: pageParam },
         }),
       ),
     initialPageParam: undefined as string | undefined,

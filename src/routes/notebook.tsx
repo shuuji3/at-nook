@@ -1,14 +1,17 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { Entry } from "../components/entry";
 import { NotebookHeader } from "../components/notebook-header";
 import { NotebookShell } from "../components/notebook-shell";
 import { documentTitle, dayOf } from "../lib/format";
 import { authorFeedQuery, profileQuery } from "../lib/queries";
+import { useSession } from "../lib/session";
 
 /** One person's notebook: header band plus written entries. */
 export const NotebookRoute = () => {
+  const { session } = useSession();
+
   const { actor = "" } = useParams<{ actor: string }>();
 
   const profile = useQuery(profileQuery(actor));
@@ -29,6 +32,16 @@ export const NotebookRoute = () => {
       document.title = title;
     }
   }, [title]);
+
+  if (!session) {
+    return (
+      <NotebookShell>
+        <h1 className="page-note">
+          open the notebook from the <Link to="/">cover</Link> first
+        </h1>
+      </NotebookShell>
+    );
+  }
 
   if (profile.isPending) {
     return <p className="page-note">finding the notebook…</p>;

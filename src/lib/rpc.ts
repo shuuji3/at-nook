@@ -1,6 +1,27 @@
-import { Client, simpleFetchHandler } from "@atcute/client";
+import { Client, simpleFetchHandler, type FetchHandlerObject } from "@atcute/client";
 import type {} from "@atcute/bluesky";
+import { APPVIEW_AUDIENCE } from "./oauth-scope";
 
-export const rpc = new Client({
+/** the public AppView, used only by the cover for handle candidates */
+export const publicRpc = new Client({
   handler: simpleFetchHandler({ service: "https://public.api.bsky.app" }),
 });
+
+let reader: Client | null = null;
+
+/**
+ * Points the reader at the signed-in account's PDS, proxying reads to the
+ * AppView. Pass null to drop it on sign out.
+ */
+export const setReader = (handler: FetchHandlerObject | null): void => {
+  reader = handler ? new Client({ handler, proxy: APPVIEW_AUDIENCE }) : null;
+};
+
+/** The authenticated reader. Every atproto read goes through it. */
+export const rpc = (): Client => {
+  if (!reader) {
+    throw new Error("read attempted before sign-in");
+  }
+
+  return reader;
+};

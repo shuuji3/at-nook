@@ -14,7 +14,13 @@ vi.mock("../lib/auth", () => ({
   signOut: vi.fn(),
 }));
 
-vi.mock("../lib/queries", () => ({ profileQuery: mocks.profileQuery }));
+vi.mock("../lib/queries", () => ({
+  profileQuery: mocks.profileQuery,
+  actorCandidatesQuery: (q: string) => ({
+    queryKey: ["actorCandidates", q],
+    queryFn: async () => ({ actors: [] }),
+  }),
+}));
 
 import { App } from "../app";
 import { renderWithProviders } from "../test/render";

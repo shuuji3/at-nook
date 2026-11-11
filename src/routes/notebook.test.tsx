@@ -12,6 +12,15 @@ vi.mock("../lib/auth", () => ({
   resumeSession: vi.fn(),
   signOut: vi.fn(),
 }));
+vi.mock("../lib/session", () => ({
+  SessionProvider: ({ children }: { children: unknown }) => children,
+  useSession: () => ({
+    session: { did: "did:plc:me", handle: "me.test" },
+    ready: true,
+    end: vi.fn(),
+    refresh: vi.fn(),
+  }),
+}));
 vi.mock("../lib/queries", () => ({
   profileQuery: mocks.profileQuery,
   authorFeedQuery: mocks.authorFeedQuery,

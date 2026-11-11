@@ -16,6 +16,7 @@
     "@atcute/identity-resolver": "^2.0.3",
     "@atcute/lexicons": "^2.1.1",
     "@atcute/oauth-browser-client": "^5.1.0",
+    "@atcute/oauth-types": "^1.0.1",
     "@tanstack/react-query": "^5.107.1",
     "hls.js": "^1.7.4",
     "react": "^19.3.1",
