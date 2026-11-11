@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router";
 import { SessionProvider } from "./lib/session";
 import { CallbackRoute } from "./routes/callback";
+import { HashtagRoute } from "./routes/hashtag";
 import { HomeRoute } from "./routes/home";
 import { ListGridRoute } from "./routes/list-grid";
 import { NotebookRoute } from "./routes/notebook";
@@ -13,6 +14,7 @@ export const App = () => (
       <Route path="/oauth/callback" element={<CallbackRoute />} />
       <Route path="/profile/:actor" element={<NotebookRoute />} />
       <Route path="/profile/:actor/list/:rkey" element={<ListGridRoute />} />
+      <Route path="/hashtag/:tag" element={<HashtagRoute />} />
       <Route path="*" element={<NotFoundRoute />} />
     </Routes>
   </SessionProvider>
