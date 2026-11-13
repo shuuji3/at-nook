@@ -11,7 +11,7 @@ interface PhotoProps {
   tapeHue: number;
 }
 
-const MOVE_MS = 260;
+const MOVE_MS = 300;
 const HALF_MS = MOVE_MS / 2;
 const TAPE_MS = 180;
 const EASE = "cubic-bezier(0.22, 0.61, 0.36, 1)";
@@ -28,8 +28,6 @@ interface Plan {
   pose: Pose;
   /** the padding that renders as the taped print's own padding under this pose */
   startPad: string;
-  /** the viewer print's own padding, where the move settles */
-  endPad: string;
   scaleY: number;
   /** the page caption's font size and line height, in px */
   pageFont: number;
@@ -62,8 +60,9 @@ const prefersReducedMotion = () =>
  *
  * The whole print travels — paper, picture and caption as one object. The two prints
  * are the same object at two sizes, so each axis gets its own scale: that maps one
- * box onto the other exactly, which a single scale cannot do because the padding is a
- * fixed length and the caption wraps at each print's own width.
+ * box onto the other exactly. The padding is carried as the taped print's padding
+ * divided by the scale, so the paper keeps the same margin against the picture at
+ * every frame instead of thinning out as the print grows.
  *
  * The viewer caption holds the caption twice — once at the page's size, once at the
  * viewer's — and the box height travels between the two heights while the two forms
@@ -91,10 +90,10 @@ export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => 
    * The move plan: the pose that puts the viewer print on the taped print, plus the
    * padding and caption box geometry that must go with it.
    *
-   * A scale cannot carry a fixed length, so the fixed lengths are scaled the other way:
-   * the viewer print is padded by the taped print's padding divided by the scale, and
-   * the caption box starts at the page caption's height divided by the scale, so both
-   * render as the taped print's own under the pose and ease back as the print grows.
+   * A scale cannot carry a fixed length, so the viewer print is padded by the taped
+   * print's padding divided by the scale, and the caption box starts at the page
+   * caption's height divided by the scale: both render as the taped print's own under
+   * the pose. Only the caption box then eases to the viewer's height as the print grows.
    */
   const plan = useCallback((): Plan | null => {
     const print = printRef.current;
@@ -119,11 +118,8 @@ export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => 
     const scaleY = printH / viewerH;
 
     const printStyle = getComputedStyle(print);
-    const viewerStyle = getComputedStyle(viewer);
     const printPadX = parseFloat(printStyle.paddingLeft);
     const printPadY = parseFloat(printStyle.paddingTop);
-    const viewerPadX = parseFloat(viewerStyle.paddingLeft);
-    const viewerPadY = parseFloat(viewerStyle.paddingTop);
 
     const pageCaption = print.querySelector<HTMLElement>(".photo-caption");
     const viewerCaption = viewer.querySelector<HTMLElement>(".photo-caption-viewer");
@@ -151,7 +147,6 @@ export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => 
         rotate: tilt,
       },
       startPad: `${printPadY / scaleY}px ${printPadX / scaleX}px`,
-      endPad: `${viewerPadY}px ${viewerPadX}px`,
       scaleY,
       pageFont,
       pageLine,
@@ -177,7 +172,6 @@ export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => 
     }
 
     let animation: Animation | null = null;
-    let paddingAnimation: Animation | null = null;
     let tapeAnimation: Animation | null = null;
     const captionAnimations: Animation[] = [];
 
@@ -190,7 +184,6 @@ export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => 
       const {
         pose,
         startPad,
-        endPad,
         scaleY,
         pageFont,
         pageLine,
@@ -224,11 +217,6 @@ export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => 
       const backdrop = backdropRef.current;
 
       animation = card.animate([{ transform: poseTransform(pose) }, { transform: "none" }], {
-        duration: MOVE_MS,
-        easing: EASE,
-        fill: "forwards",
-      });
-      paddingAnimation = card.animate([{ padding: startPad }, { padding: endPad }], {
         duration: MOVE_MS,
         easing: EASE,
         fill: "forwards",
@@ -287,12 +275,10 @@ export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => 
       void animation.finished
         .then(() => {
           animation?.cancel();
-          paddingAnimation?.cancel();
           for (const captionAnimation of captionAnimations) {
             captionAnimation.cancel();
           }
           card.style.transform = "";
-          card.style.padding = "";
           if (captionBox) {
             captionBox.style.height = "";
             captionBox.style.marginTop = "";
@@ -321,7 +307,6 @@ export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => 
       animation = begin(current);
       return () => {
         animation?.cancel();
-        paddingAnimation?.cancel();
         tapeAnimation?.cancel();
         for (const captionAnimation of captionAnimations) {
           captionAnimation.cancel();
@@ -332,7 +317,6 @@ export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => 
     setPhase("open");
     return () => {
       animation?.cancel();
-      paddingAnimation?.cancel();
       tapeAnimation?.cancel();
       for (const captionAnimation of captionAnimations) {
         captionAnimation.cancel();
@@ -357,8 +341,6 @@ export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => 
 
     const {
       pose,
-      startPad,
-      endPad,
       scaleY,
       pageFont,
       pageLine,
@@ -382,12 +364,6 @@ export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => 
 
     card.style.transform = "none";
     card.animate([{ transform: "none" }, { transform: poseTransform(pose) }], {
-      duration: MOVE_MS,
-      easing: EASE,
-      fill: "forwards",
-    });
-    card.style.padding = endPad;
-    card.animate([{ padding: endPad }, { padding: startPad }], {
       duration: MOVE_MS,
       easing: EASE,
       fill: "forwards",
