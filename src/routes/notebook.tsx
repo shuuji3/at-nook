@@ -10,7 +10,11 @@ import { useSession } from "../lib/session";
 
 /** One person's notebook: header band plus written entries. */
 export const NotebookRoute = () => {
-  const { session } = useSession();
+  const { session, ready } = useSession();
+
+  if (!ready) {
+    return null;
+  }
 
   const { actor = "" } = useParams<{ actor: string }>();
 
@@ -44,11 +48,19 @@ export const NotebookRoute = () => {
   }
 
   if (profile.isPending) {
-    return <p className="page-note">finding the notebook…</p>;
+    return (
+      <NotebookShell>
+        <p className="page-note">finding the notebook…</p>
+      </NotebookShell>
+    );
   }
 
   if (profile.isError || !profile.data) {
-    return <h1 className="page-note">this notebook could not be found</h1>;
+    return (
+      <NotebookShell>
+        <h1 className="page-note">this notebook could not be found</h1>
+      </NotebookShell>
+    );
   }
 
   const entries = (feed.data?.pages ?? [])

@@ -59,7 +59,7 @@ export const ShelfRoute = () => {
             ))}
           </div>
 
-          {active.isPending ? <p className="shelf-note">finding notebooks…</p> : null}
+          {active.isPending ? <p className="loading-note">finding notebooks…</p> : null}
           {active.isError ? <p className="shelf-note">the shelf could not be reached</p> : null}
           {active.hasNextPage ? (
             <button

@@ -8,7 +8,11 @@ import { useSession } from "../lib/session";
 
 /** A curation list: the people inside it, laid out like a shelf. */
 export const ListGridRoute = () => {
-  const { session } = useSession();
+  const { session, ready } = useSession();
+
+  if (!ready) {
+    return null;
+  }
 
   const { actor = "", rkey = "" } = useParams<{
     actor: string;
@@ -34,11 +38,19 @@ export const ListGridRoute = () => {
   }
 
   if (profile.isPending) {
-    return <p className="page-note">finding the notebook…</p>;
+    return (
+      <NotebookShell>
+        <p className="page-note">finding the notebook…</p>
+      </NotebookShell>
+    );
   }
 
   if (profile.isError || !profile.data) {
-    return <h1 className="page-note">this notebook could not be found</h1>;
+    return (
+      <NotebookShell>
+        <h1 className="page-note">this notebook could not be found</h1>
+      </NotebookShell>
+    );
   }
 
   const pages = list.data?.pages ?? [];
