@@ -305,6 +305,9 @@ export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => 
           if (backdrop) {
             backdrop.style.opacity = "1";
           }
+          if (tape) {
+            tape.style.opacity = "0";
+          }
           setPhase("open");
         })
         .catch(() => undefined);
