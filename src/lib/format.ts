@@ -105,6 +105,12 @@ export const offsetFor = (seed: string, index: number): number => {
 
 export const coverHue = (did: string): number => hash(did) % 360;
 
+/** A whole-rem horizontal shift in steps, so stacked spines snap to a grid and never line up. */
+export const spineShift = (seed: string): number => {
+  const value = hash(`${seed}:spine`) / 0xffffffff;
+  return Math.floor(value * 7) - 3;
+};
+
 export const documentTitle = (profile: { displayName?: string; handle: string }): string =>
   profile.displayName
     ? `at-nook — ${profile.displayName} (@${profile.handle})`

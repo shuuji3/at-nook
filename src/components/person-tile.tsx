@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import { Link } from "react-router";
-import { coverHue } from "../lib/format";
+import { coverHue, spineShift } from "../lib/format";
 import { Avatar } from "./avatar";
 
 export interface TileProfile {
@@ -16,19 +16,30 @@ interface PersonTileProps {
   caption?: string;
 }
 
-/** One person as a little closed notebook standing on the shelf. */
+/** One person as a book spine lying flat on the shelf. */
 export const PersonTile = ({ profile, href, caption }: PersonTileProps) => (
   <Link
-    className="mini-notebook"
+    className="spine-row"
     to={href}
-    style={{ "--cover-hue": coverHue(profile.did) } as CSSProperties}
+    style={
+      {
+        "--spine-hue": coverHue(profile.did),
+        "--spine-shift": spineShift(profile.did),
+      } as CSSProperties
+    }
   >
-    <span className="mini-spine" aria-hidden="true" />
-    <span className="mini-face">
-      <Avatar src={profile.avatar} alt={profile.displayName ?? profile.handle} size={64} />
-      <span className="mini-name">{profile.displayName ?? profile.handle}</span>
-      <span className="mini-handle">@{profile.handle}</span>
-      {caption ? <span className="mini-caption">{caption}</span> : null}
+    <span className="spine-edge">
+      <Avatar
+        src={profile.avatar}
+        alt={profile.displayName ?? profile.handle}
+        size={44}
+        viewable={false}
+      />
     </span>
+    <span className="spine-label">
+      <span className="spine-name">{profile.displayName ?? profile.handle}</span>
+      <span className="spine-handle">@{profile.handle}</span>
+    </span>
+    {caption ? <span className="spine-caption">{caption}</span> : null}
   </Link>
 );
