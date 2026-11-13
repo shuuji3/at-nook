@@ -43,7 +43,7 @@ export const Avatar = ({ src, alt, size = 44, viewable = true }: AvatarProps) =>
           width: size,
           maxWidth: size,
           padding: "4px",
-          "--tilt": "0deg",
+          margin: 0,
         } as CSSProperties
       }
     />
