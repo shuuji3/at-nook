@@ -1,6 +1,6 @@
 {
-  "client_id": "https://at-nook.shuuji3.xyz/oauth-client-metadata.json?v=2",
-  "client_name": "bluesky notebook reader",
+  "client_id": "https://at-nook.shuuji3.xyz/oauth-client-metadata.json",
+  "client_name": "at-nook",
   "application_type": "web",
   "grant_types": ["authorization_code", "refresh_token"],
   "response_types": ["code"],

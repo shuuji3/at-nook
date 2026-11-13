@@ -111,7 +111,7 @@ export const CoverRoute = () => {
         <span className="cover-spine" aria-hidden="true" />
 
         <div className="cover-face">
-          <h1 className="cover-title">notebook</h1>
+          <h1 className="cover-title">at-nook</h1>
 
           <div className="cover-name-line">
             <label className="cover-label" htmlFor="handle">

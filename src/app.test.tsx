@@ -7,6 +7,6 @@ describe("app", () => {
   it("renders the cover route", () => {
     renderWithProviders(<App />);
 
-    expect(screen.getByRole("heading", { name: "notebook" })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "at-nook" })).toBeTruthy();
   });
 });

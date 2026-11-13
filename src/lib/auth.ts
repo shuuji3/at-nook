@@ -17,7 +17,7 @@ import {
 import { OAUTH_SCOPE } from "./oauth-scope";
 import { setReader } from "./rpc";
 
-const DID_STORAGE_KEY = "notebook-reader:did";
+const DID_STORAGE_KEY = "at-nook:did";
 
 const LOOPBACK_HOSTS = new Set(["127.0.0.1", "localhost"]);
 

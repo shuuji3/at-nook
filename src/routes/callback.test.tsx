@@ -48,7 +48,7 @@ describe("oauth callback", () => {
     await waitFor(() => expect(mocks.finishLogin).toHaveBeenCalledTimes(1));
     expect(mocks.finishLogin).toHaveBeenCalledWith("#code=abc&state=xyz");
     expect(window.location.hash).toBe("");
-    expect(await screen.findByRole("heading", { name: "notebook" })).toBeTruthy();
+    expect(await screen.findByRole("heading", { name: "at-nook" })).toBeTruthy();
   });
 
   it("returns to the cover with a note when the callback fails", async () => {

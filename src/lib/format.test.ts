@@ -71,8 +71,8 @@ describe("format", () => {
 
   it("never drops the handle from the title", () => {
     expect(documentTitle({ displayName: "Bluesky", handle: "bsky.app" })).toBe(
-      "notebook — Bluesky (@bsky.app)",
+      "at-nook — Bluesky (@bsky.app)",
     );
-    expect(documentTitle({ handle: "bsky.app" })).toBe("notebook — @bsky.app");
+    expect(documentTitle({ handle: "bsky.app" })).toBe("at-nook — @bsky.app");
   });
 });

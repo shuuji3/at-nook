@@ -107,5 +107,5 @@ export const coverHue = (did: string): number => hash(did) % 360;
 
 export const documentTitle = (profile: { displayName?: string; handle: string }): string =>
   profile.displayName
-    ? `notebook — ${profile.displayName} (@${profile.handle})`
-    : `notebook — @${profile.handle}`;
+    ? `at-nook — ${profile.displayName} (@${profile.handle})`
+    : `at-nook — @${profile.handle}`;

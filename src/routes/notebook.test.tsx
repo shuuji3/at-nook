@@ -88,7 +88,7 @@ describe("notebook", () => {
 
     expect(await screen.findByRole("heading", { name: /Bluesky/ })).toBeTruthy();
     expect(screen.getByText("@bsky.app")).toBeTruthy();
-    expect(document.title).toBe("notebook — Bluesky (@bsky.app)");
+    expect(document.title).toBe("at-nook — Bluesky (@bsky.app)");
     expect(screen.getAllByRole("article")).toHaveLength(1);
   });
 
@@ -105,7 +105,7 @@ describe("notebook", () => {
     renderWithProviders(<App />, { route: "/profile/plain.test" });
 
     expect(await screen.findByRole("heading")).toBeTruthy();
-    expect(document.title).toBe("notebook — @plain.test");
+    expect(document.title).toBe("at-nook — @plain.test");
   });
 
   it("says when the notebook has no more writing", async () => {
