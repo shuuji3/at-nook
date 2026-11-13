@@ -764,8 +764,7 @@
 /* clippings: links and quotes */
 .note {
   display: block;
-  margin: calc(var(--line-height) - 1.25rem) calc(-1 * var(--line-height))
-    calc(var(--line-height) - 0.75rem) calc(-1 * (1rem + 3px));
+  margin: calc(var(--line-height) - 1.25rem) 0 calc(var(--line-height) - 0.75rem) 0;
   padding: 1.25rem 1rem 0.75rem;
   border-left: 3px solid var(--note-accent);
   background: rgba(255, 255, 255, 0.6);
@@ -819,7 +818,7 @@
 
 .note-quote {
   margin: calc(var(--line-height) - 1.25rem) calc(-1 * var(--line-height))
-    calc(var(--line-height) - 0.75rem) calc(-1 * (1rem + 3px));
+    calc(var(--line-height) - 0.75rem) 0;
   padding: 1.25rem 1rem 0.75rem;
   border-left: 3px solid var(--ink-soft);
   background: rgba(255, 255, 255, 0.6);
