@@ -45,8 +45,7 @@ export const oauthEndpoints = (origin: string): OAuthEndpoints => {
   }
 
   return {
-    // ?v=2 busts the PDS's cached copy of the previous client metadata
-    client_id: `${origin}/oauth-client-metadata.json?v=2`,
+    client_id: `${origin}/oauth-client-metadata.json`,
     redirect_uri: `${origin}/oauth/callback`,
   };
 };

@@ -99,9 +99,9 @@ describe("oauth endpoints", () => {
   });
 
   it("uses the public client metadata for any other origin", () => {
-    expect(oauthEndpoints("https://bluesky-notebook-reader.shuuji3.xyz")).toEqual({
-      client_id: "https://bluesky-notebook-reader.shuuji3.xyz/oauth-client-metadata.json?v=2",
-      redirect_uri: "https://bluesky-notebook-reader.shuuji3.xyz/oauth/callback",
+    expect(oauthEndpoints("https://at-nook.shuuji3.xyz")).toEqual({
+      client_id: "https://at-nook.shuuji3.xyz/oauth-client-metadata.json",
+      redirect_uri: "https://at-nook.shuuji3.xyz/oauth/callback",
     });
   });
 
@@ -111,7 +111,7 @@ describe("oauth endpoints", () => {
       redirect_uris: string[];
       scope: string;
     };
-    const endpoints = oauthEndpoints("https://bluesky-notebook-reader.shuuji3.xyz");
+    const endpoints = oauthEndpoints("https://at-nook.shuuji3.xyz");
 
     expect(metadata.client_id).toBe(endpoints.client_id);
     expect(metadata.redirect_uris).toEqual([endpoints.redirect_uri]);

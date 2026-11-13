@@ -3,7 +3,7 @@ import { defineConfig } from "vite-plus";
 
 const DEV_HOST = "127.0.0.1";
 const DEV_PORT = 12520;
-const TUNNEL_HOST = "bluesky-notebook-reader.shuuji3.xyz";
+const TUNNEL_HOST = "at-nook.shuuji3.xyz";
 
 export default defineConfig({
   plugins: [react()],
