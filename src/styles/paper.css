@@ -370,6 +370,7 @@
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
+  transform: rotate(-90deg);
 }
 
 .spine-label {
