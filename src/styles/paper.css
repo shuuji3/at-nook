@@ -340,6 +340,12 @@
   box-shadow: 0 2px 4px rgba(43, 58, 85, 0.26);
 }
 
+/* the spine slides a little further out when pointed at */
+.spine-row:hover {
+  transform: translateX(calc(var(--spine-shift, 0) * 1rem - 3rem));
+  box-shadow: 0 6px 14px rgba(43, 58, 85, 0.32);
+}
+
 /* the lightly raised bands of a spine */
 .spine-row::before,
 .spine-row::after {
@@ -416,6 +422,12 @@
 
   .photo-zoom .photo-enlarged {
     will-change: transform;
+  }
+
+  .spine-row {
+    transition:
+      transform 140ms ease,
+      box-shadow 140ms ease;
   }
 }
 
