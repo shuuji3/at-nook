@@ -94,7 +94,7 @@
   margin: 6px 0 0;
   padding: 6px;
   list-style: none;
-  max-height: 190px;
+  max-height: 300px;
   overflow-y: auto;
   border-radius: 6px;
   background: #6d3833;
@@ -104,7 +104,7 @@
 
 .cover-candidate {
   display: grid;
-  grid-template-columns: 36px 1fr auto;
+  grid-template-columns: 36px 1fr;
   gap: 8px;
   align-items: center;
   padding: 6px 8px;
@@ -120,16 +120,15 @@
   background: rgba(246, 234, 216, 0.22);
 }
 
-.cover-candidate-name {
+.cover-candidate-handle {
   font-size: 20px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.cover-candidate-handle {
-  font-size: 15px;
-  opacity: 0.8;
+.cover-candidate-name {
+  font-size: 20px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

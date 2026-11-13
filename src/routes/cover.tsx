@@ -162,10 +162,13 @@ export const CoverRoute = () => {
                       alt={person.displayName ?? person.handle}
                       size={28}
                     />
-                    <span className="cover-candidate-name">
-                      {person.displayName ?? person.handle}
+                    <span>
+                      <span className="cover-candidate-handle">@{person.handle}</span>
+                      <span className="cover-candidate-name">
+                        {" "}
+                        ({person.displayName ?? person.handle})
+                      </span>
                     </span>
-                    <span className="cover-candidate-handle">@{person.handle}</span>
                   </li>
                 ))}
               </ul>
