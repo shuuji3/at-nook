@@ -78,34 +78,40 @@ export const EmbedNote = ({ embed, seed, postDay }: EmbedNoteProps) => {
       );
 
     case "quote": {
-      const stamp = embed.createdAt ? splitTimestamp(embed.createdAt) : null;
+      const timestamp = embed.createdAt ? splitTimestamp(embed.createdAt) : null;
       const sameDay = Boolean(embed.createdAt && postDay && dayOf(embed.createdAt) === postDay);
       const href = profileHref(embed.handle);
 
       return (
         <blockquote className={`note note-quote note-quote-${embed.variant}`}>
           {embed.handle ? (
-            <p className="note-quote-author">
-              quote from{" "}
-              {embed.displayName ? (
-                <Link className="note-quote-name" to={href}>
-                  {embed.displayName}
-                </Link>
+            <>
+              <p className="note-quote-author">
+                quote from{" "}
+                {embed.displayName ? (
+                  <>
+                    <Link className="note-quote-name" to={href}>
+                      @{embed.handle}
+                    </Link>
+                    ({embed.displayName})
+                  </>
+                ) : null}
+              </p>
+              {timestamp ? (
+                <p className="note-quote-author">
+                  <a
+                    className="note-quote-time"
+                    href={`https://bsky.app/profile/${embed.handle}/post/${rkeyFromUri(embed.uri)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <time dateTime={embed.createdAt}>
+                      {sameDay ? timestamp.time : `${timestamp.date} ${timestamp.time}`}
+                    </time>
+                  </a>
+                </p>
               ) : null}
-              @{embed.handle}
-              {stamp ? (
-                <a
-                  className="note-quote-time"
-                  href={`https://bsky.app/profile/${embed.handle}/post/${rkeyFromUri(embed.uri)}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <time dateTime={embed.createdAt}>
-                    {sameDay ? stamp.time : `${stamp.date} ${stamp.time}`}
-                  </time>
-                </a>
-              ) : null}
-            </p>
+            </>
           ) : null}
           {embed.text ? (
             <p className="note-quote-text">
