@@ -680,7 +680,7 @@
 
 .photo-zoom .photo-enlarged {
   width: auto;
-  max-width: 92vw;
+  max-width: none;
   margin-left: 0;
   transform: none;
   /* the backdrop already separates the print from the page */
