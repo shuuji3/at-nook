@@ -17,6 +17,16 @@
   --page-width: 960px;
 }
 
+/*
+ * registered so the keyframes can sweep the cloth through the hue wheel;
+ * 0deg leaves the cloth at its own hue
+ */
+@property --cloth-hue {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
 /* the closed notebook */
 .cover {
   min-height: 100vh;
@@ -33,7 +43,7 @@
   height: min(720px, 88svh);
   display: flex;
   border-radius: 4px 14px 14px 4px;
-  background-color: var(--cloth);
+  background-color: hsl(from var(--cloth) calc(h + 120 + var(--cloth-hue)) s l);
   background-image:
     radial-gradient(ellipse at 25% 8%, rgba(255, 255, 255, 0.1), transparent 55%),
     radial-gradient(ellipse at 85% 95%, rgba(0, 0, 0, 0.28), transparent 60%),
@@ -357,6 +367,19 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  .cover-book {
+    animation: cloth-hue 30s linear infinite;
+  }
+
+  @keyframes cloth-hue {
+    from {
+      --cloth-hue: 0;
+    }
+    to {
+      --cloth-hue: 360;
+    }
+  }
+
   .photo-zoom .photo-enlarged {
     will-change: transform;
   }
