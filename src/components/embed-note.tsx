@@ -87,18 +87,18 @@ export const EmbedNote = ({ embed, seed, postDay }: EmbedNoteProps) => {
           {embed.handle ? (
             <>
               <p className="note-quote-author">
-                quote from{" "}
-                {embed.displayName ? (
-                  <>
-                    <Link className="note-quote-name" to={href}>
-                      @{embed.handle}
-                    </Link>
-                    ({embed.displayName})
-                  </>
-                ) : null}
-              </p>
-              {timestamp ? (
-                <p className="note-quote-author">
+                <span>
+                  quote from{" "}
+                  {embed.displayName ? (
+                    <>
+                      <Link className="note-quote-name" to={href}>
+                        @{embed.handle}
+                      </Link>
+                      ({embed.displayName})
+                    </>
+                  ) : null}
+                </span>
+                {timestamp ? (
                   <a
                     className="note-quote-time"
                     href={`https://bsky.app/profile/${embed.handle}/post/${rkeyFromUri(embed.uri)}`}
@@ -109,8 +109,8 @@ export const EmbedNote = ({ embed, seed, postDay }: EmbedNoteProps) => {
                       {sameDay ? timestamp.time : `${timestamp.date} ${timestamp.time}`}
                     </time>
                   </a>
-                </p>
-              ) : null}
+                ) : null}
+              </p>
             </>
           ) : null}
           {embed.text ? (

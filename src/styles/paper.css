@@ -831,6 +831,7 @@
 .note-quote-author,
 .entry-author {
   display: flex;
+  justify-content: space-between;
   flex-wrap: nowrap;
   gap: 0 0.5em;
   margin: 0;
