@@ -42,6 +42,8 @@ interface Plan {
   endCapMargin: number;
 }
 
+type Phase = "closed" | "opening" | "open" | "closing";
+
 const centre = (rect: DOMRect) => ({
   x: rect.left + rect.width / 2,
   y: rect.top + rect.height / 2,
@@ -70,7 +72,7 @@ const prefersReducedMotion = () =>
  * form is always drawn on the paper, not behind it.
  */
 export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => {
-  const [zoomed, setZoomed] = useState(false);
+  const [phase, setPhase] = useState<Phase>("closed");
   const [staged, setStaged] = useState(false);
   const printRef = useRef<HTMLElement | null>(null);
   const viewerRef = useRef<HTMLElement | null>(null);
@@ -161,8 +163,7 @@ export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => 
   }, [tilt]);
 
   useLayoutEffect(() => {
-    if (!zoomed) {
-      setStaged(false);
+    if (phase !== "opening") {
       return;
     }
 
@@ -171,6 +172,7 @@ export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => 
         backdropRef.current.style.opacity = "1";
       }
       setStaged(false);
+      setPhase("open");
       return;
     }
 
@@ -303,6 +305,7 @@ export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => 
           if (backdrop) {
             backdrop.style.opacity = "1";
           }
+          setPhase("open");
         })
         .catch(() => undefined);
 
@@ -323,6 +326,7 @@ export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => 
       };
     }
 
+    setPhase("open");
     return () => {
       animation?.cancel();
       paddingAnimation?.cancel();
@@ -331,16 +335,22 @@ export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => 
         captionAnimation.cancel();
       }
     };
-  }, [zoomed, plan]);
+  }, [phase, plan]);
 
   const close = useCallback(() => {
+    if (phase !== "open") {
+      return;
+    }
+
     const current = plan();
     const card = viewerRef.current;
 
     if (!current || !card || prefersReducedMotion()) {
-      setZoomed(false);
+      setPhase("closed");
       return;
     }
+
+    setPhase("closing");
 
     const {
       pose,
@@ -433,7 +443,7 @@ export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => 
         captionBox.style.height = `${startCaptionH}px`;
         captionBox.style.marginTop = `${startCapMargin}px`;
       }
-      setZoomed(false);
+      setPhase("closed");
       for (const captionAnimation of captionAnimations) {
         captionAnimation.cancel();
       }
@@ -456,12 +466,12 @@ export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => 
         })
         .catch(() => undefined);
     }, MOVE_MS);
-  }, [plan]);
+  }, [phase, plan]);
 
   return (
     <>
       <figure
-        className={zoomed ? "photo is-away" : "photo"}
+        className={phase !== "closed" ? "photo is-away" : "photo"}
         style={style}
         ref={printRef}
         data-photo="print"
@@ -470,7 +480,11 @@ export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => 
         <button
           className="photo-button"
           type="button"
-          onClick={() => setZoomed(true)}
+          onClick={() => {
+            if (phase === "closed") {
+              setPhase("opening");
+            }
+          }}
           aria-label={image.alt || "photo"}
         >
           <img
@@ -490,7 +504,7 @@ export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => 
         ) : null}
       </figure>
 
-      {zoomed
+      {phase !== "closed"
         ? createPortal(
             <div className="photo-zoom" role="dialog" aria-label="photo" onClick={close}>
               <div className="photo-zoom-backdrop" ref={backdropRef} aria-hidden="true" />
