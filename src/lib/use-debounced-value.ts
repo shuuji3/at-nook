@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react";
+import { ref, watch, type Ref } from "vue";
 
 /** Returns `value` once it has stopped changing for `delay` milliseconds. */
-export const useDebouncedValue = <T>(value: T, delay: number): T => {
-  const [debounced, setDebounced] = useState(value);
+export const useDebouncedValue = <T>(source: Ref<T>, delay: number): Ref<T> => {
+  const debounced = ref(source.value) as Ref<T>;
 
-  useEffect(() => {
-    const timer = setTimeout(() => setDebounced(value), delay);
-    return () => clearTimeout(timer);
-  }, [value, delay]);
+  watch(source, (newValue, _oldValue, onCleanup) => {
+    const timer = setTimeout(() => {
+      debounced.value = newValue;
+    }, delay);
+    onCleanup(() => clearTimeout(timer));
+  });
 
   return debounced;
 };
