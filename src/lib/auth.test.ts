@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
-import { beforeEach, describe, expect, it, vi } from "vite-plus/test";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
+// vi.hoisted must not reference any imported variables — use global vi
 const mocks = vi.hoisted(() => ({
   configureOAuth: vi.fn(),
   createAuthorizationUrl: vi.fn(),
@@ -11,11 +12,11 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("@atcute/oauth-browser-client", () => ({
-  configureOAuth: mocks.configureOAuth,
-  createAuthorizationUrl: mocks.createAuthorizationUrl,
-  finalizeAuthorization: mocks.finalizeAuthorization,
-  getSession: mocks.getSession,
-  deleteStoredSession: mocks.deleteStoredSession,
+  configureOAuth: (...args: unknown[]) => mocks.configureOAuth(...args),
+  createAuthorizationUrl: (...args: unknown[]) => mocks.createAuthorizationUrl(...args),
+  finalizeAuthorization: (...args: unknown[]) => mocks.finalizeAuthorization(...args),
+  getSession: (...args: unknown[]) => mocks.getSession(...args),
+  deleteStoredSession: (...args: unknown[]) => mocks.deleteStoredSession(...args),
   OAuthUserAgent: class {
     signOut = mocks.signOut;
   },
@@ -28,7 +29,7 @@ import {
   getStoredDid,
   oauthEndpoints,
   resumeSession,
-  signOut,
+  signOut as signOutFn,
   startLogin,
   storeDid,
 } from "./auth";
@@ -79,7 +80,7 @@ describe("auth", () => {
     storeDid("did:plc:z");
     mocks.getSession.mockResolvedValue({});
 
-    await signOut("did:plc:z");
+    await signOutFn("did:plc:z");
 
     expect(mocks.signOut).toHaveBeenCalled();
     expect(mocks.deleteStoredSession).toHaveBeenCalledWith("did:plc:z");

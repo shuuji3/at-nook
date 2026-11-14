@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from "node:fs";
-import { describe, expect, it } from "vite-plus/test";
+import { describe, expect, it } from "vitest";
 
 const FILES = [
   "public/fonts/shadows-into-light-two-latin.woff2",

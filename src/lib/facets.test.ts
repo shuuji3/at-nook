@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vite-plus/test";
+import { describe, expect, it } from "vitest";
 import { toFacetSegments } from "./facets";
 
 const facet = (byteStart: number, byteEnd: number, feature: unknown) => ({
