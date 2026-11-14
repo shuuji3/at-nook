@@ -1,14 +1,15 @@
 {
   "name": "at-nook",
-  "version": "0.0.0",
-  "private": true,
   "type": "module",
+  "private": true,
   "scripts": {
-    "dev": "vp dev",
-    "build": "tsc && vp build",
-    "preview": "vp preview",
-    "prepare": "vp config",
-    "lint": "vp fmt && vp lint --fix"
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "lint": "nuxt typecheck && eslint .",
+    "test": "vitest run"
   },
   "dependencies": {
     "@atcute/bluesky": "^4.0.26",
@@ -18,25 +19,26 @@
     "@atcute/lexicons": "^2.1.1",
     "@atcute/oauth-browser-client": "^5.1.0",
     "@atcute/oauth-types": "^1.0.1",
-    "@tanstack/react-query": "^5.107.1",
+    "@tanstack/vue-query": "^5.107.1",
     "hls.js": "^1.7.4",
-    "react": "^19.3.1",
-    "react-dom": "^19.3.1",
-    "react-router": "^8.5.1"
+    "nuxt": "^4.6.4",
+    "vue": "^3.5.45",
+    "vue-router": "^5.4.0"
   },
   "devDependencies": {
+    "@nuxt/eslint": "^1.17.0",
+    "@nuxt/test-utils": "^4.4.0",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",
-    "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.8",
+    "@testing-library/vue": "^8.1.0",
     "@types/node": "^26.6.6",
-    "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0",
-    "@vitejs/plugin-react": "^6.3.0",
+    "@vitejs/plugin-vue": "6.0.11",
+    "eslint": "^10.14.0",
     "jsdom": "^31.0.0",
-    "typescript": "~7.0.2",
-    "vite": "catalog:",
-    "vite-plus": "catalog:"
+    "typescript": "~5.9.3",
+    "vitest": "2.1.8",
+    "vue-tsc": "^3.3.14"
   },
   "devEngines": {
     "packageManager": {
