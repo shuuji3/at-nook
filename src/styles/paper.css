@@ -1042,10 +1042,6 @@ select:focus-visible {
     gap: 8px;
   }
 
-  .shelf-grid {
-    grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
-  }
-
   .entry {
     grid-template-columns: 1fr;
     gap: 0;
