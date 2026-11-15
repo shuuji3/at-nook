@@ -49,9 +49,9 @@
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { useInfiniteQuery, useQuery } from "@tanstack/vue-query";
-import { listUri, profileHref } from "../../../../lib/format";
-import { listQuery, profileQuery } from "../../../../lib/queries";
-import { useSession } from "../../../../lib/session";
+import { listUri, profileHref } from "../../../../utils/format";
+import { listQuery, profileQuery } from "../../../../utils/queries";
+import { useSession } from "../../../../composables/use-session";
 
 const { session } = useSession();
 

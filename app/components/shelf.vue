@@ -38,10 +38,10 @@ import { computed, ref } from "vue";
 import { useInfiniteQuery } from "@tanstack/vue-query";
 import { ok } from "@atcute/client";
 import type { ResourceUri } from "@atcute/lexicons";
-import { profileHref } from "../lib/format";
-import { followsQuery, listsQuery } from "../lib/queries";
-import { rpc } from "../lib/rpc";
-import { useSession } from "../lib/session";
+import { profileHref } from "../utils/format";
+import { followsQuery, listsQuery } from "../utils/queries";
+import { rpc } from "../utils/rpc";
+import { useSession } from "../composables/use-session";
 import type { Group } from "./group-sidebar.vue";
 
 const FIVE_MINUTES = 300_000;

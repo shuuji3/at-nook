@@ -5,8 +5,8 @@ import { h } from "vue";
 
 const mocks = vi.hoisted(() => ({ finishLogin: vi.fn(), refresh: vi.fn() }));
 
-vi.mock("../lib/auth", () => ({ finishLogin: mocks.finishLogin, getStoredDid: () => null }));
-vi.mock("../lib/session", () => ({ useSession: () => ({ refresh: mocks.refresh }) }));
+vi.mock("../utils/auth", () => ({ finishLogin: mocks.finishLogin, getStoredDid: () => null }));
+vi.mock("../composables/use-session", () => ({ useSession: () => ({ refresh: mocks.refresh }) }));
 
 import { RouterView } from "vue-router";
 import { renderWithProviders } from "../test/render";

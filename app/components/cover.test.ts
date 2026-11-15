@@ -4,8 +4,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({ startLogin: vi.fn(), get: vi.fn() }));
 
-vi.mock("../lib/auth", () => ({ startLogin: mocks.startLogin }));
-vi.mock("../lib/rpc", () => ({
+vi.mock("../utils/auth", () => ({ startLogin: mocks.startLogin }));
+vi.mock("../utils/rpc", () => ({
   publicRpc: { get: mocks.get },
   rpc: () => ({ get: mocks.get }),
 }));

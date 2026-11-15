@@ -46,9 +46,9 @@
 import { computed, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useInfiniteQuery, useQuery } from "@tanstack/vue-query";
-import { authorFeedQuery, profileQuery } from "../../lib/queries";
-import { documentTitle, dayOf } from "../../lib/format";
-import { useSession } from "../../lib/session";
+import { authorFeedQuery, profileQuery } from "../../utils/queries";
+import { documentTitle, dayOf } from "../../utils/format";
+import { useSession } from "../../composables/use-session";
 
 const { session } = useSession();
 

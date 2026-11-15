@@ -9,7 +9,7 @@ const mocks = vi.hoisted(() => ({
   listsQuery: vi.fn(),
 }));
 
-vi.mock("../lib/session", () => ({
+vi.mock("../composables/use-session", () => ({
   useSession: () => ({
     session: { value: { did: "did:plc:me", handle: "me.test" } },
     ready: { value: true },
@@ -17,7 +17,7 @@ vi.mock("../lib/session", () => ({
     refresh: vi.fn(),
   }),
 }));
-vi.mock("../lib/queries", () => ({
+vi.mock("../utils/queries", () => ({
   profileQuery: mocks.profileQuery,
   listQuery: mocks.listQuery,
   followsQuery: mocks.followsQuery,

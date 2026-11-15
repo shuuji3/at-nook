@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/vue";
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock("./lib/auth", () => ({
+vi.mock("./utils/auth", () => ({
   getStoredDid: () => null,
   resumeSession: vi.fn(),
   signOut: vi.fn(),

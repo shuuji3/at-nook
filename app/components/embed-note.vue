@@ -84,8 +84,8 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import type { EmbedView } from "../lib/embed";
-import { dayOf, pickSpread, profileHref, rkeyFromUri, splitTimestamp, tapeHue } from "../lib/format";
+import type { EmbedView } from "../utils/embed";
+import { dayOf, pickSpread, profileHref, rkeyFromUri, splitTimestamp, tapeHue } from "../utils/format";
 
 const props = defineProps<{
   embed: EmbedView;

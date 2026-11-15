@@ -54,9 +54,9 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import type { AppBskyFeedDefs } from "@atcute/bluesky";
-import { toEmbedView, toReplyView } from "../lib/embed";
-import { dayOf, profileHref, rkeyFromUri, splitTimestamp } from "../lib/format";
-import { useRulingSnap } from "../lib/use-ruling-snap";
+import { toEmbedView, toReplyView } from "../utils/embed";
+import { dayOf, profileHref, rkeyFromUri, splitTimestamp } from "../utils/format";
+import { useRulingSnap } from "../composables/use-ruling-snap";
 
 const props = withDefaults(
   defineProps<{

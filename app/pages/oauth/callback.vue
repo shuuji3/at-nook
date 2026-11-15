@@ -5,8 +5,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { finishLogin } from "../../lib/auth";
-import { useSession } from "../../lib/session";
+import { finishLogin } from "../../utils/auth";
+import { useSession } from "../../composables/use-session";
 
 const router = useRouter();
 const { refresh } = useSession();

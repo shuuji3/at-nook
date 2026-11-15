@@ -1,8 +1,8 @@
 import { useQuery, useQueryClient } from "@tanstack/vue-query";
 // TODO: why dont use nuxt composable, not vue inject and provide?
 import { computed, inject, provide, ref, type InjectionKey, type Ref } from "vue";
-import { getStoredDid, resumeSession, signOut } from "./auth";
-import { profileQuery } from "./queries";
+import { getStoredDid, resumeSession, signOut } from "../utils/auth";
+import { profileQuery } from "../utils/queries";
 
 export interface Session {
   did: string;

@@ -82,10 +82,10 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import { useRoute } from "vue-router";
-import { startLogin } from "../lib/auth";
-import { stripAt } from "../lib/format";
-import { actorCandidatesQuery } from "../lib/queries";
-import { useDebouncedValue } from "../lib/use-debounced-value";
+import { startLogin } from "../utils/auth";
+import { stripAt } from "../utils/format";
+import { actorCandidatesQuery } from "../utils/queries";
+import { useDebouncedValue } from "../composables/use-debounced-value";
 import { useQuery } from "@tanstack/vue-query";
 
 interface Candidate {

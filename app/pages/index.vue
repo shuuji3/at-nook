@@ -4,7 +4,7 @@
 </template>
 
 <script setup lang="ts">
-import { useSession } from "../lib/session";
+import { useSession } from "../composables/use-session";
 
 const { session, ready } = useSession();
 </script>

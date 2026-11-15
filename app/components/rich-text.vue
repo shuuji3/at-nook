@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { toFacetSegments } from "../lib/facets";
+import { toFacetSegments } from "../utils/facets";
 
 const props = defineProps<{
   text: string;
