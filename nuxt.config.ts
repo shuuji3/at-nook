@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   modules: ['@nuxt/eslint'],
   typescript: {
     tsConfig: {
-      exclude: ["src/**/*.test.ts", "src/**/*.test.tsx"],
+      exclude: ["app/**/*.test.ts", "app/**/*.test.tsx"],
     },
   },
   app: {
@@ -13,11 +13,6 @@ export default defineNuxtConfig({
       title: "at-nook",
       link: [{ rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }],
     },
-  },
-  srcDir: 'src',
-  dir: {
-    pages: 'routes',
-    public: 'public',
   },
   devServer: {
     host: '127.0.0.1',
@@ -29,10 +24,9 @@ export default defineNuxtConfig({
     },
   },
   css: [
-    '~/styles/fonts.css',
-    '~/styles/zen-kurenaido.css',
-    '~/styles/global.css',
-    '~/styles/paper.css',
+    '~/assets/css/fonts.css',
+    '~/assets/css/zen-kurenaido.css',
+    '~/assets/css/global.css',
+    '~/assets/css/paper.css',
   ],
-  
 })

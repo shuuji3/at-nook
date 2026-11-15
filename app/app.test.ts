@@ -8,7 +8,7 @@ vi.mock("./lib/auth", () => ({
 }));
 
 import App from "./app.vue";
-import Index from "./routes/index.vue";
+import Index from "./pages/index.vue";
 import { renderWithProviders } from "./test/render";
 
 describe("app", () => {

@@ -6,9 +6,9 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     globals: true,
-    setupFiles: ["./src/test/setup.ts"],
+    setupFiles: ["./app/test/setup.ts"],
     env: { TZ: "UTC" },
-    include: ["src/**/*.test.{ts,tsx}"],
+    include: ["app/**/*.test.{ts,tsx}"],
     exclude: ["node_modules", "ref", "dist", ".nuxt"],
   },
 });

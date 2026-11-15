@@ -9,7 +9,7 @@ export default withNuxt(
   },
   {
     // nuxt names components after their files; vue 3 allows fragment roots
-    files: ["src/**/*.vue"],
+    files: ["app/**/*.vue"],
     rules: {
       "vue/multi-word-component-names": "off",
       "vue/no-multiple-template-root": "off",
@@ -17,7 +17,7 @@ export default withNuxt(
   },
   {
     // the plain script block exports the tile's prop type before setup imports
-    files: ["src/components/person-tile.vue"],
+    files: ["app/components/person-tile.vue"],
     rules: { "import/first": "off" },
   },
 );

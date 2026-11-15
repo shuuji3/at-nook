@@ -14,11 +14,11 @@ describe("fonts", () => {
   });
 
   it("css never points at google hosts", () => {
-    for (const file of ["src/styles/fonts.css", "src/styles/zen-kurenaido.css"]) {
+    for (const file of ["app/assets/css/fonts.css", "app/assets/css/zen-kurenaido.css"]) {
       const css = readFileSync(file, "utf8");
       expect(css).not.toMatch(/fonts\.(googleapis|gstatic)\.com/);
     }
-    expect(readFileSync("src/styles/fonts.css", "utf8")).toContain("Shadows Into Light Two");
-    expect(readFileSync("src/styles/zen-kurenaido.css", "utf8")).toContain("Zen Kurenaido");
+    expect(readFileSync("app/assets/css/fonts.css", "utf8")).toContain("Shadows Into Light Two");
+    expect(readFileSync("app/assets/css/zen-kurenaido.css", "utf8")).toContain("Zen Kurenaido");
   });
 });
