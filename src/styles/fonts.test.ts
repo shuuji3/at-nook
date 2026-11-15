@@ -2,9 +2,9 @@ import { existsSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 const FILES = [
-  "public/fonts/shadows-into-light-two-latin.woff2",
-  "public/fonts/shadows-into-light-two-latin-ext.woff2",
-  "public/fonts/OFL.txt",
+  "public/fonts/shadows-into-light-two/shadows-into-light-two-latin.woff2",
+  "public/fonts/shadows-into-light-two/shadows-into-light-two-latin-ext.woff2",
+  "public/fonts/shadows-into-light-two/OFL.txt",
   "public/fonts/zen-kurenaido/OFL.txt",
 ];
 

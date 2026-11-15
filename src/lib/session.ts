@@ -1,4 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/vue-query";
+// TODO: why dont use nuxt composable, not vue inject and provide?
 import { computed, inject, provide, ref, type InjectionKey, type Ref } from "vue";
 import { getStoredDid, resumeSession, signOut } from "./auth";
 import { profileQuery } from "./queries";
@@ -36,6 +37,7 @@ export const useProvideSession = (): SessionContextValue => {
         return null;
       }
 
+      // TODO: fetchQuery is deprecated
       const profile = await queryClient.fetchQuery(profileQuery(() => did.value ?? ""));
       return {
         did: did.value,
@@ -64,11 +66,13 @@ export const useProvideSession = (): SessionContextValue => {
   const ready = computed(() => did.value === null || !isPending.value);
 
   const ctx: SessionContextValue = { session, ready, end, refresh };
+  // TODO: why dont use nuxt composable, not vue inject and provide?
   provide(SessionKey, ctx);
   return ctx;
 };
 
 export const useSession = (): SessionContextValue => {
+  // TODO: why dont use nuxt composable, not vue inject and provide?
   const value = inject(SessionKey);
   if (!value) {
     throw new Error("useSession must be used inside a SessionProvider");

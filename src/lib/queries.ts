@@ -1,12 +1,11 @@
 import { ok } from "@atcute/client";
 import type { ActorIdentifier, ResourceUri } from "@atcute/lexicons";
-import { infiniteQueryOptions, queryOptions } from "@tanstack/vue-query";
+import { infiniteQueryOptions, queryOptions, keepPreviousData } from "@tanstack/vue-query";
 import { computed, toValue, type MaybeRefOrGetter } from "vue";
-import { keepPreviousData } from "@tanstack/vue-query";
 import { publicRpc, rpc } from "./rpc";
 
-const FIVE_MINUTES = 300_000;
 const ONE_MINUTE = 60_000;
+const FIVE_MINUTES = ONE_MINUTE * 5;
 
 /** A query key that re-reads its input, so route params stay live. */
 const keyed = (prefix: string, input: MaybeRefOrGetter<string>) =>
