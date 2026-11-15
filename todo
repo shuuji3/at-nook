@@ -1,5 +1,0 @@
-- current migarataion resulst villates many default nuxt recommended ways. this is official docs to refer: https://nuxt.com/llms.txt start from recommended directory structure, then find correct standard official ways to compose nuxt project for each as needed.
-- adopt components to Scoped Styles
-- components tag order is wrong, script -> template -> style  scoped
-- i put questionble points in code as // TODO comment, find and resolves
-- overall there are many unnecessary imports when nuxt autoimport many
