@@ -116,3 +116,132 @@ const sameDay = computed(() => {
     a clipping that could not be pasted
   </p>
 </template>
+
+<style scoped>
+/* clippings: links and quotes */
+.note {
+  display: block;
+  margin: calc(var(--line-height) - 1.25rem) 0 calc(var(--line-height) - 0.75rem) 0;
+  padding: 1.25rem 1rem 0.75rem;
+  border-left: 3px solid var(--note-accent);
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 6px 12px rgba(43, 58, 85, 0.28);
+  font-family: var(--font-hand);
+  font-size: 20px;
+  line-height: var(--line-height);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.note :deep(a) {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.note-external {
+  display: flex;
+  gap: var(--line-height);
+  align-items: flex-start;
+  flex-wrap: nowrap;
+}
+
+.note-body {
+  display: grid;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.note-thumb {
+  flex: 0 0 auto;
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  order: 2;
+}
+
+.note-title {
+  display: block;
+  text-decoration: underline;
+  overflow-wrap: anywhere;
+}
+
+.note-description {
+  display: block;
+  color: var(--ink-soft);
+  overflow-wrap: anywhere;
+}
+
+.note-quote {
+  margin: calc(var(--line-height) - 1.25rem) calc(-1 * var(--line-height))
+    calc(var(--line-height) - 0.75rem) 0;
+  padding: 1.25rem 1rem 0.75rem;
+  border-left: 3px solid var(--ink-soft);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.note-quote-reply {
+  border-left-color: var(--indent-accent-color);
+}
+
+.note-quote-author,
+.entry-author {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 0 0.5em;
+  margin: 0;
+  overflow: hidden;
+  font-family: var(--font-hand);
+  font-size: 17px;
+  line-height: var(--line-height);
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.note-quote-handle {
+  color: var(--ink-soft);
+}
+
+.note-quote-time {
+  color: var(--ink-soft);
+}
+
+.note-quote-who {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.note-quote-time {
+  flex: 0 0 auto;
+}
+
+.note-quote-text {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.note-unsupported {
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+@media (min-width: 901px) {
+  .note,
+  .note-quote {
+    max-width: 75%;
+  }
+}
+
+@media (max-width: 640px) {
+  .note-quote-author {
+    font-size: 15px;
+  }
+
+  .note {
+    margin-inline: calc(-1 * (1rem + 3px));
+  }
+}
+</style>

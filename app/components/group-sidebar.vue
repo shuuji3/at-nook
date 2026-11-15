@@ -33,3 +33,44 @@ defineEmits<{
     </button>
   </nav>
 </template>
+
+<style scoped>
+.groups {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-content: start;
+}
+
+.group-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-hand);
+  font-size: 22px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.group-row[aria-current="page"] {
+  background: rgba(43, 58, 85, 0.1);
+}
+
+.group-count {
+  color: var(--ink-soft);
+  font-size: 16px;
+}
+
+@media (max-width: 900px) {
+  .groups {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 8px;
+  }
+}
+</style>

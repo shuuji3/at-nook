@@ -107,3 +107,89 @@ const entryRef = useRulingSnap<HTMLElement>();
     </div>
   </article>
 </template>
+
+<style scoped>
+.entry {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  align-items: start;
+}
+
+.entry-time time {
+  display: flex;
+  gap: 0 8px;
+  white-space: nowrap;
+}
+
+.entry-time {
+  display: grid;
+  justify-self: start;
+  align-content: start;
+  padding-top: 0;
+  font-family: var(--font-hand);
+  font-size: 18px;
+  line-height: var(--line-height);
+  color: var(--ink-soft);
+  text-align: left;
+}
+
+.entry-body {
+  display: grid;
+  min-width: 0;
+  padding: 0;
+}
+
+.entry-text {
+  margin: 0;
+  font-family: var(--font-hand);
+  font-size: 22px;
+  line-height: var(--line-height);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.entry-reply {
+  margin: 0;
+  font-family: var(--font-hand);
+  font-size: 20px;
+  line-height: var(--line-height);
+  color: var(--ink-soft);
+  overflow-wrap: anywhere;
+}
+
+.entry-reply a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.note-quote-author,
+.entry-author {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 0 0.5em;
+  margin: 0;
+  overflow: hidden;
+  font-family: var(--font-hand);
+  font-size: 17px;
+  line-height: var(--line-height);
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.entry-author :deep(a) {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 900px) {
+  .entry {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+</style>

@@ -40,3 +40,31 @@ withDefaults(defineProps<{
     }"
   />
 </template>
+
+<style scoped>
+.avatar-print {
+  display: inline-grid;
+  place-items: center;
+  padding: 4px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(43, 58, 85, 0.28);
+}
+
+.avatar {
+  display: block;
+  background-color: var(--placeholder);
+  width: var(--avatar-size, var(--avatar-default, 44px));
+  height: var(--avatar-size, var(--avatar-default, 44px));
+  object-fit: cover;
+}
+
+.avatar-fallback {
+  display: grid;
+  place-items: center;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-hand);
+  font-size: 20px;
+  border: 1px solid rgba(43, 58, 85, 0.2);
+}
+</style>

@@ -425,3 +425,113 @@ watch(phase, async (newPhase) => {
     </div>
   </Teleport>
 </template>
+
+<style scoped>
+/* while its viewer copy is out, the print in the page keeps its place and its tape,
+   but its paper, picture and caption step aside */
+.photo.is-away {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.photo.is-away .photo-button,
+.photo.is-away .photo-caption {
+  visibility: hidden;
+}
+
+.photo-zoom {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  cursor: zoom-out;
+}
+
+/* the backdrop is its own layer, so fading it never fades the print */
+.photo-zoom-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: rgba(20, 20, 25, 0.72);
+  opacity: 0;
+}
+
+.photo-zoom-close {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  border: none;
+  background: transparent;
+  cursor: zoom-out;
+}
+
+.photo-zoom .photo-enlarged {
+  width: auto;
+  max-width: none;
+  margin-left: 0;
+  transform: none;
+  /* the backdrop already separates the print from the page */
+  box-shadow: none;
+}
+
+/* hidden until the taped pose has been written onto it, so it is never painted
+   anywhere but in the taped print's place */
+.photo-zoom .photo-enlarged.is-staged {
+  visibility: hidden;
+}
+
+/* the picture itself is the travelling part, so it is laid out and posed by script */
+.photo-zoom .photo-enlarged .photo-image {
+  width: auto;
+  max-width: min(88vw, 1100px);
+  max-height: 80vh;
+  height: auto;
+  object-fit: contain;
+  transform-origin: 50% 50%;
+}
+
+.photo-caption {
+  /* width:0 stops the caption's one-line max-content from sizing the shrink-to-fit
+     card (which widened it past the picture); min-width:100% then fills the width the
+     picture gives the card, so the text wraps there */
+  width: 0;
+  min-width: 100%;
+  margin-top: 0.75rem;
+  /* the box height is driven by script while the print travels, so the text can't
+     reflow the box; the text fades instead */
+  overflow: hidden;
+  font-family: var(--font-hand);
+  font-size: 18px;
+  line-height: var(--line-height);
+  color: var(--ink-soft);
+}
+
+.photo-caption-text {
+  display: block;
+}
+
+/* the viewer caption holds the caption twice: once at the page's size, once at the
+   viewer's; they cross-fade while the box height travels between the two heights */
+.photo-caption-stacked {
+  position: relative;
+}
+
+.photo-caption-stacked .photo-caption-page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transform-origin: top left;
+  /* rests hidden; the page form only shows while it is faded in */
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .photo-zoom .photo-enlarged {
+    will-change: transform;
+  }
+}
+</style>

@@ -41,3 +41,101 @@ const descriptionFacets = computed(() => (props.profile as { descriptionFacets?:
     </div>
   </header>
 </template>
+
+<style scoped>
+/* pasted-in front of a notebook */
+.notebook-header {
+  margin: 0;
+}
+
+.header-banner {
+  background: linear-gradient(120deg, hsl(var(--cover-hue) 40% 42%), hsl(var(--cover-hue) 35% 26%));
+}
+
+.header-banner img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.header-face {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  align-items: start;
+  padding: var(--line-height) var(--page-pad) var(--line-height) var(--text-pad);
+}
+
+.header-avatar {
+  display: block;
+}
+
+.header-words {
+  padding-bottom: 0;
+}
+
+.header-name {
+  margin: 0;
+  font-family: var(--font-hand);
+  font-size: 44px;
+  font-weight: 400;
+  line-height: var(--line-height);
+  color: var(--ink);
+}
+
+.header-title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.header-who {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0 0.35em;
+}
+
+.header-handle {
+  font-family: var(--font-hand);
+  font-size: 22px;
+  line-height: var(--line-height);
+  color: var(--ink-soft);
+  overflow-wrap: anywhere;
+}
+
+.header-pronouns {
+  font-family: var(--font-hand);
+  font-size: 22px;
+  line-height: var(--line-height);
+  color: var(--ink-soft);
+}
+
+.header-bio {
+  margin: 0;
+  font-family: var(--font-hand);
+  font-size: 20px;
+  line-height: var(--line-height);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  .header-face {
+    grid-template-columns: auto 1fr;
+    gap: var(--line-height);
+    align-items: start;
+    margin-top: 0;
+  }
+
+  .header-words {
+    display: contents;
+  }
+
+  .header-bio {
+    grid-column: 1 / -1;
+  }
+}
+</style>

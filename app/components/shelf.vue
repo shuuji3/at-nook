@@ -134,3 +134,58 @@ const setSelected = (id: string) => {
     </div>
   </section>
 </template>
+
+<style scoped>
+/* shelf of notebooks */
+.shelf {
+  min-height: 100vh;
+  padding: 48px 24px 96px;
+  background: var(--paper-shadow);
+}
+
+.notebook-root {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 24px;
+  width: min(100%, 1080px);
+  margin-inline: auto;
+  padding: 28px 28px 28px 40px;
+  background: var(--paper);
+  border-radius: 6px;
+  box-shadow: 0 20px 44px rgba(43, 58, 85, 0.28);
+}
+
+.shelf-page {
+  min-width: 0;
+}
+
+.shelf-title {
+  margin: 0 0 28px;
+  font-family: var(--font-hand);
+  font-size: clamp(34px, 5vw, 54px);
+  font-weight: 400;
+  color: var(--ink);
+}
+
+.shelf-note {
+  margin-top: 24px;
+  font-family: var(--font-hand);
+  font-size: 22px;
+  color: var(--ink-soft);
+}
+
+/* the one way a page says it is still being fetched */
+.loading-note {
+  font-family: var(--font-hand);
+  font-size: 22px;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .notebook-root {
+    grid-template-columns: 1fr;
+    padding: 20px 16px;
+  }
+}
+</style>

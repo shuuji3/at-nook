@@ -29,3 +29,11 @@ const segments = computed(() => toFacetSegments(props.text, props.facets));
     <span v-else>{{ segment.text }}</span>
   </template>
 </template>
+
+<style scoped>
+.rich-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+</style>

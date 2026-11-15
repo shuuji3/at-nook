@@ -29,3 +29,15 @@ onMounted(() => {
 <template>
   <p class="callback">opening your notebook…</p>
 </template>
+
+<style scoped>
+/* the callback interstitial */
+.callback {
+  margin: 0;
+  padding: 20vh 24px;
+  text-align: center;
+  font-family: var(--font-hand);
+  font-size: 28px;
+  color: var(--ink);
+}
+</style>

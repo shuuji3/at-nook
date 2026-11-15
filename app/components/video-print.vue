@@ -95,3 +95,28 @@ watch([playing, () => props.playlist], ([isPlaying, pl]) => {
     </figure>
   </div>
 </template>
+
+<style scoped>
+.photo-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #000;
+}
+
+.photo-play-mark {
+  position: absolute;
+  inset: 40px 14px 10px;
+  display: grid;
+  place-items: center;
+  font-size: 34px;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+
+.photo-button:has(.photo-play-mark) {
+  position: relative;
+  cursor: pointer;
+}
+</style>
