@@ -1,3 +1,38 @@
+<script setup lang="ts">
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+import { useInfiniteQuery, useQuery } from "@tanstack/vue-query";
+import { listUri, profileHref } from "../../../../utils/format";
+import { listQuery, profileQuery } from "../../../../utils/queries";
+import { useSession } from "../../../../composables/use-session";
+
+const { session } = useSession();
+
+const route = useRoute();
+const actor = computed(() => (route.params.actor as string) ?? "");
+const rkey = computed(() => (route.params.rkey as string) ?? "");
+
+const profile = useQuery({
+  ...profileQuery(actor),
+  enabled: () => actor.value.length > 0,
+});
+
+const uri = computed(() => (profile.data.value ? listUri(profile.data.value.did, rkey.value) : ""));
+
+const list = useInfiniteQuery({
+  ...listQuery(uri),
+  enabled: () => Boolean(uri.value),
+});
+
+const name = computed(
+  () => (list.data.value?.pages[0]?.list.name) ?? "list",
+);
+
+const members = computed(
+  () => (list.data.value?.pages ?? []).flatMap((page) => page.items.map((item) => item.subject)),
+);
+</script>
+
 <template>
   <NotebookShell v-if="!session">
     <h1 class="page-note">
@@ -44,38 +79,3 @@
     </button>
   </NotebookShell>
 </template>
-
-<script setup lang="ts">
-import { computed } from "vue";
-import { useRoute } from "vue-router";
-import { useInfiniteQuery, useQuery } from "@tanstack/vue-query";
-import { listUri, profileHref } from "../../../../utils/format";
-import { listQuery, profileQuery } from "../../../../utils/queries";
-import { useSession } from "../../../../composables/use-session";
-
-const { session } = useSession();
-
-const route = useRoute();
-const actor = computed(() => (route.params.actor as string) ?? "");
-const rkey = computed(() => (route.params.rkey as string) ?? "");
-
-const profile = useQuery({
-  ...profileQuery(actor),
-  enabled: () => actor.value.length > 0,
-});
-
-const uri = computed(() => (profile.data.value ? listUri(profile.data.value.did, rkey.value) : ""));
-
-const list = useInfiniteQuery({
-  ...listQuery(uri),
-  enabled: () => Boolean(uri.value),
-});
-
-const name = computed(
-  () => (list.data.value?.pages[0]?.list.name) ?? "list",
-);
-
-const members = computed(
-  () => (list.data.value?.pages ?? []).flatMap((page) => page.items.map((item) => item.subject)),
-);
-</script>

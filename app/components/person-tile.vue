@@ -1,3 +1,22 @@
+<script lang="ts">
+export interface TileProfile {
+  did: string;
+  handle: string;
+  displayName?: string;
+  avatar?: string;
+}
+</script>
+
+<script setup lang="ts">
+import { coverHue, spineShift } from "../utils/format";
+
+defineProps<{
+  profile: TileProfile;
+  href: string;
+  caption?: string;
+}>();
+</script>
+
 <template>
   <NuxtLink
     class="spine-row"
@@ -22,22 +41,3 @@
     <span v-if="caption" class="spine-caption">{{ caption }}</span>
   </NuxtLink>
 </template>
-
-<script lang="ts">
-export interface TileProfile {
-  did: string;
-  handle: string;
-  displayName?: string;
-  avatar?: string;
-}
-</script>
-
-<script setup lang="ts">
-import { coverHue, spineShift } from "../utils/format";
-
-defineProps<{
-  profile: TileProfile;
-  href: string;
-  caption?: string;
-}>();
-</script>

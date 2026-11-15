@@ -1,47 +1,3 @@
-<template>
-  <NotebookShell>
-    <template v-if="!session">
-      <h1 class="page-note">
-        open the notebook from the <NuxtLink to="/">cover</NuxtLink> first
-      </h1>
-    </template>
-
-    <template v-else-if="notFound && !placeholderProfile">
-      <h1 class="page-note">this notebook could not be found</h1>
-    </template>
-
-    <template v-else>
-      <NotebookHeader v-if="headerProfile" :profile="headerProfile" />
-      <div v-else class="notebook-skeleton">
-        <p v-if="profile.isPending.value" class="page-note">finding the notebook…</p>
-      </div>
-
-      <div class="entries">
-        <template v-if="entries.length > 0">
-          <template v-for="({ item, showDate }, index) in dated" :key="item.post.uri">
-            <Entry :item="item" :index="index" :show-date="showDate" />
-          </template>
-        </template>
-      </div>
-
-      <p v-if="!profile.data.value && feed.isPending.value" class="page-note">turning to the first page…</p>
-      <p v-else-if="feed.isError.value" class="page-note">this page could not be read</p>
-      <p v-else-if="profile.data.value && !feed.isPending.value && entries.length === 0 && !notFound" class="page-note">
-        the rest of the notebook is empty
-      </p>
-      <button
-        v-if="feed.hasNextPage.value"
-        class="page-turn"
-        type="button"
-        :disabled="feed.isFetchingNextPage.value"
-        @click="() => feed.fetchNextPage()"
-      >
-        turn the page
-      </button>
-    </template>
-  </NotebookShell>
-</template>
-
 <script setup lang="ts">
 import { computed, watch } from "vue";
 import { useRoute } from "vue-router";
@@ -111,3 +67,47 @@ const dated = computed(() => {
   });
 });
 </script>
+
+<template>
+  <NotebookShell>
+    <template v-if="!session">
+      <h1 class="page-note">
+        open the notebook from the <NuxtLink to="/">cover</NuxtLink> first
+      </h1>
+    </template>
+
+    <template v-else-if="notFound && !placeholderProfile">
+      <h1 class="page-note">this notebook could not be found</h1>
+    </template>
+
+    <template v-else>
+      <NotebookHeader v-if="headerProfile" :profile="headerProfile" />
+      <div v-else class="notebook-skeleton">
+        <p v-if="profile.isPending.value" class="page-note">finding the notebook…</p>
+      </div>
+
+      <div class="entries">
+        <template v-if="entries.length > 0">
+          <template v-for="({ item, showDate }, index) in dated" :key="item.post.uri">
+            <Entry :item="item" :index="index" :show-date="showDate" />
+          </template>
+        </template>
+      </div>
+
+      <p v-if="!profile.data.value && feed.isPending.value" class="page-note">turning to the first page…</p>
+      <p v-else-if="feed.isError.value" class="page-note">this page could not be read</p>
+      <p v-else-if="profile.data.value && !feed.isPending.value && entries.length === 0 && !notFound" class="page-note">
+        the rest of the notebook is empty
+      </p>
+      <button
+        v-if="feed.hasNextPage.value"
+        class="page-turn"
+        type="button"
+        :disabled="feed.isFetchingNextPage.value"
+        @click="() => feed.fetchNextPage()"
+      >
+        turn the page
+      </button>
+    </template>
+  </NotebookShell>
+</template>

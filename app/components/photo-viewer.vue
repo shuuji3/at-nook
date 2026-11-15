@@ -1,63 +1,3 @@
-<template>
-  <figure
-    ref="printRef"
-    :class="phase !== 'closed' ? 'photo is-away' : 'photo'"
-    :style="{ ...style, '--tilt': `${tilt}deg` }"
-    data-photo="print"
-  >
-    <span v-if="tape" class="photo-tape" aria-hidden="true" />
-    <button
-      class="photo-button"
-      type="button"
-      :aria-label="alt || 'photo'"
-      @click="onOpen"
-    >
-      <img
-        class="photo-image pv-image"
-        :src="src"
-        :alt="alt"
-        :width="width"
-        :height="height"
-        loading="lazy"
-        decoding="async"
-      >
-    </button>
-    <figcaption v-if="caption" class="photo-caption">
-      <span class="photo-caption-text">{{ caption }}</span>
-    </figcaption>
-  </figure>
-
-  <Teleport v-if="phase !== 'closed'" to="body">
-    <div class="photo-zoom" role="dialog" aria-label="photo" @click="close">
-      <div ref="backdropRef" class="photo-zoom-backdrop" aria-hidden="true" />
-      <figure
-        ref="viewerRef"
-        :class="staged ? 'photo photo-enlarged is-staged' : 'photo photo-enlarged'"
-        :style="{ '--tilt': `${tilt}deg` }"
-        data-photo="viewer"
-      >
-        <img
-          class="photo-image pv-image"
-          :src="src"
-          :alt="alt"
-          :width="width"
-          :height="height"
-        >
-        <figcaption v-if="caption" class="photo-caption photo-caption-stacked">
-          <span class="photo-caption-text photo-caption-page">{{ caption }}</span>
-          <span class="photo-caption-text photo-caption-viewer">{{ caption }}</span>
-        </figcaption>
-      </figure>
-      <button
-        class="photo-zoom-close"
-        type="button"
-        aria-label="close photo"
-        @click="close"
-      />
-    </div>
-  </Teleport>
-</template>
-
 <script setup lang="ts">
 import {
   computed,
@@ -431,3 +371,63 @@ watch(phase, async (newPhase) => {
     });
 });
 </script>
+
+<template>
+  <figure
+    ref="printRef"
+    :class="phase !== 'closed' ? 'photo is-away' : 'photo'"
+    :style="{ ...style, '--tilt': `${tilt}deg` }"
+    data-photo="print"
+  >
+    <span v-if="tape" class="photo-tape" aria-hidden="true" />
+    <button
+      class="photo-button"
+      type="button"
+      :aria-label="alt || 'photo'"
+      @click="onOpen"
+    >
+      <img
+        class="photo-image pv-image"
+        :src="src"
+        :alt="alt"
+        :width="width"
+        :height="height"
+        loading="lazy"
+        decoding="async"
+      >
+    </button>
+    <figcaption v-if="caption" class="photo-caption">
+      <span class="photo-caption-text">{{ caption }}</span>
+    </figcaption>
+  </figure>
+
+  <Teleport v-if="phase !== 'closed'" to="body">
+    <div class="photo-zoom" role="dialog" aria-label="photo" @click="close">
+      <div ref="backdropRef" class="photo-zoom-backdrop" aria-hidden="true" />
+      <figure
+        ref="viewerRef"
+        :class="staged ? 'photo photo-enlarged is-staged' : 'photo photo-enlarged'"
+        :style="{ '--tilt': `${tilt}deg` }"
+        data-photo="viewer"
+      >
+        <img
+          class="photo-image pv-image"
+          :src="src"
+          :alt="alt"
+          :width="width"
+          :height="height"
+        >
+        <figcaption v-if="caption" class="photo-caption photo-caption-stacked">
+          <span class="photo-caption-text photo-caption-page">{{ caption }}</span>
+          <span class="photo-caption-text photo-caption-viewer">{{ caption }}</span>
+        </figcaption>
+      </figure>
+      <button
+        class="photo-zoom-close"
+        type="button"
+        aria-label="close photo"
+        @click="close"
+      />
+    </div>
+  </Teleport>
+</template>

@@ -1,3 +1,15 @@
+<script setup lang="ts">
+import type { EmbedImage } from "../utils/embed";
+
+defineProps<{
+  image: EmbedImage;
+  tilt: number;
+  nudge: number;
+  tapeTilt: number;
+  tapeHue: number;
+}>();
+</script>
+
 <template>
   <PhotoViewer
     :src="image.fullsize"
@@ -13,15 +25,3 @@
     } as any"
   />
 </template>
-
-<script setup lang="ts">
-import type { EmbedImage } from "../utils/embed";
-
-defineProps<{
-  image: EmbedImage;
-  tilt: number;
-  nudge: number;
-  tapeTilt: number;
-  tapeHue: number;
-}>();
-</script>

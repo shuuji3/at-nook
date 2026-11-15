@@ -1,38 +1,3 @@
-<template>
-  <section class="shelf">
-    <div class="notebook-root">
-      <GroupSidebar :groups="groups" :selected="selected" @select="setSelected" />
-
-      <div class="shelf-page">
-        <div class="shelf-grid">
-          <PersonTile
-            v-for="profile in people"
-            :key="profile.did"
-            :profile="profile"
-            :href="profileHref(profile.handle)"
-          />
-        </div>
-
-        <p v-if="activeIsPending && !activeIsFetched" class="loading-note">
-          finding notebooks…
-        </p>
-        <p v-else-if="activeIsError" class="shelf-note">
-          the shelf could not be reached
-        </p>
-        <button
-          v-if="activeHasNext"
-          class="page-turn"
-          type="button"
-          :disabled="activeFetchingNext"
-          @click="fetchNext"
-        >
-          more notebooks
-        </button>
-      </div>
-    </div>
-  </section>
-</template>
-
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { useInfiniteQuery } from "@tanstack/vue-query";
@@ -139,3 +104,38 @@ const setSelected = (id: string) => {
   selected.value = id;
 };
 </script>
+
+<template>
+  <section class="shelf">
+    <div class="notebook-root">
+      <GroupSidebar :groups="groups" :selected="selected" @select="setSelected" />
+
+      <div class="shelf-page">
+        <div class="shelf-grid">
+          <PersonTile
+            v-for="profile in people"
+            :key="profile.did"
+            :profile="profile"
+            :href="profileHref(profile.handle)"
+          />
+        </div>
+
+        <p v-if="activeIsPending && !activeIsFetched" class="loading-note">
+          finding notebooks…
+        </p>
+        <p v-else-if="activeIsError" class="shelf-note">
+          the shelf could not be reached
+        </p>
+        <button
+          v-if="activeHasNext"
+          class="page-turn"
+          type="button"
+          :disabled="activeFetchingNext"
+          @click="fetchNext"
+        >
+          more notebooks
+        </button>
+      </div>
+    </div>
+  </section>
+</template>

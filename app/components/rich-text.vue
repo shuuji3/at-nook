@@ -1,3 +1,15 @@
+<script setup lang="ts">
+import { computed } from "vue";
+import { toFacetSegments } from "../utils/facets";
+
+const props = defineProps<{
+  text: string;
+  facets?: unknown;
+}>();
+
+const segments = computed(() => toFacetSegments(props.text, props.facets));
+</script>
+
 <template>
   <template v-for="(segment, index) in segments" :key="index">
     <NuxtLink
@@ -19,15 +31,3 @@
     <span v-else>{{ segment.text }}</span>
   </template>
 </template>
-
-<script setup lang="ts">
-import { computed } from "vue";
-import { toFacetSegments } from "../utils/facets";
-
-const props = defineProps<{
-  text: string;
-  facets?: unknown;
-}>();
-
-const segments = computed(() => toFacetSegments(props.text, props.facets));
-</script>

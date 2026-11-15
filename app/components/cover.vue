@@ -1,84 +1,3 @@
-<template>
-  <section class="cover">
-    <div class="cover-book">
-      <span class="cover-spine" aria-hidden="true" />
-
-      <div class="cover-face">
-        <h1 class="cover-title">at-nook</h1>
-
-        <div class="cover-name-line">
-          <label class="cover-label" for="handle">handle</label>
-          <div class="cover-input-row">
-            <span class="cover-at" aria-hidden="true">@</span>
-            <input
-              id="handle"
-              class="cover-input"
-              role="combobox"
-              :aria-expanded="open"
-              aria-controls="cover-candidates"
-              aria-autocomplete="list"
-              :aria-activedescendant="open && active >= 0 ? `cover-candidate-${active}` : undefined"
-              autocomplete="off"
-              :spellcheck="false"
-              :value="raw"
-              @input="onInput"
-              @keydown="onKeyDown"
-            >
-          </div>
-
-          <ul
-            v-if="open"
-            id="cover-candidates"
-            class="cover-candidates"
-            role="listbox"
-            aria-label="people"
-          >
-            <li
-              v-for="(person, index) in people"
-              :id="`cover-candidate-${index}`"
-              :key="person.did"
-              class="cover-candidate"
-              role="option"
-              :aria-selected="index === active"
-              @mousedown.prevent
-              @mouseenter="setActive(index)"
-              @click="choose(person)"
-            >
-              <Avatar :src="person.avatar" :alt="person.displayName ?? person.handle" :size="28" />
-              <span>
-                <span class="cover-candidate-handle">@{{ person.handle }}</span>
-                <span class="cover-candidate-name">
-                  ({{ person.displayName ?? person.handle }})
-                </span>
-              </span>
-            </li>
-          </ul>
-        </div>
-
-        <div class="cover-name-field">
-          <span class="cover-label">name</span>
-          <p class="cover-name" aria-live="polite">
-            {{ chosen ? (chosen.displayName ?? chosen.handle) : '' }}
-          </p>
-        </div>
-
-        <p class="cover-note">
-          {{ error ?? (loginFailed ? 'sign-in did not finish. try again.' : '') }}
-        </p>
-
-        <button
-          class="cover-open"
-          type="button"
-          :disabled="!canOpen || opening"
-          @click="signIn"
-        >
-          open notebook
-        </button>
-      </div>
-    </div>
-  </section>
-</template>
-
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import { useRoute } from "vue-router";
@@ -197,3 +116,84 @@ const onInput = (event: Event) => {
   raw.value = (event.target as HTMLInputElement).value;
 };
 </script>
+
+<template>
+  <section class="cover">
+    <div class="cover-book">
+      <span class="cover-spine" aria-hidden="true" />
+
+      <div class="cover-face">
+        <h1 class="cover-title">at-nook</h1>
+
+        <div class="cover-name-line">
+          <label class="cover-label" for="handle">handle</label>
+          <div class="cover-input-row">
+            <span class="cover-at" aria-hidden="true">@</span>
+            <input
+              id="handle"
+              class="cover-input"
+              role="combobox"
+              :aria-expanded="open"
+              aria-controls="cover-candidates"
+              aria-autocomplete="list"
+              :aria-activedescendant="open && active >= 0 ? `cover-candidate-${active}` : undefined"
+              autocomplete="off"
+              :spellcheck="false"
+              :value="raw"
+              @input="onInput"
+              @keydown="onKeyDown"
+            >
+          </div>
+
+          <ul
+            v-if="open"
+            id="cover-candidates"
+            class="cover-candidates"
+            role="listbox"
+            aria-label="people"
+          >
+            <li
+              v-for="(person, index) in people"
+              :id="`cover-candidate-${index}`"
+              :key="person.did"
+              class="cover-candidate"
+              role="option"
+              :aria-selected="index === active"
+              @mousedown.prevent
+              @mouseenter="setActive(index)"
+              @click="choose(person)"
+            >
+              <Avatar :src="person.avatar" :alt="person.displayName ?? person.handle" :size="28" />
+              <span>
+                <span class="cover-candidate-handle">@{{ person.handle }}</span>
+                <span class="cover-candidate-name">
+                  ({{ person.displayName ?? person.handle }})
+                </span>
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="cover-name-field">
+          <span class="cover-label">name</span>
+          <p class="cover-name" aria-live="polite">
+            {{ chosen ? (chosen.displayName ?? chosen.handle) : '' }}
+          </p>
+        </div>
+
+        <p class="cover-note">
+          {{ error ?? (loginFailed ? 'sign-in did not finish. try again.' : '') }}
+        </p>
+
+        <button
+          class="cover-open"
+          type="button"
+          :disabled="!canOpen || opening"
+          @click="signIn"
+        >
+          open notebook
+        </button>
+      </div>
+    </div>
+  </section>
+</template>

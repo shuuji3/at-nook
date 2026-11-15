@@ -1,3 +1,41 @@
+<script setup lang="ts">
+import { computed } from "vue";
+import type { EmbedView } from "../utils/embed";
+import { dayOf, pickSpread, profileHref, rkeyFromUri, splitTimestamp, tapeHue } from "../utils/format";
+
+const props = defineProps<{
+  embed: EmbedView;
+  seed: string;
+  postDay?: string;
+}>();
+
+const imageKeys = computed(() =>
+  props.embed?.kind === "images" ? props.embed.images.map((i) => i.fullsize || i.thumb) : [],
+);
+
+const tilts = computed(() =>
+  pickSpread(props.seed, imageKeys.value, { min: -2, max: 2, step: 0.1, gap: 0.6 }),
+);
+
+const nudges = computed(() =>
+  pickSpread(`${props.seed}:nudge`, imageKeys.value, { min: -8, max: 8, step: 0.1, gap: 3 }),
+);
+
+const tapes = computed(() =>
+  pickSpread(`${props.seed}:tape`, imageKeys.value, { min: -8, max: 8, step: 0.1, gap: 3 }),
+);
+
+const timestamp = computed(() => {
+  if (props.embed?.kind !== "quote" || !props.embed.createdAt) return null;
+  return splitTimestamp(props.embed.createdAt);
+});
+
+const sameDay = computed(() => {
+  if (props.embed?.kind !== "quote" || !props.embed.createdAt || !props.postDay) return false;
+  return dayOf(props.embed.createdAt) === props.postDay;
+});
+</script>
+
 <template>
   <div v-if="!embed" />
 
@@ -81,41 +119,3 @@
     a clipping that could not be pasted
   </p>
 </template>
-
-<script setup lang="ts">
-import { computed } from "vue";
-import type { EmbedView } from "../utils/embed";
-import { dayOf, pickSpread, profileHref, rkeyFromUri, splitTimestamp, tapeHue } from "../utils/format";
-
-const props = defineProps<{
-  embed: EmbedView;
-  seed: string;
-  postDay?: string;
-}>();
-
-const imageKeys = computed(() =>
-  props.embed?.kind === "images" ? props.embed.images.map((i) => i.fullsize || i.thumb) : [],
-);
-
-const tilts = computed(() =>
-  pickSpread(props.seed, imageKeys.value, { min: -2, max: 2, step: 0.1, gap: 0.6 }),
-);
-
-const nudges = computed(() =>
-  pickSpread(`${props.seed}:nudge`, imageKeys.value, { min: -8, max: 8, step: 0.1, gap: 3 }),
-);
-
-const tapes = computed(() =>
-  pickSpread(`${props.seed}:tape`, imageKeys.value, { min: -8, max: 8, step: 0.1, gap: 3 }),
-);
-
-const timestamp = computed(() => {
-  if (props.embed?.kind !== "quote" || !props.embed.createdAt) return null;
-  return splitTimestamp(props.embed.createdAt);
-});
-
-const sameDay = computed(() => {
-  if (props.embed?.kind !== "quote" || !props.embed.createdAt || !props.postDay) return false;
-  return dayOf(props.embed.createdAt) === props.postDay;
-});
-</script>

@@ -1,3 +1,15 @@
+<script setup lang="ts">
+withDefaults(defineProps<{
+  src?: string;
+  alt: string;
+  size?: number;
+  viewable?: boolean;
+}>(), {
+  size: 44,
+  viewable: true,
+});
+</script>
+
 <template>
   <span v-if="!src" class="avatar-print" :style="{ '--avatar-default': `${size}px` }">
     <span
@@ -28,15 +40,3 @@
     }"
   />
 </template>
-
-<script setup lang="ts">
-withDefaults(defineProps<{
-  src?: string;
-  alt: string;
-  size?: number;
-  viewable?: boolean;
-}>(), {
-  size: 44,
-  viewable: true,
-});
-</script>

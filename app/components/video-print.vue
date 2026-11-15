@@ -1,48 +1,3 @@
-<template>
-  <div class="photos">
-    <figure class="photo" :style="{ '--tilt': `${rotationFor(seed, 0)}deg` }">
-      <span
-        class="photo-tape"
-        aria-hidden="true"
-        :style="{
-          '--tape-tilt': `${tapeTilt(seed, 0)}deg`,
-          '--tape-hue': tapeHue(seed, 0),
-        }"
-      />
-      <template v-if="playing && playlist">
-        <video
-          ref="videoRef"
-          class="photo-video"
-          :poster="thumbnail"
-          controls
-          autoplay
-          playsinline
-        />
-      </template>
-      <template v-else>
-        <button
-          class="photo-button"
-          type="button"
-          :disabled="!playlist"
-          :aria-label="label"
-          @click="setPlaying(true)"
-        >
-          <img
-            class="photo-image"
-            :src="thumbnail"
-            :alt="label"
-            :width="width"
-            :height="height"
-            loading="lazy"
-            decoding="async"
-          >
-          <span v-if="playlist" class="photo-play-mark" aria-hidden="true">▶</span>
-        </button>
-      </template>
-    </figure>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import { rotationFor, tapeHue, tapeTilt } from "../utils/format";
@@ -97,3 +52,48 @@ watch([playing, () => props.playlist], ([isPlaying, pl]) => {
   };
 });
 </script>
+
+<template>
+  <div class="photos">
+    <figure class="photo" :style="{ '--tilt': `${rotationFor(seed, 0)}deg` }">
+      <span
+        class="photo-tape"
+        aria-hidden="true"
+        :style="{
+          '--tape-tilt': `${tapeTilt(seed, 0)}deg`,
+          '--tape-hue': tapeHue(seed, 0),
+        }"
+      />
+      <template v-if="playing && playlist">
+        <video
+          ref="videoRef"
+          class="photo-video"
+          :poster="thumbnail"
+          controls
+          autoplay
+          playsinline
+        />
+      </template>
+      <template v-else>
+        <button
+          class="photo-button"
+          type="button"
+          :disabled="!playlist"
+          :aria-label="label"
+          @click="setPlaying(true)"
+        >
+          <img
+            class="photo-image"
+            :src="thumbnail"
+            :alt="label"
+            :width="width"
+            :height="height"
+            loading="lazy"
+            decoding="async"
+          >
+          <span v-if="playlist" class="photo-play-mark" aria-hidden="true">▶</span>
+        </button>
+      </template>
+    </figure>
+  </div>
+</template>

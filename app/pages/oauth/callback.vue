@@ -1,7 +1,3 @@
-<template>
-  <p class="callback">opening your notebook…</p>
-</template>
-
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
@@ -33,3 +29,7 @@ onMounted(() => {
   void complete();
 });
 </script>
+
+<template>
+  <p class="callback">opening your notebook…</p>
+</template>

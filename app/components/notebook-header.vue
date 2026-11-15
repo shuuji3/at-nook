@@ -1,3 +1,20 @@
+<script setup lang="ts">
+import { computed } from "vue";
+import type { AppBskyActorDefs } from "@atcute/bluesky";
+import { coverHue } from "../utils/format";
+import { useRulingSnap } from "../composables/use-ruling-snap";
+
+const props = defineProps<{
+  profile: AppBskyActorDefs.ProfileViewDetailed;
+}>();
+
+const name = computed(() => props.profile.displayName ?? props.profile.handle);
+const bannerRef = useRulingSnap<HTMLDivElement>();
+
+// descriptionFacets is not in the installed lexicon types but the AppView sends it
+const descriptionFacets = computed(() => (props.profile as { descriptionFacets?: unknown }).descriptionFacets);
+</script>
+
 <template>
   <header class="notebook-header">
     <div
@@ -27,20 +44,3 @@
     </div>
   </header>
 </template>
-
-<script setup lang="ts">
-import { computed } from "vue";
-import type { AppBskyActorDefs } from "@atcute/bluesky";
-import { coverHue } from "../utils/format";
-import { useRulingSnap } from "../composables/use-ruling-snap";
-
-const props = defineProps<{
-  profile: AppBskyActorDefs.ProfileViewDetailed;
-}>();
-
-const name = computed(() => props.profile.displayName ?? props.profile.handle);
-const bannerRef = useRulingSnap<HTMLDivElement>();
-
-// descriptionFacets is not in the installed lexicon types but the AppView sends it
-const descriptionFacets = computed(() => (props.profile as { descriptionFacets?: unknown }).descriptionFacets);
-</script>

@@ -1,3 +1,22 @@
+<script setup lang="ts">
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+import { useInfiniteQuery } from "@tanstack/vue-query";
+import { tagQuery } from "../../utils/queries";
+
+const route = useRoute();
+const tag = computed(() => (route.params.tag as string) ?? "");
+
+const posts = useInfiniteQuery({
+  ...tagQuery(tag),
+  enabled: () => tag.value.length > 0,
+});
+
+const items = computed(
+  () => (posts.data.value?.pages ?? []).flatMap((page) => page.posts.map((post) => ({ post }))),
+);
+</script>
+
 <template>
   <NotebookShell>
     <h1 class="list-title">#{{ tag }}</h1>
@@ -28,22 +47,3 @@
     </button>
   </NotebookShell>
 </template>
-
-<script setup lang="ts">
-import { computed } from "vue";
-import { useRoute } from "vue-router";
-import { useInfiniteQuery } from "@tanstack/vue-query";
-import { tagQuery } from "../../utils/queries";
-
-const route = useRoute();
-const tag = computed(() => (route.params.tag as string) ?? "");
-
-const posts = useInfiniteQuery({
-  ...tagQuery(tag),
-  enabled: () => tag.value.length > 0,
-});
-
-const items = computed(
-  () => (posts.data.value?.pages ?? []).flatMap((page) => page.posts.map((post) => ({ post }))),
-);
-</script>
