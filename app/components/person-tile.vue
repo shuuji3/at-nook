@@ -66,8 +66,10 @@ const spineExtra = computed(() => spineHeight(profile.did));
     rotate(90deg);
 }
 
-/* the book lifts straight up off the shelf bar when pointed at */
-.book-frame:hover {
+/* the book lifts straight up off the shelf bar when pointed at, held, or tapped */
+.book-frame:hover,
+.book-frame:active,
+.book-frame:has(.spine-row:active) {
   transform: translateY(
       calc(var(--book-thickness, 72px) / 2 - var(--book-length) / 2 - 1.5rem)
     )
