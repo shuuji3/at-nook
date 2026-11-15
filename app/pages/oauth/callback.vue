@@ -16,7 +16,7 @@ onMounted(() => {
     try {
       await finishLogin(hash);
       refresh();
-      await router.replace("/");
+      await router.replace("/shelf");
     } catch {
       await router.replace("/?loginFailed=1");
     }

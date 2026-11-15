@@ -17,7 +17,7 @@ beforeEach(() => {
 });
 
 describe("oauth callback", () => {
-  it("stores the session, scrubs the fragment, and returns to the cover", async () => {
+  it("stores the session, scrubs the fragment, and navigates to the shelf", async () => {
     mocks.finishLogin.mockResolvedValue({ did: "did:plc:me" });
 
     await renderWithProviders(Callback, { route: "/oauth/callback#code=abc&state=xyz" });
@@ -26,7 +26,7 @@ describe("oauth callback", () => {
     await waitFor(() => expect(mocks.finishLogin).toHaveBeenCalledTimes(1));
     expect(mocks.finishLogin).toHaveBeenCalledWith("#code=abc&state=xyz");
     expect(window.location.hash).toBe("");
-    await waitFor(() => expect(router.currentRoute.value.path).toBe("/"));
+    await waitFor(() => expect(router.currentRoute.value.path).toBe("/shelf"));
   });
 
   it("returns to the cover with a note when the callback fails", async () => {
