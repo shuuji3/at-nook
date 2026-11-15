@@ -132,6 +132,7 @@ const onInput = (event: Event) => {
               aria-autocomplete="list"
               :aria-activedescendant="open && active >= 0 ? `cover-candidate-${active}` : undefined"
               autocomplete="off"
+              autofocus
               :spellcheck="false"
               :value="raw"
               @input="onInput"
@@ -189,14 +190,17 @@ const onInput = (event: Event) => {
         </button>
       </div>
     </div>
-    <a
-      class="cover-credit"
-      href="https://www.flickr.com/photos/kharlamovaa/5580663027/"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      credit: photo "nook" by kharlamovaa / cc-by-2.0
-    </a>
+    <span class="cover-credit">
+      credit:
+      <a
+        href="https://www.flickr.com/photos/kharlamovaa/5580663027/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        photo "nook" by kharlamovaa
+      </a>
+      (<a target="_blank" href="https://creativecommons.org/licenses/by/2.0/deed.en">cc-by-2.0</a>)
+    </span>
   </section>
 </template>
 
@@ -339,10 +343,9 @@ const onInput = (event: Event) => {
 
 .cover-input {
   width: 100%;
-  padding: 8px 4px;
+  padding: 0.5rem;
   border: none;
-  border-bottom: 1px dashed rgba(246, 234, 216, 0.4);
-  background: transparent;
+  background: rgba(246, 234, 216, 0.22);
   color: inherit;
   font-family: var(--font-hand);
   font-size: 30px;
@@ -356,11 +359,15 @@ const onInput = (event: Event) => {
 .cover-name-field {
   display: grid;
   gap: 4px;
+  border-bottom: 2px solid rgba(246, 234, 216, 0.6);
 }
 
 .cover-name {
+  display: flex;
+  align-items: center;
   height: 76px;
   margin: 0;
+  padding-inline: 0.5rem;
   overflow: hidden;
   font-family: var(--font-hand);
   font-size: 32px;
@@ -395,7 +402,7 @@ const onInput = (event: Event) => {
 
 @media (prefers-reduced-motion: no-preference) {
   .cover-book {
-    animation: cloth-hue 30s linear infinite;
+    animation: cloth-hue 24s linear infinite;
   }
 
   @keyframes cloth-hue {
@@ -411,15 +418,15 @@ const onInput = (event: Event) => {
 /* photo credit */
 .cover-credit {
   position: fixed;
-  bottom: 10px;
-  right: 12px;
-  max-width: 320px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  bottom: 1rem;
+  right: 1rem;
   white-space: nowrap;
   color: var(--paper);
   font-family: var(--font-hand);
-  font-size: 16px;
-  text-decoration: none;
+  font-size: 22px;
+
+  & a {
+    color: var(--paper);
+  }
 }
 </style>
