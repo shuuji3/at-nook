@@ -7,6 +7,11 @@ the main guiding principles of at-nook include:
 - **single author-centered continuous view**: presenting an author's posts like a handwritten notebook, rather than a typical timeline or feed mixing multiple authors into a single column
 - others?
 
+## credits
+
+- built with [Nuxt](https://npmx.dev/package/nuxt) and [atcute](https://npmx.dev/package/@atcute/client)
+- cover photo credit: ["nook" by kharlamovaa / cc-by-2.0](https://www.flickr.com/photos/kharlamovaa/5580663027/)
+
 ## alpha version
 this is currently an **alpha** version. this means:
 - the app is still in an exploratory phase and is subject to drastic UI changes
