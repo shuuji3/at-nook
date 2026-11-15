@@ -29,7 +29,7 @@ const items = computed(
     </div>
 
     <p v-if="posts.isPending.value" class="page-note">finding posts…</p>
-    <p v-else-if="posts.isError.value" class="page-note">this page is torn out</p>
+    <p v-else-if="posts.isError.value" class="page-note">404 not found</p>
     <p v-else-if="posts.isSuccess.value && items.length === 0" class="page-note">
       nothing carries this tag
     </p>

@@ -78,7 +78,7 @@ describe("list grid", () => {
     expect(await screen.findByText("this list is empty")).toBeTruthy();
   });
 
-  it("shows a torn page when the list cannot be read", async () => {
+  it("shows not found when the list cannot be read", async () => {
     mocks.listQuery.mockReturnValue({
       queryKey: ["list"],
       queryFn: async () => {
@@ -92,6 +92,6 @@ describe("list grid", () => {
       route: "/profile/me.test/list/missing",
     });
 
-    expect(await screen.findByText("this page is torn out")).toBeTruthy();
+    expect(await screen.findByText("404 not found")).toBeTruthy();
   });
 });

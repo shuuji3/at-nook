@@ -59,7 +59,7 @@ const members = computed(
     </div>
 
     <p v-if="list.isPending.value" class="page-note">finding people…</p>
-    <p v-else-if="list.isError.value" class="page-note">this page is torn out</p>
+    <p v-else-if="list.isError.value" class="page-note">404 not found</p>
     <p v-else-if="list.isSuccess.value && members.length === 0" class="page-note">
       this list is empty
     </p>

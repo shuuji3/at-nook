@@ -1,14 +1,13 @@
 <template>
-  <section class="torn-page">
-    <!-- TODO:  'torn out' is not good phrase. dont use this phrase in any pages in entire app -->
-    <h1 class="torn-page-title">this page is torn out</h1>
-    <NuxtLink class="torn-page-link" to="/">back to the cover</NuxtLink>
+  <section class="not-found">
+    <h1 class="not-found-title">404 not found</h1>
+    <NuxtLink class="not-found-link" to="/">back to the cover</NuxtLink>
   </section>
 </template>
 
 <style scoped>
 /* a page that was never bound */
-.torn-page {
+.not-found {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -19,14 +18,14 @@
   color: var(--ink);
 }
 
-.torn-page-title {
+.not-found-title {
   margin: 0;
   font-family: var(--font-hand);
   font-size: clamp(36px, 7vw, 64px);
   font-weight: 400;
 }
 
-.torn-page-link {
+.not-found-link {
   font-family: var(--font-hand);
   font-size: 22px;
   color: var(--ink);
