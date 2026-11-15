@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   modules: ['@nuxt/eslint'],
   typescript: {
     tsConfig: {
-      include: ["../test/setup.ts", "../test/utils/**/*"],
+      include: ["@/test/setup.ts", "@/test/utils/**/*"],
     },
   },
   app: {
@@ -14,13 +14,9 @@ export default defineNuxtConfig({
       link: [{ rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }],
     },
   },
-  devServer: {
-    host: '127.0.0.1',
-    port: 12520,
-  },
   vite: {
     server: {
-      allowedHosts: ['at-nook.shuuji3.xyz', 'bell'],
+      allowedHosts: ['at-nook.shuuji3.xyz'],
     },
   },
   css: [
