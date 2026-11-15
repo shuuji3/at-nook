@@ -1,75 +1,37 @@
-# Nuxt Minimal Starter
+# 📔 at-nook
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+**at-nook** /ət ˈnʊk/ is a social posts reader web app designed to provide a calm, comfortable experience of reading social media without distractions. it aims to make users feel as if they are reading (or writing) at their own cozy nook at home.
 
-## Setup
+the main guiding principles of at-nook include:
+- **pseudo-physical experience**: using physical cues such as paper, photos, books, stationery, and handwritten fonts
+- **single author-centered continuous view**: presenting an author's posts like a handwritten notebook, rather than a typical timeline or feed mixing multiple authors into a single column
+- others?
 
-Make sure to install dependencies:
+## alpha version
+this is currently an **alpha** version. this means:
+- the app is still in an exploratory phase and is subject to drastic UI changes
+- some core features are not yet implemented as I'm still finding what feels best to me
+- it is still uncertain if/when the project will reach a beta version
 
-```bash
-# npm
-npm install
+## maybe TODO
+- [ ] find a good way to present reply threads: single-user notebook vs. multi-user exchanges?
+- [ ] fix seemingly unstable session management?
+- [ ] integrate margin.at using highlighter or sticky note expressions?
+- [ ] experiment with FedCM login experience?
+- [ ] integrate masto.js for Mastodon?
 
-# pnpm
+## development
+
+```shell
 pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
 pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+you may need to configure oauth flow to use `localhost` callback and ensure `public/oauth-client-metadata.json` is publicly accessible from your pds.
 
-Build the application for production:
+build the application for production and preview it locally:
 
-```bash
-# npm
-npm run build
-
-# pnpm
+```shell
 pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
 pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
 ```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
