@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { toFacetSegments } from "./facets";
+import { toFacetSegments } from "../../../app/utils/facets";
 
 const facet = (byteStart: number, byteEnd: number, feature: unknown) => ({
   index: { byteStart, byteEnd },

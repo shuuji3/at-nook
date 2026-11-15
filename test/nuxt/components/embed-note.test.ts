@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/vue";
 import { describe, expect, it } from "vitest";
-import { renderWithProviders } from "../test/render";
-import EmbedNote from "./embed-note.vue";
+import { renderWithProviders } from "../../utils/render";
+import EmbedNote from "~/components/embed-note.vue";
 
 describe("embed note", () => {
   it("writes a quote without linking a missing author", async () => {

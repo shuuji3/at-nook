@@ -8,7 +8,7 @@ const mocks = vi.hoisted(() => ({
   get: vi.fn(),
 }));
 
-vi.mock("../composables/use-session", () => ({
+vi.mock("~/composables/use-session", () => ({
   useSession: () => ({
     session: { value: { did: "did:plc:me", handle: "me.test" } },
     ready: { value: true },
@@ -16,14 +16,14 @@ vi.mock("../composables/use-session", () => ({
     refresh: vi.fn(),
   }),
 }));
-vi.mock("../utils/queries", () => ({
+vi.mock("~/utils/queries", () => ({
   followsQuery: mocks.followsQuery,
   listsQuery: mocks.listsQuery,
 }));
-vi.mock("../utils/rpc", () => ({ rpc: () => ({ get: mocks.get }) }));
+vi.mock("~/utils/rpc", () => ({ rpc: () => ({ get: mocks.get }) }));
 
-import { renderWithProviders } from "../test/render";
-import Shelf from "../components/shelf.vue";
+import { renderWithProviders } from "../../utils/render";
+import Shelf from "~/components/shelf.vue";
 
 const page = (key: string, value: unknown) => ({
   queryKey: [key],

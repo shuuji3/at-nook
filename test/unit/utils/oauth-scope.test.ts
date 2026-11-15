@@ -1,6 +1,6 @@
 import { isOAuthScope } from "@atcute/oauth-types";
 import { describe, expect, it } from "vitest";
-import { APPVIEW_AUDIENCE, OAUTH_SCOPE, VIEW_PERMISSION_SET } from "./oauth-scope";
+import { APPVIEW_AUDIENCE, OAUTH_SCOPE, VIEW_PERMISSION_SET } from "../../../app/utils/oauth-scope";
 
 describe("oauth scope", () => {
   it("requests identity plus the published view permission set", () => {

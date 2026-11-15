@@ -22,7 +22,7 @@ vi.mock("@atcute/oauth-browser-client", () => ({
   },
 }));
 
-import { OAUTH_SCOPE } from "./oauth-scope";
+import { OAUTH_SCOPE } from "../../../app/utils/oauth-scope";
 import {
   clearStoredDid,
   finishLogin,
@@ -32,7 +32,7 @@ import {
   signOut as signOutFn,
   startLogin,
   storeDid,
-} from "./auth";
+} from "../../../app/utils/auth";
 
 beforeEach(() => {
   clearStoredDid();

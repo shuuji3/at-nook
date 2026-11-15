@@ -4,14 +4,14 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({ startLogin: vi.fn(), get: vi.fn() }));
 
-vi.mock("../utils/auth", () => ({ startLogin: mocks.startLogin }));
-vi.mock("../utils/rpc", () => ({
+vi.mock("~/utils/auth", () => ({ startLogin: mocks.startLogin }));
+vi.mock("~/utils/rpc", () => ({
   publicRpc: { get: mocks.get },
   rpc: () => ({ get: mocks.get }),
 }));
 
-import { renderWithProviders } from "../test/render";
-import Cover from "./cover.vue";
+import { renderWithProviders } from "../../utils/render";
+import Cover from "~/components/cover.vue";
 
 beforeEach(() => {
   vi.clearAllMocks();

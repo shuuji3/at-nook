@@ -11,7 +11,7 @@ import {
   rotationFor,
   splitTimestamp,
   stripAt,
-} from "./format";
+} from "../../../app/utils/format";
 
 describe("format", () => {
   it("strips one leading @ and trims", () => {

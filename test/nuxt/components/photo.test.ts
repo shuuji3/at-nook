@@ -1,8 +1,8 @@
 import { screen } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { renderWithProviders } from "../test/render";
-import Photo from "./photo.vue";
+import { renderWithProviders } from "../../utils/render";
+import Photo from "~/components/photo.vue";
 
 // The photo-viewer animation plan reads element dimensions and computed
 // styles. jsdom returns zero for everything, which makes `plan` null and

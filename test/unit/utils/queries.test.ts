@@ -7,7 +7,7 @@ import {
   listsQuery,
   profileQuery,
   tagQuery,
-} from "./queries";
+} from "../../../app/utils/queries";
 
 // the vue-query option types carry the response data in the key type, which
 // makes direct reads of queryKey/initialPageParam awkward in assertions

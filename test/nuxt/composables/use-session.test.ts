@@ -9,13 +9,13 @@ const mocks = vi.hoisted(() => ({
   signOut: vi.fn(),
 }));
 
-vi.mock("../utils/auth", () => ({
+vi.mock("~/utils/auth", () => ({
   getStoredDid: mocks.getStoredDid,
   resumeSession: mocks.resumeSession,
   signOut: mocks.signOut,
 }));
 
-vi.mock("../utils/queries", () => ({
+vi.mock("~/utils/queries", () => ({
   profileQuery: (actor: string) => ({
     queryKey: ["profile", actor],
     queryFn: async () => ({
@@ -26,8 +26,8 @@ vi.mock("../utils/queries", () => ({
   }),
 }));
 
-import { renderWithProviders } from "../test/render";
-import { useProvideSession, useSession } from "./use-session";
+import { renderWithProviders } from "../../utils/render";
+import { useProvideSession, useSession } from "~/composables/use-session";
 
 const Probe = defineComponent({
   setup() {

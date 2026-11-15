@@ -6,7 +6,7 @@ const mocks = vi.hoisted(() => ({
   authorFeedQuery: vi.fn(),
 }));
 
-vi.mock("../composables/use-session", () => ({
+vi.mock("~/composables/use-session", () => ({
   useSession: () => ({
     session: { value: { did: "did:plc:me", handle: "me.test" } },
     ready: { value: true },
@@ -14,13 +14,13 @@ vi.mock("../composables/use-session", () => ({
     refresh: vi.fn(),
   }),
 }));
-vi.mock("../utils/queries", () => ({
+vi.mock("~/utils/queries", () => ({
   profileQuery: mocks.profileQuery,
   authorFeedQuery: mocks.authorFeedQuery,
 }));
 
-import { renderWithProviders } from "../test/render";
-import Notebook from "./profile/[actor].vue";
+import { renderWithProviders } from "../../utils/render";
+import Notebook from "~/pages/profile/[actor].vue";
 
 const post = (uri: string) => ({
   uri,

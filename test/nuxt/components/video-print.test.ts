@@ -1,8 +1,8 @@
 import { screen } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
-import { renderWithProviders } from "../test/render";
-import VideoPrint from "./video-print.vue";
+import { renderWithProviders } from "../../utils/render";
+import VideoPrint from "~/components/video-print.vue";
 
 describe("video print", () => {
   it("plays in place when tapped", async () => {

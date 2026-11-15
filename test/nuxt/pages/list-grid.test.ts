@@ -9,7 +9,7 @@ const mocks = vi.hoisted(() => ({
   listsQuery: vi.fn(),
 }));
 
-vi.mock("../composables/use-session", () => ({
+vi.mock("~/composables/use-session", () => ({
   useSession: () => ({
     session: { value: { did: "did:plc:me", handle: "me.test" } },
     ready: { value: true },
@@ -17,15 +17,15 @@ vi.mock("../composables/use-session", () => ({
     refresh: vi.fn(),
   }),
 }));
-vi.mock("../utils/queries", () => ({
+vi.mock("~/utils/queries", () => ({
   profileQuery: mocks.profileQuery,
   listQuery: mocks.listQuery,
   followsQuery: mocks.followsQuery,
   listsQuery: mocks.listsQuery,
 }));
 
-import { renderWithProviders } from "../test/render";
-import ListGrid from "./profile/[actor]/list/[rkey].vue";
+import { renderWithProviders } from "../../utils/render";
+import ListGrid from "~/pages/profile/[actor]/list/[rkey].vue";
 
 const alice = {
   did: "did:plc:a",

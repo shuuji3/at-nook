@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createQueryClient } from "./query-client";
+import { createQueryClient } from "../../../app/utils/query-client";
 
 describe("query client", () => {
   it("retries transient failures and keeps data fresh for a minute", () => {

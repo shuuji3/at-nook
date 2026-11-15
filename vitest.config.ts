@@ -1,14 +1,29 @@
-import vue from "@vitejs/plugin-vue";
+import { defineVitestProject } from "@nuxt/test-utils/config";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-  plugins: [vue()],
   test: {
-    environment: "jsdom",
-    globals: true,
-    setupFiles: ["./app/test/setup.ts"],
-    env: { TZ: "UTC" },
-    include: ["app/**/*.test.{ts,tsx}"],
-    exclude: ["node_modules", "ref", "dist", ".nuxt"],
+    projects: [
+      {
+        test: {
+          name: "unit",
+          include: ["test/unit/**/*.{test,spec}.ts"],
+          environment: "jsdom",
+          setupFiles: ["test/setup.ts"],
+          env: { TZ: "UTC" },
+        },
+      },
+      await defineVitestProject({
+        test: {
+          name: "nuxt",
+          include: ["test/nuxt/**/*.{test,spec}.ts"],
+          environment: "nuxt",
+          globals: true,
+          env: { TZ: "UTC" },
+          setupFiles: ["test/setup.ts"],
+          environmentOptions: { nuxt: { domEnvironment: "jsdom" } },
+        },
+      }),
+    ],
   },
 });

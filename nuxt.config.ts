@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   modules: ['@nuxt/eslint'],
   typescript: {
     tsConfig: {
-      exclude: ["app/**/*.test.ts", "app/**/*.test.tsx"],
+      include: ["../test/setup.ts", "../test/utils/**/*"],
     },
   },
   app: {

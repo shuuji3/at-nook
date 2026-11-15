@@ -1,8 +1,8 @@
 import type { AppBskyFeedDefs } from "@atcute/bluesky";
 import { screen } from "@testing-library/vue";
 import { describe, expect, it } from "vitest";
-import { renderWithProviders } from "../test/render";
-import Entry from "./entry.vue";
+import { renderWithProviders } from "../../utils/render";
+import Entry from "~/components/entry.vue";
 
 const makeItem = (record: unknown, embed?: unknown, reply?: unknown): AppBskyFeedDefs.FeedViewPost =>
   ({

@@ -5,12 +5,12 @@ import { h } from "vue";
 
 const mocks = vi.hoisted(() => ({ finishLogin: vi.fn(), refresh: vi.fn() }));
 
-vi.mock("../utils/auth", () => ({ finishLogin: mocks.finishLogin, getStoredDid: () => null }));
-vi.mock("../composables/use-session", () => ({ useSession: () => ({ refresh: mocks.refresh }) }));
+vi.mock("~/utils/auth", () => ({ finishLogin: mocks.finishLogin, getStoredDid: () => null }));
+vi.mock("~/composables/use-session", () => ({ useSession: () => ({ refresh: mocks.refresh }) }));
 
 import { RouterView } from "vue-router";
-import { renderWithProviders } from "../test/render";
-import Callback from "./oauth/callback.vue";
+import { renderWithProviders } from "../../utils/render";
+import Callback from "~/pages/oauth/callback.vue";
 
 const Cover = { setup: () => () => h("h1", "at-nook") };
 const Root = { setup: () => () => h(RouterView) };

@@ -3,19 +3,19 @@ import { QueryClient, VueQueryPlugin } from "@tanstack/vue-query";
 import { render } from "@testing-library/vue";
 import { defineComponent, h, type Component } from "vue";
 import { RouterView, createMemoryHistory, createRouter, type RouteRecordRaw } from "vue-router";
-import Avatar from "../components/avatar.vue";
-import Cover from "../components/cover.vue";
-import EmbedNote from "../components/embed-note.vue";
-import Entry from "../components/entry.vue";
-import GroupSidebar from "../components/group-sidebar.vue";
-import NotebookHeader from "../components/notebook-header.vue";
-import NotebookShell from "../components/notebook-shell.vue";
-import PersonTile from "../components/person-tile.vue";
-import Photo from "../components/photo.vue";
-import PhotoViewer from "../components/photo-viewer.vue";
-import RichText from "../components/rich-text.vue";
-import Shelf from "../components/shelf.vue";
-import VideoPrint from "../components/video-print.vue";
+import Avatar from "~/components/avatar.vue";
+import Cover from "~/components/cover.vue";
+import EmbedNote from "~/components/embed-note.vue";
+import Entry from "~/components/entry.vue";
+import GroupSidebar from "~/components/group-sidebar.vue";
+import NotebookHeader from "~/components/notebook-header.vue";
+import NotebookShell from "~/components/notebook-shell.vue";
+import PersonTile from "~/components/person-tile.vue";
+import Photo from "~/components/photo.vue";
+import PhotoViewer from "~/components/photo-viewer.vue";
+import RichText from "~/components/rich-text.vue";
+import Shelf from "~/components/shelf.vue";
+import VideoPrint from "~/components/video-print.vue";
 
 export const createTestQueryClient = () =>
   new QueryClient({

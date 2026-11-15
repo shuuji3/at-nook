@@ -1,15 +1,15 @@
 import { screen } from "@testing-library/vue";
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock("./utils/auth", () => ({
+vi.mock("~/utils/auth", () => ({
   getStoredDid: () => null,
   resumeSession: vi.fn(),
   signOut: vi.fn(),
 }));
 
-import App from "./app.vue";
-import Index from "./pages/index.vue";
-import { renderWithProviders } from "./test/render";
+import App from "~/app.vue";
+import Index from "~/pages/index.vue";
+import { renderWithProviders } from "../utils/render";
 
 describe("app", () => {
   it("renders the cover route", async () => {
