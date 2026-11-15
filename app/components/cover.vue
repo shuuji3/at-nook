@@ -189,6 +189,14 @@ const onInput = (event: Event) => {
         </button>
       </div>
     </div>
+    <a
+      class="cover-credit"
+      href="https://www.flickr.com/photos/kharlamovaa/5580663027/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      credit: photo "nook" by kharlamovaa / cc-by-2.0
+    </a>
   </section>
 </template>
 
@@ -199,7 +207,9 @@ const onInput = (event: Event) => {
   display: grid;
   place-items: center;
   padding: 48px 24px;
-  background: var(--paper-shadow);
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
+    url(/images/5580663027_deeb68abf8_o-flickr-kharlamovaa-cc-by-2.0.jpg) center / cover no-repeat;
 }
 
 /* a closed book standing on the desk */
@@ -396,5 +406,20 @@ const onInput = (event: Event) => {
       --cloth-hue: 360;
     }
   }
+}
+
+/* photo credit */
+.cover-credit {
+  position: fixed;
+  bottom: 10px;
+  right: 12px;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--paper);
+  font-family: var(--font-hand);
+  font-size: 16px;
+  text-decoration: none;
 }
 </style>
