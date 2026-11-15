@@ -1,11 +1,5 @@
 <script setup lang="ts">
-import {
-  computed,
-  nextTick,
-  ref,
-  watch,
-  type CSSProperties,
-} from "vue";
+import type { CSSProperties } from "vue";
 
 const MOVE_MS = 300;
 const HALF_MS = MOVE_MS / 2;

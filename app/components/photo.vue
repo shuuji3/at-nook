@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { EmbedImage } from "../utils/embed";
 
 defineProps<{
   image: EmbedImage;

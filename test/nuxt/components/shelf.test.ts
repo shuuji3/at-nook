@@ -1,5 +1,6 @@
 import { screen } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
@@ -8,19 +9,15 @@ const mocks = vi.hoisted(() => ({
   get: vi.fn(),
 }));
 
-vi.mock("~/composables/use-session", () => ({
-  useSession: () => ({
-    session: { value: { did: "did:plc:me", handle: "me.test" } },
-    ready: { value: true },
-    end: vi.fn(),
-    refresh: vi.fn(),
-  }),
+mockNuxtImport("useSession", () => () => ({
+  session: { value: { did: "did:plc:me", handle: "me.test" } },
+  ready: { value: true },
+  end: vi.fn(),
+  refresh: vi.fn(),
 }));
-vi.mock("~/utils/queries", () => ({
-  followsQuery: mocks.followsQuery,
-  listsQuery: mocks.listsQuery,
-}));
-vi.mock("~/utils/rpc", () => ({ rpc: () => ({ get: mocks.get }) }));
+mockNuxtImport("followsQuery", () => mocks.followsQuery);
+mockNuxtImport("listsQuery", () => mocks.listsQuery);
+mockNuxtImport("rpc", () => () => ({ get: mocks.get }));
 
 import { renderWithProviders } from "../../utils/render";
 import Shelf from "~/components/shelf.vue";

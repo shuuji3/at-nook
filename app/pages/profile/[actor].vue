@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import { computed, watch } from "vue";
-import { useRoute } from "vue-router";
 import { useInfiniteQuery, useQuery } from "@tanstack/vue-query";
-import { authorFeedQuery, profileQuery } from "../../utils/queries";
-import { documentTitle, dayOf } from "../../utils/format";
-import { useSession } from "../../composables/use-session";
 
 const { session } = useSession();
 

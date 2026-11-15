@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import { rotationFor, tapeHue, tapeTilt } from "../utils/format";
 
 const props = defineProps<{
   thumbnail: string;

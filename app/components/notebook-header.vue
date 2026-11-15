@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
 import type { AppBskyActorDefs } from "@atcute/bluesky";
-import { coverHue } from "../utils/format";
-import { useRulingSnap } from "../composables/use-ruling-snap";
 
 const props = defineProps<{
   profile: AppBskyActorDefs.ProfileViewDetailed;

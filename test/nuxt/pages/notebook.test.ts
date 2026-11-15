@@ -1,4 +1,5 @@
 import { screen } from "@testing-library/vue";
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
@@ -6,18 +7,14 @@ const mocks = vi.hoisted(() => ({
   authorFeedQuery: vi.fn(),
 }));
 
-vi.mock("~/composables/use-session", () => ({
-  useSession: () => ({
-    session: { value: { did: "did:plc:me", handle: "me.test" } },
-    ready: { value: true },
-    end: vi.fn(),
-    refresh: vi.fn(),
-  }),
+mockNuxtImport("useSession", () => () => ({
+  session: { value: { did: "did:plc:me", handle: "me.test" } },
+  ready: { value: true },
+  end: vi.fn(),
+  refresh: vi.fn(),
 }));
-vi.mock("~/utils/queries", () => ({
-  profileQuery: mocks.profileQuery,
-  authorFeedQuery: mocks.authorFeedQuery,
-}));
+mockNuxtImport("profileQuery", () => mocks.profileQuery);
+mockNuxtImport("authorFeedQuery", () => mocks.authorFeedQuery);
 
 import { renderWithProviders } from "../../utils/render";
 import Notebook from "~/pages/profile/[actor].vue";
@@ -45,8 +42,6 @@ const feedPage = (feed: unknown[], cursor?: string) => ({
   getNextPageParam: () => undefined,
 });
 
-const routes = [{ path: "/profile/:actor", component: { template: "<div />" } }];
-
 beforeEach(() => {
   vi.clearAllMocks();
   mocks.profileQuery.mockImplementation((actor: string) => ({
@@ -66,7 +61,7 @@ beforeEach(() => {
 
 describe("notebook", () => {
   it("titles the page with the display name and handle", async () => {
-    await renderWithProviders(Notebook, { route: "/profile/bsky.app", routes });
+    await renderWithProviders(Notebook, { route: "/profile/bsky.app" });
 
     expect(await screen.findByRole("heading", { name: /Bluesky/ })).toBeTruthy();
     expect(screen.getByText("@bsky.app")).toBeTruthy();
@@ -84,7 +79,7 @@ describe("notebook", () => {
       }),
     }));
 
-    await renderWithProviders(Notebook, { route: "/profile/plain.test", routes });
+    await renderWithProviders(Notebook, { route: "/profile/plain.test" });
 
     expect(await screen.findByRole("heading")).toBeTruthy();
     expect(document.title).toBe("at-nook — @plain.test");
@@ -93,7 +88,7 @@ describe("notebook", () => {
   it("says when the notebook has no more writing", async () => {
     mocks.authorFeedQuery.mockReturnValue(feedPage([]));
 
-    await renderWithProviders(Notebook, { route: "/profile/bsky.app", routes });
+    await renderWithProviders(Notebook, { route: "/profile/bsky.app" });
 
     expect(await screen.findByText("the rest of the notebook is empty")).toBeTruthy();
   });
@@ -104,7 +99,7 @@ describe("notebook", () => {
       queryFn: async () => ({ ...profile, handle: actor, pronouns: "she/her" }),
     }));
 
-    await renderWithProviders(Notebook, { route: "/profile/bsky.app", routes });
+    await renderWithProviders(Notebook, { route: "/profile/bsky.app" });
 
     expect(await screen.findByText("she/her")).toBeTruthy();
   });

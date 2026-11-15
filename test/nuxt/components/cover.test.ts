@@ -1,14 +1,13 @@
 import { screen } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({ startLogin: vi.fn(), get: vi.fn() }));
 
-vi.mock("~/utils/auth", () => ({ startLogin: mocks.startLogin }));
-vi.mock("~/utils/rpc", () => ({
-  publicRpc: { get: mocks.get },
-  rpc: () => ({ get: mocks.get }),
-}));
+mockNuxtImport("startLogin", () => mocks.startLogin);
+mockNuxtImport("publicRpc", () => ({ get: mocks.get }));
+mockNuxtImport("rpc", () => () => ({ get: mocks.get }));
 
 import { renderWithProviders } from "../../utils/render";
 import Cover from "~/components/cover.vue";

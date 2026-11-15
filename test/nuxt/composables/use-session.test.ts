@@ -1,5 +1,6 @@
 // not reviewed
 import { screen } from "@testing-library/vue";
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { defineComponent, h } from "vue";
 
@@ -9,20 +10,16 @@ const mocks = vi.hoisted(() => ({
   signOut: vi.fn(),
 }));
 
-vi.mock("~/utils/auth", () => ({
-  getStoredDid: mocks.getStoredDid,
-  resumeSession: mocks.resumeSession,
-  signOut: mocks.signOut,
-}));
+mockNuxtImport("getStoredDid", () => mocks.getStoredDid);
+mockNuxtImport("resumeSession", () => mocks.resumeSession);
+mockNuxtImport("signOut", () => mocks.signOut);
 
-vi.mock("~/utils/queries", () => ({
-  profileQuery: (actor: string) => ({
-    queryKey: ["profile", actor],
-    queryFn: async () => ({
-      did: actor,
-      handle: "bsky.app",
-      displayName: "Bluesky",
-    }),
+mockNuxtImport("profileQuery", () => (actor: string) => ({
+  queryKey: ["profile", actor],
+  queryFn: async () => ({
+    did: actor,
+    handle: "bsky.app",
+    displayName: "Bluesky",
   }),
 }));
 

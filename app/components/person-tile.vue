@@ -8,7 +8,6 @@ export interface TileProfile {
 </script>
 
 <script setup lang="ts">
-import { coverHue, spineShift } from "../utils/format";
 
 defineProps<{
   profile: TileProfile;

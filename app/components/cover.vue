@@ -1,10 +1,4 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
-import { useRoute } from "vue-router";
-import { startLogin } from "../utils/auth";
-import { stripAt } from "../utils/format";
-import { actorCandidatesQuery } from "../utils/queries";
-import { useDebouncedValue } from "../composables/use-debounced-value";
 import { useQuery } from "@tanstack/vue-query";
 
 interface Candidate {
