@@ -105,9 +105,47 @@
   color: var(--ink-soft);
 }
 
+/* the shelf's own box: gives the grid below a width to measure books against */
+.shelf-frame {
+  container-type: inline-size;
+}
+
+/* a shelf of upright books: the shelf owns the boards, one per row, and the rows are
+   all the same height so every board lines up */
 .list-grid,
 .shelf-grid {
-  padding: 0 var(--page-pad) 0 var(--text-pad);
+  /* the spine's real height: 10px padding either side plus the 52px avatar print */
+  --book-thickness: 72px;
+  /* even margins for the shelf inside the page, and the shelf's own lip past the books */
+  --shelf-pad: var(--page-pad);
+  --shelf-lip: 16px;
+  /* one book's base length: the shelf's content width */
+  --shelf-width: calc(100cqw - 2 * var(--shelf-pad));
+  /* the board is a real plank, not a line */
+  --shelf-board: 28px;
+  /* the shelf's own air: the 1.5rem hover lift plus a margin, so a lifted book can
+     never pass through the board of the shelf above */
+  --shelf-clearance: 2rem;
+  /* tallest book (base + the top bucket's 6rem) + that clearance + the board */
+  --shelf-row: calc(
+    var(--shelf-width) + 6rem + var(--shelf-clearance) + var(--shelf-board)
+  );
+  display: grid;
+  grid-template-columns: repeat(auto-fill, var(--book-thickness));
+  /* the columns are one track list shared by every row, so a short last row keeps
+     their left edge; centring only splits the remainder after the last full column */
+  justify-content: center;
+  overflow-x: clip;
+  /* the boards: the shelf's own layer, one per row, reaching a lip past the books */
+  background-image: repeating-linear-gradient(
+    180deg,
+    transparent 0 calc(var(--shelf-row) - var(--shelf-board)),
+    rgba(122, 63, 58, 0.5) calc(var(--shelf-row) - var(--shelf-board)) var(--shelf-row)
+  );
+  background-size: calc(100% - 2 * var(--shelf-pad) + 2 * var(--shelf-lip)) 100%;
+  background-position-x: calc(var(--shelf-pad) - var(--shelf-lip));
+  background-repeat: no-repeat;
+  padding: 0 var(--shelf-pad);
 }
 
 /* photos taped into the page */
@@ -221,7 +259,11 @@ select:focus-visible {
   }
 
   .shelf-grid {
-    grid-template-columns: 1fr;
-    padding-inline: 16px;
+    /* the mobile spine's real height: 8px padding either side plus the 52px avatar print */
+    --book-thickness: 68px;
+    --shelf-pad: 8px;
+    /* a phone's width alone leaves the title and @handle squeezed, so a book stands half
+       again as tall there; desk widths keep the plain shelf width */
+    --shelf-width: calc((100cqw - 2 * var(--shelf-pad)) * 1.5);
   }
 }

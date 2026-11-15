@@ -89,7 +89,7 @@ const descriptionFacets = computed(() => (props.profile as { descriptionFacets?:
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0;
+  gap: 1rem;
 }
 
 .header-who {

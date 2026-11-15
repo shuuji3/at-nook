@@ -8,40 +8,72 @@ export interface TileProfile {
 </script>
 
 <script setup lang="ts">
-
-defineProps<{
+const { profile, caption = "" } = defineProps<{
   profile: TileProfile;
   href: string;
   caption?: string;
 }>();
+
+/** The book's random extra height in whole rem, from the old spine shift's math. */
+const spineExtra = computed(() => spineHeight(profile.did));
 </script>
 
 <template>
-  <NuxtLink
-    class="spine-row"
-    :to="href"
-    :style="{
-      '--spine-hue': coverHue(profile.did),
-      '--spine-shift': spineShift(profile.did),
-    }"
-  >
-    <span class="spine-edge">
-      <Avatar
-        :src="profile.avatar"
-        :alt="profile.displayName ?? profile.handle"
-        :size="44"
-        :viewable="false"
-      />
+  <span class="book-slot">
+    <span class="book-frame">
+      <NuxtLink
+        class="spine-row"
+        :to="href"
+        :style="{ '--spine-hue': coverHue(profile.did) }"
+      >
+        <span class="spine-edge">
+          <Avatar
+            :src="profile.avatar"
+            :alt="profile.displayName ?? profile.handle"
+            :size="44"
+            :viewable="false"
+          />
+        </span>
+        <span class="spine-label">
+          <span class="spine-name">{{ profile.displayName ?? profile.handle }}</span>
+          <span class="spine-handle">@{{ profile.handle }}</span>
+        </span>
+        <span v-if="caption" class="spine-caption">{{ caption }}</span>
+      </NuxtLink>
     </span>
-    <span class="spine-label">
-      <span class="spine-name">{{ profile.displayName ?? profile.handle }}</span>
-      <span class="spine-handle">@{{ profile.handle }}</span>
-    </span>
-    <span v-if="caption" class="spine-caption">{{ caption }}</span>
-  </NuxtLink>
+  </span>
 </template>
 
 <style scoped>
+/* the shelf cell a book stands in: reserves a row and sets the book's foot on the board */
+.book-slot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: var(--shelf-row);
+  padding-bottom: var(--shelf-board, 10px);
+}
+
+/* the shelf turns a book upright: the rotation lives here, never in the spine rules */
+.book-frame {
+  display: block;
+  flex: 0 0 auto;
+  --spine-height: v-bind(spineExtra);
+  /* the shelf's width plus the old shift's whole-rem extra, so a book is only ever taller */
+  --book-length: calc(var(--shelf-width) + var(--spine-height, 0) * 1rem);
+  width: var(--book-length);
+  transform: translateY(calc(var(--book-thickness, 72px) / 2 - var(--book-length) / 2))
+    rotate(90deg);
+}
+
+/* the book lifts straight up off the shelf bar when pointed at */
+.book-frame:hover {
+  transform: translateY(
+      calc(var(--book-thickness, 72px) / 2 - var(--book-length) / 2 - 1.5rem)
+    )
+    rotate(90deg);
+}
+
 /* a person as a book spine lying flat on the shelf */
 .spine-row {
   position: relative;
@@ -54,7 +86,6 @@ defineProps<{
   color: #f6ead8;
   border-radius: 4px;
   overflow: hidden;
-  transform: translateX(calc(var(--spine-shift, 0) * 1rem));
   background-color: hsl(var(--spine-hue) 34% 42%);
   background-image:
     repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.04) 0 2px, transparent 2px 5px),
@@ -62,9 +93,8 @@ defineProps<{
   box-shadow: 0 2px 4px rgba(43, 58, 85, 0.26);
 }
 
-/* the spine slides a little further out when pointed at */
+/* the spine is pulled clear of its neighbours when pointed at */
 .spine-row:hover {
-  transform: translateX(calc(var(--spine-shift, 0) * 1rem - 3rem));
   box-shadow: 0 6px 14px rgba(43, 58, 85, 0.32);
 }
 
@@ -113,6 +143,8 @@ defineProps<{
 }
 
 .spine-handle {
+  /* the imprint sits at the spine's foot, away from the name */
+  margin-left: auto;
   font-size: 22px;
   color: rgba(246, 234, 216, 0.82);
   white-space: nowrap;
@@ -135,6 +167,10 @@ defineProps<{
       transform 140ms ease,
       box-shadow 140ms ease;
   }
+
+  .book-frame {
+    transition: transform 140ms ease;
+  }
 }
 
 @media (max-width: 640px) {
@@ -142,7 +178,6 @@ defineProps<{
   .spine-row {
     min-height: 58px;
     padding: 8px 16px 8px 10px;
-    transform: translateX(clamp(-1rem, calc(var(--spine-shift, 0) * 0.5rem), 1rem));
   }
 
   .spine-label {

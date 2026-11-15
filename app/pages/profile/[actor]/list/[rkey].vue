@@ -49,13 +49,15 @@ const members = computed(
       <p class="list-count">{{ members.length }} people</p>
     </template>
 
-    <div class="shelf-grid">
-      <PersonTile
-        v-for="member in members"
-        :key="member.did"
-        :profile="member"
-        :href="profileHref(member.handle)"
-      />
+    <div class="shelf-frame">
+      <div class="shelf-grid">
+        <PersonTile
+          v-for="member in members"
+          :key="member.did"
+          :profile="member"
+          :href="profileHref(member.handle)"
+        />
+      </div>
     </div>
 
     <p v-if="list.isPending.value" class="page-note">finding people…</p>

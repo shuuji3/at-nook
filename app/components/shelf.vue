@@ -4,7 +4,7 @@ import { ok } from "@atcute/client";
 import type { ResourceUri } from "@atcute/lexicons";
 import type { Group } from "./group-sidebar.vue";
 
-const FIVE_MINUTES = 300_000;
+const FIVE_MINUTES = 60_000 * 5;
 const FOLLOWING = "following";
 
 const { session } = useSession();
@@ -106,13 +106,15 @@ const setSelected = (id: string) => {
       <GroupSidebar :groups="groups" :selected="selected" @select="setSelected" />
 
       <div class="shelf-page">
-        <div class="shelf-grid">
-          <PersonTile
-            v-for="profile in people"
-            :key="profile.did"
-            :profile="profile"
-            :href="profileHref(profile.handle)"
-          />
+        <div class="shelf-frame">
+          <div class="shelf-grid">
+            <PersonTile
+              v-for="profile in people"
+              :key="profile.did"
+              :profile="profile"
+              :href="profileHref(profile.handle)"
+            />
+          </div>
         </div>
 
         <p v-if="activeIsPending && !activeIsFetched" class="loading-note">
@@ -186,6 +188,14 @@ const setSelected = (id: string) => {
   .notebook-root {
     grid-template-columns: 1fr;
     padding: 20px 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  /* on a phone the shelf takes the whole width, so a book stays long enough
+     for its own title and handle */
+  .shelf {
+    padding-inline: 0;
   }
 }
 </style>

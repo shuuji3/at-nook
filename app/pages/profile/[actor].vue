@@ -77,9 +77,6 @@ const dated = computed(() => {
 
     <template v-else>
       <NotebookHeader v-if="headerProfile" :profile="headerProfile" />
-      <div v-else class="notebook-skeleton">
-        <p v-if="profile.isPending.value" class="page-note">finding the notebook…</p>
-      </div>
 
       <div class="entries">
         <template v-if="entries.length > 0">
@@ -87,13 +84,15 @@ const dated = computed(() => {
             <Entry :item="item" :index="index" :show-date="showDate" />
           </template>
         </template>
+        <div v-else class="notebook-skeleton">
+          <p v-if="!profile.data.value && feed.isPending.value" class="page-note">opening to the notebook…</p>
+          <p v-else-if="feed.isError.value" class="page-note">this page could not be read</p>
+          <p v-else-if="profile.data.value && !feed.isPending.value && entries.length === 0 && !notFound" class="page-note">
+            the rest of the notebook is empty
+          </p>
+        </div>
       </div>
 
-      <p v-if="!profile.data.value && feed.isPending.value" class="page-note">turning to the first page…</p>
-      <p v-else-if="feed.isError.value" class="page-note">this page could not be read</p>
-      <p v-else-if="profile.data.value && !feed.isPending.value && entries.length === 0 && !notFound" class="page-note">
-        the rest of the notebook is empty
-      </p>
       <button
         v-if="feed.hasNextPage.value"
         class="page-turn"

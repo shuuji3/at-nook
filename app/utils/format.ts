@@ -105,10 +105,13 @@ export const offsetFor = (seed: string, index: number): number => {
 
 export const coverHue = (did: string): number => hash(did) % 360;
 
-/** A whole-rem horizontal shift in steps, so stacked spines snap to a grid and never line up. */
-export const spineShift = (seed: string): number => {
+/**
+ * The old spine shift's math (seven whole-rem buckets), now used to give each book
+ * extra height on top of the shelf's width, so books never stand level.
+ */
+export const spineHeight = (seed: string): number => {
   const value = hash(`${seed}:spine`) / 0xffffffff;
-  return Math.floor(value * 7) - 3;
+  return Math.floor(value * 7);
 };
 
 export const documentTitle = (profile: { displayName?: string; handle: string }): string =>
