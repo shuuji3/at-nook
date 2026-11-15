@@ -5,6 +5,7 @@
 the main guiding principles of at-nook include:
 - **pseudo-physical experience**: using physical cues such as paper, photos, books, stationery, and handwritten fonts
 - **single author-centered continuous view**: presenting an author's posts like a handwritten notebook, rather than a typical timeline or feed mixing multiple authors into a single column
+- **time to reflect**: helping users pause to reflect on their thoughts while reading or writing
 - others?
 
 ## credits
@@ -18,12 +19,16 @@ this is currently an **alpha** version. this means:
 - some core features are not yet implemented as I'm still finding what feels best to me
 - it is still uncertain if/when the project will reach a beta version
 
-## maybe TODO
+## future ideas
 - [ ] find a good way to present reply threads: single-user notebook vs. multi-user exchanges?
 - [ ] fix seemingly unstable session management?
 - [ ] integrate margin.at using highlighter or sticky note expressions?
 - [ ] experiment with FedCM login experience?
 - [ ] integrate masto.js for Mastodon?
+- [ ] offer an option for pageless (current) vs. paginated views?
+- [ ] per-author theme customization?
+- [ ] find a way to chunk posts chronologically? (feasible without client-side store and many fetch? experience may vary depending on author posting frequency)
+- [ ] liveness delay option: only show posts written up to a specific time (e.g., posts written up to 6am can be read starting from noon, a 6-hour wait). this can reduce the "random reward" expectation triggered by constant reloading, similar to gambling mechanics.
 
 ## development
 
