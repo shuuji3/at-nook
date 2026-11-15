@@ -27,7 +27,7 @@ vi.mock("~/utils/queries", () => ({
 }));
 
 import { renderWithProviders } from "../../utils/render";
-import { useProvideSession, useSession } from "~/composables/use-session";
+import { useSession } from "~/composables/use-session";
 
 const Probe = defineComponent({
   setup() {
@@ -37,17 +37,11 @@ const Probe = defineComponent({
   },
 });
 
-const Host = defineComponent({
-  setup() {
-    useProvideSession();
-    return () => h(Probe);
-  },
-});
-
-const renderSession = () => renderWithProviders(Host);
+const renderSession = () => renderWithProviders(Probe);
 
 beforeEach(() => {
   vi.clearAllMocks();
+  clearNuxtState();
 });
 
 describe("session", () => {
