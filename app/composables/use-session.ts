@@ -21,15 +21,6 @@ export const useSession = (): SessionContextValue => {
   const queryClient = useQueryClient();
   const did = useState<string | null>("session-did", () => getStoredDid());
 
-  onMounted(() => {
-    // the server has no localStorage, so it ships `did: null` in the payload
-    // and the client skips the initializer during hydration; re-read the
-    // stored did on mount so a full reload keeps the signed-in account
-    if (did.value === null) {
-      did.value = getStoredDid();
-    }
-  });
-
   const { data, isPending } = useQuery({
     queryKey: computed(() => ["session", did.value]),
     enabled: computed(() => did.value !== null),

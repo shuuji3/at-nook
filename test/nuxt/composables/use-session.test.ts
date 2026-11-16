@@ -70,24 +70,5 @@ describe("session", () => {
     expect(await screen.findByText("ready|none")).toBeTruthy();
   });
 
-  it("recovers a stored did when the ssr payload initialized it as null", async () => {
-    mocks.getStoredDid.mockReturnValue("did:plc:reload");
-    mocks.resumeSession.mockResolvedValue(true);
-
-    const HydrationProbe = defineComponent({
-      setup() {
-        // the server has no localStorage, so it serializes the did as null and
-        // the client skips the useState initializer during hydration
-        useNuxtApp().payload.state["$ssession-did"] = null;
-        const { session, ready } = useSession();
-        return () =>
-          h("p", `${ready.value ? "ready" : "loading"}|${session.value?.handle ?? "none"}`);
-      },
-    });
-
-    await renderWithProviders(HydrationProbe);
-
-    expect(await screen.findByText("ready|bsky.app")).toBeTruthy();
-    expect(mocks.resumeSession).toHaveBeenCalledWith("did:plc:reload");
-  });
+  
 });

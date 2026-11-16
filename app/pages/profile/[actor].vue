@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useInfiniteQuery, useQuery } from "@tanstack/vue-query";
 
-const { session } = useSession();
+const { session, ready } = useSession();
 
 const route = useRoute();
 const actor = computed(() => (route.params.actor as string) ?? "");
@@ -65,7 +65,10 @@ const dated = computed(() => {
 
 <template>
   <NotebookShell>
-    <template v-if="!session">
+    <template v-if="!ready">
+      <!-- session is loading — showing the gate here would be wrong -->
+    </template>
+    <template v-else-if="!session">
       <h1 class="page-note">
         open the notebook from the <NuxtLink to="/">cover</NuxtLink> first
       </h1>
