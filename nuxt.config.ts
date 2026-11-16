@@ -12,6 +12,23 @@ export default defineNuxtConfig({
       deployConfig: true,
       wrangler: {
         name: 'at-nook',
+        // Don't assign a public *.workers.dev URL or per-deployment preview URLs.
+        workers_dev: false,
+        preview_urls: false,
+        // Single custom domain, Production and Preview. Previews are served at
+        // <preview-name>.at-nook.shuuji3.xyz; Cloudflare auto-creates the wildcard
+        // DNS/cert for previews (as in the reference project).
+        routes: [
+          {
+            pattern: 'at-nook.shuuji3.xyz',
+            custom_domain: true,
+            // @ts-expect-error valid cloudflare wrangler route field (Production and Preview, see
+            // developers.cloudflare.com/workers/previews/custom-domains/)
+            // nitropack's vendored route type lags and doesn't include previews_enabled yet.
+            // Removes itself once fixed.
+            previews_enabled: true,
+          },
+        ],
         assets: {
           // Serve index.html for unmatched requests so client-side routes work.
           not_found_handling: 'single-page-application',
