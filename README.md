@@ -3,6 +3,7 @@
 **at-nook** /ət ˈnʊk/ is a social posts reader web app designed to provide a calm, comfortable experience of reading social media without distractions. it aims to make users feel as if they are reading (or writing) at their own cozy nook at home.
 
 the main guiding principles of at-nook include:
+
 - **pseudo-physical experience**: using physical cues such as paper, photos, books, stationery, and handwritten fonts
 - **single author-centered continuous view**: presenting an author's posts like a handwritten notebook, rather than a typical timeline or feed mixing multiple authors into a single column
 - **time to reflect**: helping users pause to reflect on their thoughts while reading or writing
@@ -14,12 +15,15 @@ the main guiding principles of at-nook include:
 - cover photo credit: ["nook" by kharlamovaa / cc-by-2.0](https://www.flickr.com/photos/kharlamovaa/5580663027/)
 
 ## alpha version
+
 this is currently an **alpha** version. this means:
+
 - the app is still in an exploratory phase and is subject to drastic UI changes
 - some core features are not yet implemented as I'm still finding what feels best to me
 - it is still uncertain if/when the project will reach a beta version
 
 ## future ideas
+
 - [ ] find a good way to present reply threads: single-user notebook vs. multi-user exchanges?
 - [ ] fix seemingly unstable session management?
 - [ ] integrate margin.at using highlighter or sticky note expressions?

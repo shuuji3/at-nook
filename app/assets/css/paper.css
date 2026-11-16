@@ -22,7 +22,7 @@
  * 0deg leaves the cloth at its own hue
  */
 @property --cloth-hue {
-  syntax: "<number>";
+  syntax: '<number>';
   inherits: false;
   initial-value: 0;
 }
@@ -127,9 +127,7 @@
      never pass through the board of the shelf above */
   --shelf-clearance: 2rem;
   /* tallest book (base + the top bucket's 6rem) + that clearance + the board */
-  --shelf-row: calc(
-    var(--shelf-width) + 6rem + var(--shelf-clearance) + var(--shelf-board)
-  );
+  --shelf-row: calc(var(--shelf-width) + 6rem + var(--shelf-clearance) + var(--shelf-board));
   display: grid;
   grid-template-columns: repeat(auto-fill, var(--book-thickness));
   /* the columns are one track list shared by every row, so a short last row keeps
@@ -205,7 +203,7 @@
 }
 
 :where(a, button, [tabindex]):focus-visible::after {
-  content: "";
+  content: '';
   position: absolute;
   left: -0.375rem;
   right: -0.375rem;

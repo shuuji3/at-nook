@@ -1,45 +1,45 @@
-import { segmentize, type Facet } from "@atcute/bluesky-richtext-segmenter";
-import { profileHref } from "./format";
+import { segmentize, type Facet } from '@atcute/bluesky-richtext-segmenter'
+import { profileHref } from './format'
 
-export type FacetKind = "link" | "mention" | "tag";
+export type FacetKind = 'link' | 'mention' | 'tag'
 
 export interface FacetSegment {
-  text: string;
-  href?: string;
-  kind?: FacetKind;
+  text: string
+  href?: string
+  kind?: FacetKind
 }
 
 /** The facet types the notebook turns into anchors. */
 type FacetFeature = {
-  $type?: string;
-  uri?: string;
-  did?: string;
-  tag?: string;
-};
+  $type?: string
+  uri?: string
+  did?: string
+  tag?: string
+}
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === "object" && value !== null;
+  typeof value === 'object' && value !== null
 
 const readFeature = (feature: unknown): { kind: FacetKind; href: string } | null => {
   if (!isRecord(feature)) {
-    return null;
+    return null
   }
 
-  const { $type, uri, did, tag } = feature as FacetFeature;
+  const { $type, uri, did, tag } = feature as FacetFeature
 
   switch ($type) {
-    case "app.bsky.richtext.facet#link":
-      return typeof uri === "string" ? { kind: "link", href: uri } : null;
-    case "app.bsky.richtext.facet#mention":
-      return typeof did === "string" ? { kind: "mention", href: profileHref(did) } : null;
-    case "app.bsky.richtext.facet#tag":
-      return typeof tag === "string"
-        ? { kind: "tag", href: `/hashtag/${encodeURIComponent(tag)}` }
-        : null;
+    case 'app.bsky.richtext.facet#link':
+      return typeof uri === 'string' ? { kind: 'link', href: uri } : null
+    case 'app.bsky.richtext.facet#mention':
+      return typeof did === 'string' ? { kind: 'mention', href: profileHref(did) } : null
+    case 'app.bsky.richtext.facet#tag':
+      return typeof tag === 'string'
+        ? { kind: 'tag', href: `/hashtag/${encodeURIComponent(tag)}` }
+        : null
     default:
-      return null;
+      return null
   }
-};
+}
 
 /**
  * Splits post text with atcute's richtext segmenter and maps each facet to the
@@ -47,9 +47,9 @@ const readFeature = (feature: unknown): { kind: FacetKind; href: string } | null
  */
 export const toFacetSegments = (text: string, facets: unknown): FacetSegment[] =>
   segmentize(text, Array.isArray(facets) ? (facets as Facet[]) : undefined).map((segment) => {
-    const feature = segment.features?.map(readFeature).find((value) => value !== null) ?? null;
+    const feature = segment.features?.map(readFeature).find((value) => value !== null) ?? null
 
     return feature
       ? { text: segment.text, href: feature.href, kind: feature.kind }
-      : { text: segment.text };
-  });
+      : { text: segment.text }
+  })

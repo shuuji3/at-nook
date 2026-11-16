@@ -1,54 +1,53 @@
 <script setup lang="ts">
-
 const props = defineProps<{
-  thumbnail: string;
-  playlist?: string;
-  alt?: string;
-  width?: number;
-  height?: number;
-  seed: string;
-}>();
+  thumbnail: string
+  playlist?: string
+  alt?: string
+  width?: number
+  height?: number
+  seed: string
+}>()
 
-const playing = ref(false);
-const videoRef = ref<HTMLVideoElement | null>(null);
+const playing = ref(false)
+const videoRef = ref<HTMLVideoElement | null>(null)
 
-const label = props.alt && props.alt.trim().length > 0 ? props.alt : "video";
+const label = props.alt && props.alt.trim().length > 0 ? props.alt : 'video'
 
 const setPlaying = (value: boolean) => {
-  playing.value = value;
-};
+  playing.value = value
+}
 
 watch([playing, () => props.playlist], ([isPlaying, pl]) => {
-  const video = videoRef.value;
-  if (!isPlaying || !pl || !video) return;
+  const video = videoRef.value
+  if (!isPlaying || !pl || !video) return
 
   // the url is an HLS playlist, which only Safari plays natively
-  if (video.canPlayType("application/vnd.apple.mpegurl")) {
-    video.src = pl;
-    return;
+  if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = pl
+    return
   }
 
-  let hls: { destroy: () => void } | null = null;
-  let cancelled = false;
+  let hls: { destroy: () => void } | null = null
+  let cancelled = false
 
-  void import("hls.js").then(({ default: Hls }) => {
-    if (cancelled || !videoRef.value) return;
+  void import('hls.js').then(({ default: Hls }) => {
+    if (cancelled || !videoRef.value) return
     if (Hls.isSupported()) {
-      const instance = new Hls();
-      instance.loadSource(pl);
-      instance.attachMedia(videoRef.value);
-      hls = instance;
+      const instance = new Hls()
+      instance.loadSource(pl)
+      instance.attachMedia(videoRef.value)
+      hls = instance
     } else {
-      videoRef.value.src = pl;
+      videoRef.value.src = pl
     }
-  });
+  })
 
   // cleanup via watch's return
   return () => {
-    cancelled = true;
-    hls?.destroy();
-  };
-});
+    cancelled = true
+    hls?.destroy()
+  }
+})
 </script>
 
 <template>
@@ -88,7 +87,7 @@ watch([playing, () => props.playlist], ([isPlaying, pl]) => {
             :height="height"
             loading="lazy"
             decoding="async"
-          >
+          />
           <span v-if="playlist" class="photo-play-mark" aria-hidden="true">▶</span>
         </button>
       </template>

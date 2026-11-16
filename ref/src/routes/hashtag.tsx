@@ -1,19 +1,19 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { useParams } from "react-router";
-import { Entry } from "../components/entry";
-import { NotebookShell } from "../components/notebook-shell";
-import { tagQuery } from "../lib/queries";
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { useParams } from 'react-router'
+import { Entry } from '../components/entry'
+import { NotebookShell } from '../components/notebook-shell'
+import { tagQuery } from '../lib/queries'
 
 /** Every post carrying a hashtag, read like a notebook's pages. */
 export const HashtagRoute = () => {
-  const { tag = "" } = useParams<{ tag: string }>();
+  const { tag = '' } = useParams<{ tag: string }>()
 
   const posts = useInfiniteQuery({
     ...tagQuery(tag),
     enabled: tag.length > 0,
-  });
+  })
 
-  const items = (posts.data?.pages ?? []).flatMap((page) => page.posts.map((post) => ({ post })));
+  const items = (posts.data?.pages ?? []).flatMap((page) => page.posts.map((post) => ({ post })))
 
   return (
     <NotebookShell>
@@ -41,5 +41,5 @@ export const HashtagRoute = () => {
         </button>
       ) : null}
     </NotebookShell>
-  );
-};
+  )
+}

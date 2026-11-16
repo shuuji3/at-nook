@@ -1,31 +1,27 @@
 <script lang="ts">
 export interface TileProfile {
-  did: string;
-  handle: string;
-  displayName?: string;
-  avatar?: string;
+  did: string
+  handle: string
+  displayName?: string
+  avatar?: string
 }
 </script>
 
 <script setup lang="ts">
-const { profile, caption = "" } = defineProps<{
-  profile: TileProfile;
-  href: string;
-  caption?: string;
-}>();
+const { profile, caption = '' } = defineProps<{
+  profile: TileProfile
+  href: string
+  caption?: string
+}>()
 
 /** The book's random extra height in whole rem, from the old spine shift's math. */
-const spineExtra = computed(() => spineHeight(profile.did));
+const spineExtra = computed(() => spineHeight(profile.did))
 </script>
 
 <template>
   <span class="book-slot">
     <span class="book-frame">
-      <NuxtLink
-        class="spine-row"
-        :to="href"
-        :style="{ '--spine-hue': coverHue(profile.did) }"
-      >
+      <NuxtLink class="spine-row" :to="href" :style="{ '--spine-hue': coverHue(profile.did) }">
         <span class="spine-edge">
           <Avatar
             :src="profile.avatar"
@@ -70,9 +66,7 @@ const spineExtra = computed(() => spineHeight(profile.did));
 .book-frame:hover,
 .book-frame:active,
 .book-frame:has(.spine-row:active) {
-  transform: translateY(
-      calc(var(--book-thickness, 72px) / 2 - var(--book-length) / 2 - 1.5rem)
-    )
+  transform: translateY(calc(var(--book-thickness, 72px) / 2 - var(--book-length) / 2 - 1.5rem))
     rotate(90deg);
 }
 
@@ -103,7 +97,7 @@ const spineExtra = computed(() => spineHeight(profile.did));
 /* the lightly raised bands of a spine */
 .spine-row::before,
 .spine-row::after {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   right: 0;

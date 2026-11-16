@@ -6,13 +6,13 @@ export default defineNuxtConfig({
   modules: ['@nuxt/eslint'],
   typescript: {
     tsConfig: {
-      include: ["@/test/setup.ts", "@/test/utils/**/*"],
+      include: ['@/test/setup.ts', '@/test/utils/**/*'],
     },
   },
   app: {
     head: {
-      title: "at-nook",
-      link: [{ rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }],
+      title: 'at-nook',
+      link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
     },
   },
   vite: {

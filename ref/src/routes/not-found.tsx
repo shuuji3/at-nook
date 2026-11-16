@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link } from 'react-router'
 
 /** Shown for any route the notebook does not have a page for. */
 export const NotFoundRoute = () => (
@@ -8,4 +8,4 @@ export const NotFoundRoute = () => (
       back to the cover
     </Link>
   </section>
-);
+)

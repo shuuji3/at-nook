@@ -1,38 +1,31 @@
-import { Link } from "react-router";
-import type { EmbedView } from "../lib/embed";
-import {
-  dayOf,
-  pickSpread,
-  profileHref,
-  rkeyFromUri,
-  splitTimestamp,
-  tapeHue,
-} from "../lib/format";
-import { Photo } from "./photo";
-import { RichText } from "./rich-text";
-import { VideoPrint } from "./video-print";
+import { Link } from 'react-router'
+import type { EmbedView } from '../lib/embed'
+import { dayOf, pickSpread, profileHref, rkeyFromUri, splitTimestamp, tapeHue } from '../lib/format'
+import { Photo } from './photo'
+import { RichText } from './rich-text'
+import { VideoPrint } from './video-print'
 
 interface EmbedNoteProps {
-  embed: EmbedView;
-  seed: string;
+  embed: EmbedView
+  seed: string
   /** the entry's own day, so a same-day quote does not repeat the date */
-  postDay?: string;
+  postDay?: string
 }
 
 /** Pins whatever a post carried — photos, a video still, a link, or a quote. */
 export const EmbedNote = ({ embed, seed, postDay }: EmbedNoteProps) => {
   if (!embed) {
-    return null;
+    return null
   }
 
   switch (embed.kind) {
-    case "images": {
+    case 'images': {
       // every photo in the post gets its own tilt, nudge and tape angle
-      const keys = embed.images.map((image) => image.fullsize || image.thumb);
+      const keys = embed.images.map((image) => image.fullsize || image.thumb)
       // a different salt per property so the angles do not all correlate
-      const tilts = pickSpread(seed, keys, { min: -2, max: 2, step: 0.1, gap: 0.6 });
-      const nudges = pickSpread(`${seed}:nudge`, keys, { min: -8, max: 8, step: 0.1, gap: 3 });
-      const tapes = pickSpread(`${seed}:tape`, keys, { min: -8, max: 8, step: 0.1, gap: 3 });
+      const tilts = pickSpread(seed, keys, { min: -2, max: 2, step: 0.1, gap: 0.6 })
+      const nudges = pickSpread(`${seed}:nudge`, keys, { min: -8, max: 8, step: 0.1, gap: 3 })
+      const tapes = pickSpread(`${seed}:tape`, keys, { min: -8, max: 8, step: 0.1, gap: 3 })
 
       return (
         <div className="photos">
@@ -47,10 +40,10 @@ export const EmbedNote = ({ embed, seed, postDay }: EmbedNoteProps) => {
             />
           ))}
         </div>
-      );
+      )
     }
 
-    case "video":
+    case 'video':
       return embed.thumbnail ? (
         <VideoPrint
           thumbnail={embed.thumbnail}
@@ -60,9 +53,9 @@ export const EmbedNote = ({ embed, seed, postDay }: EmbedNoteProps) => {
           height={embed.height}
           seed={seed}
         />
-      ) : null;
+      ) : null
 
-    case "external":
+    case 'external':
       return (
         <a className="note note-external" href={embed.uri} target="_blank" rel="noreferrer">
           <span className="note-body">
@@ -75,12 +68,12 @@ export const EmbedNote = ({ embed, seed, postDay }: EmbedNoteProps) => {
             <img className="note-thumb" src={embed.thumb} alt="" loading="lazy" decoding="async" />
           ) : null}
         </a>
-      );
+      )
 
-    case "quote": {
-      const timestamp = embed.createdAt ? splitTimestamp(embed.createdAt) : null;
-      const sameDay = Boolean(embed.createdAt && postDay && dayOf(embed.createdAt) === postDay);
-      const href = profileHref(embed.handle);
+    case 'quote': {
+      const timestamp = embed.createdAt ? splitTimestamp(embed.createdAt) : null
+      const sameDay = Boolean(embed.createdAt && postDay && dayOf(embed.createdAt) === postDay)
+      const href = profileHref(embed.handle)
 
       return (
         <blockquote className={`note note-quote note-quote-${embed.variant}`}>
@@ -88,7 +81,7 @@ export const EmbedNote = ({ embed, seed, postDay }: EmbedNoteProps) => {
             <>
               <p className="note-quote-author">
                 <span>
-                  quote from{" "}
+                  quote from{' '}
                   {embed.displayName ? (
                     <>
                       <Link className="note-quote-name" to={href}>
@@ -119,10 +112,10 @@ export const EmbedNote = ({ embed, seed, postDay }: EmbedNoteProps) => {
             </p>
           ) : null}
         </blockquote>
-      );
+      )
     }
 
-    case "unsupported":
-      return <p className="note note-unsupported">a clipping that could not be pasted</p>;
+    case 'unsupported':
+      return <p className="note note-unsupported">a clipping that could not be pasted</p>
   }
-};
+}

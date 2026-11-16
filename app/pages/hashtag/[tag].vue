@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { useInfiniteQuery } from "@tanstack/vue-query";
+import { useInfiniteQuery } from '@tanstack/vue-query'
 
-const route = useRoute();
-const tag = computed(() => (route.params.tag as string) ?? "");
+const route = useRoute()
+const tag = computed(() => (route.params.tag as string) ?? '')
 
 const posts = useInfiniteQuery({
   ...tagQuery(tag),
   enabled: () => tag.value.length > 0,
-});
+})
 
-const items = computed(
-  () => (posts.data.value?.pages ?? []).flatMap((page) => page.posts.map((post) => ({ post }))),
-);
+const items = computed(() =>
+  (posts.data.value?.pages ?? []).flatMap((page) => page.posts.map((post) => ({ post }))),
+)
 </script>
 
 <template>

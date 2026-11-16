@@ -4,8 +4,8 @@ import {
   PlcDidDocumentResolver,
   WebDidDocumentResolver,
   XrpcHandleResolver,
-} from "@atcute/identity-resolver";
-import type { ActorIdentifier, Did } from "@atcute/lexicons";
+} from '@atcute/identity-resolver'
+import type { ActorIdentifier, Did } from '@atcute/lexicons'
 import {
   configureOAuth,
   createAuthorizationUrl,
@@ -13,17 +13,17 @@ import {
   finalizeAuthorization,
   getSession,
   OAuthUserAgent,
-} from "@atcute/oauth-browser-client";
-import { OAUTH_SCOPE } from "./oauth-scope";
-import { setReader } from "./rpc";
+} from '@atcute/oauth-browser-client'
+import { OAUTH_SCOPE } from './oauth-scope'
+import { setReader } from './rpc'
 
-const DID_STORAGE_KEY = "at-nook:did";
+const DID_STORAGE_KEY = 'at-nook:did'
 
-const LOOPBACK_HOSTS = new Set(["127.0.0.1", "localhost"]);
+const LOOPBACK_HOSTS = new Set(['127.0.0.1', 'localhost'])
 
 export interface OAuthEndpoints {
-  client_id: string;
-  redirect_uri: string;
+  client_id: string
+  redirect_uri: string
 }
 
 /**
@@ -34,33 +34,33 @@ export interface OAuthEndpoints {
  * serve its own client metadata document over https.
  */
 export const oauthEndpoints = (origin: string): OAuthEndpoints => {
-  const url = new URL(origin);
+  const url = new URL(origin)
 
   if (LOOPBACK_HOSTS.has(url.hostname)) {
-    const redirect_uri = `http://127.0.0.1:${url.port}/oauth/callback`;
+    const redirect_uri = `http://127.0.0.1:${url.port}/oauth/callback`
     return {
       client_id: `http://localhost?redirect_uri=${encodeURIComponent(redirect_uri)}&scope=${encodeURIComponent(OAUTH_SCOPE)}`,
       redirect_uri,
-    };
+    }
   }
 
   return {
     client_id: `${origin}/oauth-client-metadata.json`,
     redirect_uri: `${origin}/oauth/callback`,
-  };
-};
+  }
+}
 
-let configured = false;
+let configured = false
 
 const ensureOAuth = () => {
   if (configured) {
-    return;
+    return
   }
-  configured = true;
+  configured = true
 
   const identityResolver = new LocalActorResolver({
     handleResolver: new XrpcHandleResolver({
-      serviceUrl: "https://public.api.bsky.app",
+      serviceUrl: 'https://public.api.bsky.app',
     }),
     didDocumentResolver: new CompositeDidDocumentResolver({
       methods: {
@@ -68,93 +68,93 @@ const ensureOAuth = () => {
         web: new WebDidDocumentResolver(),
       },
     }),
-  });
+  })
 
   configureOAuth({
     metadata: oauthEndpoints(window.location.origin),
     identityResolver,
-  });
-};
+  })
+}
 
 /** Reads the did of the signed-in account from local storage. */
 export const getStoredDid = (): string | null => {
   try {
-    return localStorage.getItem(DID_STORAGE_KEY);
+    return localStorage.getItem(DID_STORAGE_KEY)
   } catch {
-    return null;
+    return null
   }
-};
+}
 
 /** Remembers the signed-in account across reloads. */
 export const storeDid = (did: string): void => {
   try {
-    localStorage.setItem(DID_STORAGE_KEY, did);
+    localStorage.setItem(DID_STORAGE_KEY, did)
   } catch {
     // a blocked localStorage only costs persistence, not the session
   }
-};
+}
 
 /** Forgets the signed-in account. */
 export const clearStoredDid = (): void => {
   try {
-    localStorage.removeItem(DID_STORAGE_KEY);
+    localStorage.removeItem(DID_STORAGE_KEY)
   } catch {
     // nothing to clear if storage is unavailable
   }
-};
+}
 
 /** Builds the authorization url for a handle. the caller performs the navigation. */
 export const startLogin = async (identifier: string): Promise<URL> => {
-  ensureOAuth();
+  ensureOAuth()
 
   return await createAuthorizationUrl({
-    target: { type: "account", identifier: identifier as ActorIdentifier },
+    target: { type: 'account', identifier: identifier as ActorIdentifier },
     scope: OAUTH_SCOPE,
-  });
-};
+  })
+}
 
 /** Completes the OAuth flow from the callback fragment and stores the resulting did. */
 export const finishLogin = async (hash: string): Promise<{ did: string }> => {
-  ensureOAuth();
+  ensureOAuth()
 
-  const { session } = await finalizeAuthorization(new URLSearchParams(hash.slice(1)));
-  const did = session.info.sub;
+  const { session } = await finalizeAuthorization(new URLSearchParams(hash.slice(1)))
+  const did = session.info.sub
 
-  storeDid(did);
-  return { did };
-};
+  storeDid(did)
+  return { did }
+}
 
 /**
  * Resumes a stored session and arms the authenticated reader with it, dropping
  * the session when it is no longer usable.
  */
 export const resumeSession = async (did: string): Promise<boolean> => {
-  ensureOAuth();
+  ensureOAuth()
 
   try {
-    const session = await getSession(did as Did);
-    setReader(new OAuthUserAgent(session));
-    return true;
+    const session = await getSession(did as Did)
+    setReader(new OAuthUserAgent(session))
+    return true
   } catch {
-    setReader(null);
-    deleteStoredSession(did as Did);
-    clearStoredDid();
-    return false;
+    setReader(null)
+    deleteStoredSession(did as Did)
+    clearStoredDid()
+    return false
   }
-};
+}
 
 /** Revokes the session and forgets the account locally, even if revocation fails. */
 export const signOut = async (did: string): Promise<void> => {
-  ensureOAuth();
+  ensureOAuth()
 
   try {
-    const session = await getSession(did as Did, { allowStale: true });
-    await new OAuthUserAgent(session).signOut();
+    const session = await getSession(did as Did, { allowStale: true })
+    await new OAuthUserAgent(session).signOut()
   } catch {
     // clearing local state is what matters when the server is unreachable
   }
 
-  setReader(null);
-  deleteStoredSession(did as Did);
-  clearStoredDid();
-};
+  setReader(null)
+  deleteStoredSession(did as Did)
+  clearStoredDid()
+}

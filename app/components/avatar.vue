@@ -1,13 +1,16 @@
 <script setup lang="ts">
-withDefaults(defineProps<{
-  src?: string;
-  alt: string;
-  size?: number;
-  viewable?: boolean;
-}>(), {
-  size: 44,
-  viewable: true,
-});
+withDefaults(
+  defineProps<{
+    src?: string
+    alt: string
+    size?: number
+    viewable?: boolean
+  }>(),
+  {
+    size: 44,
+    viewable: true,
+  },
+)
 </script>
 
 <template>
@@ -25,7 +28,7 @@ withDefaults(defineProps<{
     class="avatar-print"
     :style="{ '--avatar-default': `${size}px` }"
   >
-    <img class="avatar" :src="src" alt="" loading="lazy" decoding="async" >
+    <img class="avatar" :src="src" alt="" loading="lazy" decoding="async" />
   </span>
   <PhotoViewer
     v-else

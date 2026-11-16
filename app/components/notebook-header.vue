@@ -1,25 +1,23 @@
 <script setup lang="ts">
-import type { AppBskyActorDefs } from "@atcute/bluesky";
+import type { AppBskyActorDefs } from '@atcute/bluesky'
 
 const props = defineProps<{
-  profile: AppBskyActorDefs.ProfileViewDetailed;
-}>();
+  profile: AppBskyActorDefs.ProfileViewDetailed
+}>()
 
-const name = computed(() => props.profile.displayName ?? props.profile.handle);
-const bannerRef = useRulingSnap<HTMLDivElement>();
+const name = computed(() => props.profile.displayName ?? props.profile.handle)
+const bannerRef = useRulingSnap<HTMLDivElement>()
 
 // descriptionFacets is not in the installed lexicon types but the AppView sends it
-const descriptionFacets = computed(() => (props.profile as { descriptionFacets?: unknown }).descriptionFacets);
+const descriptionFacets = computed(
+  () => (props.profile as { descriptionFacets?: unknown }).descriptionFacets,
+)
 </script>
 
 <template>
   <header class="notebook-header">
-    <div
-      ref="bannerRef"
-      class="header-banner"
-      :style="{ '--cover-hue': coverHue(profile.did) }"
-    >
-      <img v-if="profile.banner" :src="profile.banner" alt="" >
+    <div ref="bannerRef" class="header-banner" :style="{ '--cover-hue': coverHue(profile.did) }">
+      <img v-if="profile.banner" :src="profile.banner" alt="" />
     </div>
 
     <div class="header-face">

@@ -1,11 +1,10 @@
 <script setup lang="ts">
-
 const props = defineProps<{
-  text: string;
-  facets?: unknown;
-}>();
+  text: string
+  facets?: unknown
+}>()
 
-const segments = computed(() => toFacetSegments(props.text, props.facets));
+const segments = computed(() => toFacetSegments(props.text, props.facets))
 </script>
 
 <template>

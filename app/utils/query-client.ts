@@ -1,4 +1,4 @@
-import { QueryClient } from "@tanstack/vue-query";
+import { QueryClient } from '@tanstack/vue-query'
 
 /** The app's query client, with the defaults the notebook was built around. */
 export const createQueryClient = (): QueryClient =>
@@ -6,4 +6,4 @@ export const createQueryClient = (): QueryClient =>
     defaultOptions: {
       queries: { retry: 2, staleTime: 60_000 },
     },
-  });
+  })

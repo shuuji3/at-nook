@@ -1,74 +1,71 @@
 // not reviewed
-import { screen } from "@testing-library/vue";
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { defineComponent, h } from "vue";
+import { screen } from '@testing-library/vue'
+import { mockNuxtImport } from '@nuxt/test-utils/runtime'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { defineComponent, h } from 'vue'
 
 const mocks = vi.hoisted(() => ({
   getStoredDid: vi.fn(),
   resumeSession: vi.fn(),
   signOut: vi.fn(),
-}));
+}))
 
-mockNuxtImport("getStoredDid", () => mocks.getStoredDid);
-mockNuxtImport("resumeSession", () => mocks.resumeSession);
-mockNuxtImport("signOut", () => mocks.signOut);
+mockNuxtImport('getStoredDid', () => mocks.getStoredDid)
+mockNuxtImport('resumeSession', () => mocks.resumeSession)
+mockNuxtImport('signOut', () => mocks.signOut)
 
-mockNuxtImport("profileQuery", () => (actor: string) => ({
-  queryKey: ["profile", actor],
+mockNuxtImport('profileQuery', () => (actor: string) => ({
+  queryKey: ['profile', actor],
   queryFn: async () => ({
     did: actor,
-    handle: "bsky.app",
-    displayName: "Bluesky",
+    handle: 'bsky.app',
+    displayName: 'Bluesky',
   }),
-}));
+}))
 
-import { renderWithProviders } from "../../utils/render";
-import { useSession } from "~/composables/use-session";
+import { renderWithProviders } from '../../utils/render'
+import { useSession } from '~/composables/use-session'
 
 const Probe = defineComponent({
   setup() {
-    const { session, ready } = useSession();
-    return () =>
-      h("p", `${ready.value ? "ready" : "loading"}|${session.value?.handle ?? "none"}`);
+    const { session, ready } = useSession()
+    return () => h('p', `${ready.value ? 'ready' : 'loading'}|${session.value?.handle ?? 'none'}`)
   },
-});
+})
 
-const renderSession = () => renderWithProviders(Probe);
+const renderSession = () => renderWithProviders(Probe)
 
 beforeEach(() => {
-  vi.clearAllMocks();
-  clearNuxtState();
-});
+  vi.clearAllMocks()
+  clearNuxtState()
+})
 
-describe("session", () => {
-  it("resumes a stored session and exposes the profile", async () => {
-    mocks.getStoredDid.mockReturnValue("did:plc:me");
-    mocks.resumeSession.mockResolvedValue(true);
+describe('session', () => {
+  it('resumes a stored session and exposes the profile', async () => {
+    mocks.getStoredDid.mockReturnValue('did:plc:me')
+    mocks.resumeSession.mockResolvedValue(true)
 
-    await renderSession();
+    await renderSession()
 
-    expect(await screen.findByText("ready|bsky.app")).toBeTruthy();
-    expect(mocks.resumeSession).toHaveBeenCalledWith("did:plc:me");
-  });
+    expect(await screen.findByText('ready|bsky.app')).toBeTruthy()
+    expect(mocks.resumeSession).toHaveBeenCalledWith('did:plc:me')
+  })
 
-  it("reports ready with no session when nothing is stored", async () => {
-    mocks.getStoredDid.mockReturnValue(null);
+  it('reports ready with no session when nothing is stored', async () => {
+    mocks.getStoredDid.mockReturnValue(null)
 
-    await renderSession();
+    await renderSession()
 
-    expect(await screen.findByText("ready|none")).toBeTruthy();
-    expect(mocks.resumeSession).not.toHaveBeenCalled();
-  });
+    expect(await screen.findByText('ready|none')).toBeTruthy()
+    expect(mocks.resumeSession).not.toHaveBeenCalled()
+  })
 
-  it("falls back to no session when the stored session is stale", async () => {
-    mocks.getStoredDid.mockReturnValue("did:plc:old");
-    mocks.resumeSession.mockResolvedValue(false);
+  it('falls back to no session when the stored session is stale', async () => {
+    mocks.getStoredDid.mockReturnValue('did:plc:old')
+    mocks.resumeSession.mockResolvedValue(false)
 
-    await renderSession();
+    await renderSession()
 
-    expect(await screen.findByText("ready|none")).toBeTruthy();
-  });
-
-  
-});
+    expect(await screen.findByText('ready|none')).toBeTruthy()
+  })
+})

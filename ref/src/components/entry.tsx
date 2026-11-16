@@ -1,49 +1,49 @@
-import type { AppBskyFeedDefs } from "@atcute/bluesky";
-import { Link } from "react-router";
-import { toEmbedView, toReplyView } from "../lib/embed";
-import { dayOf, profileHref, rkeyFromUri, splitTimestamp } from "../lib/format";
-import { useRulingSnap } from "../lib/use-ruling-snap";
-import { EmbedNote } from "./embed-note";
-import { RichText } from "./rich-text";
+import type { AppBskyFeedDefs } from '@atcute/bluesky'
+import { Link } from 'react-router'
+import { toEmbedView, toReplyView } from '../lib/embed'
+import { dayOf, profileHref, rkeyFromUri, splitTimestamp } from '../lib/format'
+import { useRulingSnap } from '../lib/use-ruling-snap'
+import { EmbedNote } from './embed-note'
+import { RichText } from './rich-text'
 interface EntryProps {
-  item: AppBskyFeedDefs.FeedViewPost;
-  index: number;
-  showDate?: boolean;
+  item: AppBskyFeedDefs.FeedViewPost
+  index: number
+  showDate?: boolean
   /** pages that mix authors (a hashtag) need the author written above the entry */
-  showAuthor?: boolean;
+  showAuthor?: boolean
 }
 
 const readRecord = (record: unknown): { text: string; createdAt?: string; facets?: unknown } => {
-  if (typeof record !== "object" || record === null) {
-    return { text: "" };
+  if (typeof record !== 'object' || record === null) {
+    return { text: '' }
   }
 
-  const fields = record as Record<string, unknown>;
+  const fields = record as Record<string, unknown>
   const createdAt =
-    typeof fields.createdAt === "string" && !Number.isNaN(Date.parse(fields.createdAt))
+    typeof fields.createdAt === 'string' && !Number.isNaN(Date.parse(fields.createdAt))
       ? fields.createdAt
-      : undefined;
+      : undefined
 
   return {
-    text: typeof fields.text === "string" ? fields.text : "",
+    text: typeof fields.text === 'string' ? fields.text : '',
     createdAt,
     facets: fields.facets,
-  };
-};
+  }
+}
 
 /** One dated diary entry: the writing, then whatever was pasted beside it. */
 export const Entry = ({ item, index, showDate = true, showAuthor = false }: EntryProps) => {
-  const post = item.post;
-  const { text, createdAt, facets } = readRecord(post.record);
-  const stamp = createdAt ? splitTimestamp(createdAt) : null;
-  const embed = toEmbedView(post.embed);
-  const quote = embed?.kind === "quote" ? embed : null;
-  const media = embed && embed.kind !== "quote" ? embed : null;
-  const reply = toReplyView(item.reply);
-  const replyTarget = reply?.kind === "quote" ? reply : null;
-  const embedRef = useRulingSnap<HTMLDivElement>();
-  const entryRef = useRulingSnap<HTMLElement>();
-  const postDay = createdAt ? dayOf(createdAt) : undefined;
+  const post = item.post
+  const { text, createdAt, facets } = readRecord(post.record)
+  const stamp = createdAt ? splitTimestamp(createdAt) : null
+  const embed = toEmbedView(post.embed)
+  const quote = embed?.kind === 'quote' ? embed : null
+  const media = embed && embed.kind !== 'quote' ? embed : null
+  const reply = toReplyView(item.reply)
+  const replyTarget = reply?.kind === 'quote' ? reply : null
+  const embedRef = useRulingSnap<HTMLDivElement>()
+  const entryRef = useRulingSnap<HTMLElement>()
+  const postDay = createdAt ? dayOf(createdAt) : undefined
 
   return (
     <article className="entry" data-entry={index} ref={entryRef}>
@@ -83,7 +83,7 @@ export const Entry = ({ item, index, showDate = true, showAuthor = false }: Entr
               rel="noreferrer"
             >
               @{replyTarget.handle}
-            </a>{" "}
+            </a>{' '}
             ({replyTarget.displayName})
           </p>
         ) : null}
@@ -103,5 +103,5 @@ export const Entry = ({ item, index, showDate = true, showAuthor = false }: Entr
         ) : null}
       </div>
     </article>
-  );
-};
+  )
+}

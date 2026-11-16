@@ -1,21 +1,20 @@
 <script lang="ts">
 export interface Group {
-  id: string;
-  label: string;
-  count?: number;
+  id: string
+  label: string
+  count?: number
 }
 </script>
 
 <script setup lang="ts">
-
 defineProps<{
-  groups: Group[];
-  selected: string;
-}>();
+  groups: Group[]
+  selected: string
+}>()
 
 defineEmits<{
-  select: [id: string];
-}>();
+  select: [id: string]
+}>()
 </script>
 
 <template>
@@ -57,7 +56,7 @@ defineEmits<{
   cursor: pointer;
 }
 
-.group-row[aria-current="page"] {
+.group-row[aria-current='page'] {
   background: rgba(43, 58, 85, 0.1);
 }
 

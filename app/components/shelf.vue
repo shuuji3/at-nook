@@ -1,38 +1,35 @@
 <script setup lang="ts">
-import { useInfiniteQuery } from "@tanstack/vue-query";
-import { ok } from "@atcute/client";
-import type { ResourceUri } from "@atcute/lexicons";
-import type { Group } from "./group-sidebar.vue";
+import { useInfiniteQuery } from '@tanstack/vue-query'
+import { ok } from '@atcute/client'
+import type { ResourceUri } from '@atcute/lexicons'
+import type { Group } from './group-sidebar.vue'
 
-const FIVE_MINUTES = 60_000 * 5;
-const FOLLOWING = "following";
+const FIVE_MINUTES = 60_000 * 5
+const FOLLOWING = 'following'
 
-const { session } = useSession();
-const selected = ref(FOLLOWING);
-const sessionDid = () => session.value?.did ?? "";
+const { session } = useSession()
+const selected = ref(FOLLOWING)
+const sessionDid = () => session.value?.did ?? ''
 
 const follows = useInfiniteQuery({
   ...followsQuery(sessionDid),
   enabled: () => Boolean(session.value),
-});
+})
 
 const lists = useInfiniteQuery({
   ...listsQuery(sessionDid),
   enabled: () => Boolean(session.value),
-});
+})
 
-const listKey = computed(() => [
-  "list",
-  selected.value === FOLLOWING ? "" : selected.value,
-]);
+const listKey = computed(() => ['list', selected.value === FOLLOWING ? '' : selected.value])
 
 const list = useInfiniteQuery({
   queryKey: listKey,
   queryFn: ({ pageParam }) =>
     ok(
-      rpc().get("app.bsky.graph.getList", {
+      rpc().get('app.bsky.graph.getList', {
         params: {
-          list: (selected.value === FOLLOWING ? "" : selected.value) as ResourceUri,
+          list: (selected.value === FOLLOWING ? '' : selected.value) as ResourceUri,
           limit: 50,
           cursor: pageParam,
         },
@@ -42,62 +39,62 @@ const list = useInfiniteQuery({
   initialPageParam: undefined as string | undefined,
   getNextPageParam: (last: { cursor?: string }) => last.cursor,
   staleTime: FIVE_MINUTES,
-});
+})
 
-const followsPeople = computed(() => follows.data.value?.pages.flatMap((page) => page.follows) ?? []);
+const followsPeople = computed(
+  () => follows.data.value?.pages.flatMap((page) => page.follows) ?? [],
+)
 const members = computed(
   () => list.data.value?.pages.flatMap((page) => page.items.map((item) => item.subject)) ?? [],
-);
+)
 
-const curating = computed(() => selected.value !== FOLLOWING);
-const people = computed(() => (curating.value ? members.value : followsPeople.value));
+const curating = computed(() => selected.value !== FOLLOWING)
+const people = computed(() => (curating.value ? members.value : followsPeople.value))
 
-const curationLists = computed(
-  () => lists.data.value?.pages.flatMap((page) => page.lists) ?? [],
-);
+const curationLists = computed(() => lists.data.value?.pages.flatMap((page) => page.lists) ?? [])
 
 const groups = computed<Group[]>(() => [
-  { id: FOLLOWING, label: "following" },
+  { id: FOLLOWING, label: 'following' },
   ...curationLists.value.map((entry: { uri: string; name: string; listItemCount?: number }) => ({
     id: entry.uri,
     label: entry.name,
     count: entry.listItemCount,
   })),
-]);
+])
 
 const activeIsPending = computed(() => {
-  const q = selected.value !== FOLLOWING ? list : follows;
-  return q.isPending.value;
-});
+  const q = selected.value !== FOLLOWING ? list : follows
+  return q.isPending.value
+})
 
 const activeIsFetched = computed(() => {
-  const q = selected.value !== FOLLOWING ? list : follows;
-  return q.isFetched.value;
-});
+  const q = selected.value !== FOLLOWING ? list : follows
+  return q.isFetched.value
+})
 
 const activeIsError = computed(() => {
-  const q = selected.value !== FOLLOWING ? list : follows;
-  return q.isError.value;
-});
+  const q = selected.value !== FOLLOWING ? list : follows
+  return q.isError.value
+})
 
 const activeHasNext = computed(() => {
-  const q = selected.value !== FOLLOWING ? list : follows;
-  return q.hasNextPage.value;
-});
+  const q = selected.value !== FOLLOWING ? list : follows
+  return q.hasNextPage.value
+})
 
 const activeFetchingNext = computed(() => {
-  const q = selected.value !== FOLLOWING ? list : follows;
-  return q.isFetchingNextPage.value;
-});
+  const q = selected.value !== FOLLOWING ? list : follows
+  return q.isFetchingNextPage.value
+})
 
 const fetchNext = () => {
-  const q = selected.value !== FOLLOWING ? list : follows;
-  void q.fetchNextPage();
-};
+  const q = selected.value !== FOLLOWING ? list : follows
+  void q.fetchNextPage()
+}
 
 const setSelected = (id: string) => {
-  selected.value = id;
-};
+  selected.value = id
+}
 </script>
 
 <template>
@@ -117,12 +114,8 @@ const setSelected = (id: string) => {
           </div>
         </div>
 
-        <p v-if="activeIsPending && !activeIsFetched" class="loading-note">
-          finding notebooks…
-        </p>
-        <p v-else-if="activeIsError" class="shelf-note">
-          the shelf could not be reached
-        </p>
+        <p v-if="activeIsPending && !activeIsFetched" class="loading-note">finding notebooks…</p>
+        <p v-else-if="activeIsError" class="shelf-note">the shelf could not be reached</p>
         <button
           v-if="activeHasNext"
           class="page-turn"

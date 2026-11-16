@@ -1,64 +1,64 @@
-import { useQuery, useQueryClient } from "@tanstack/vue-query";
-import { getStoredDid, resumeSession, signOut } from "../utils/auth";
-import { profileQuery } from "../utils/queries";
+import { useQuery, useQueryClient } from '@tanstack/vue-query'
+import { getStoredDid, resumeSession, signOut } from '../utils/auth'
+import { profileQuery } from '../utils/queries'
 
 export interface Session {
-  did: string;
-  handle: string;
-  displayName?: string;
-  avatar?: string;
+  did: string
+  handle: string
+  displayName?: string
+  avatar?: string
 }
 
 interface SessionContextValue {
-  session: Readonly<Ref<Session | null>>;
-  ready: Readonly<Ref<boolean>>;
-  end: () => Promise<void>;
-  refresh: () => void;
+  session: Readonly<Ref<Session | null>>
+  ready: Readonly<Ref<boolean>>
+  end: () => Promise<void>
+  refresh: () => void
 }
 
 /** Keeps the signed-in account in memory, resumes a stored oauth session on mount. */
 export const useSession = (): SessionContextValue => {
-  const queryClient = useQueryClient();
-  const did = useState<string | null>("session-did", () => getStoredDid());
+  const queryClient = useQueryClient()
+  const did = useState<string | null>('session-did', () => getStoredDid())
 
   const { data, isPending } = useQuery({
-    queryKey: computed(() => ["session", did.value]),
+    queryKey: computed(() => ['session', did.value]),
     enabled: computed(() => did.value !== null),
     queryFn: async (): Promise<Session | null> => {
       if (!did.value) {
-        return null;
+        return null
       }
       if (!(await resumeSession(did.value))) {
-        did.value = null;
-        return null;
+        did.value = null
+        return null
       }
 
-      const profile = await queryClient.query(profileQuery(() => did.value ?? ""));
+      const profile = await queryClient.query(profileQuery(() => did.value ?? ''))
       return {
         did: did.value,
         handle: profile.handle,
         displayName: profile.displayName,
         avatar: profile.avatar,
-      };
+      }
     },
     retry: false,
     staleTime: 5 * 60_000,
-  });
+  })
 
   const end = async () => {
     if (did.value) {
-      await signOut(did.value);
+      await signOut(did.value)
     }
-    queryClient.clear();
-    did.value = null;
-  };
+    queryClient.clear()
+    did.value = null
+  }
 
   const refresh = () => {
-    did.value = getStoredDid();
-  };
+    did.value = getStoredDid()
+  }
 
-  const session = computed(() => data.value ?? null);
-  const ready = computed(() => did.value === null || !isPending.value);
+  const session = computed(() => data.value ?? null)
+  const ready = computed(() => did.value === null || !isPending.value)
 
-  return { session, ready, end, refresh };
-};
+  return { session, ready, end, refresh }
+}

@@ -1,31 +1,29 @@
 <script setup lang="ts">
-import { useInfiniteQuery, useQuery } from "@tanstack/vue-query";
+import { useInfiniteQuery, useQuery } from '@tanstack/vue-query'
 
-const { session, ready } = useSession();
+const { session, ready } = useSession()
 
-const route = useRoute();
-const actor = computed(() => (route.params.actor as string) ?? "");
-const rkey = computed(() => (route.params.rkey as string) ?? "");
+const route = useRoute()
+const actor = computed(() => (route.params.actor as string) ?? '')
+const rkey = computed(() => (route.params.rkey as string) ?? '')
 
 const profile = useQuery({
   ...profileQuery(actor),
   enabled: () => actor.value.length > 0,
-});
+})
 
-const uri = computed(() => (profile.data.value ? listUri(profile.data.value.did, rkey.value) : ""));
+const uri = computed(() => (profile.data.value ? listUri(profile.data.value.did, rkey.value) : ''))
 
 const list = useInfiniteQuery({
   ...listQuery(uri),
   enabled: () => Boolean(uri.value),
-});
+})
 
-const name = computed(
-  () => (list.data.value?.pages[0]?.list.name) ?? "list",
-);
+const name = computed(() => list.data.value?.pages[0]?.list.name ?? 'list')
 
-const members = computed(
-  () => (list.data.value?.pages ?? []).flatMap((page) => page.items.map((item) => item.subject)),
-);
+const members = computed(() =>
+  (list.data.value?.pages ?? []).flatMap((page) => page.items.map((item) => item.subject)),
+)
 </script>
 
 <template>
@@ -33,9 +31,7 @@ const members = computed(
   <div v-if="!ready" />
 
   <NotebookShell v-else-if="!session">
-    <h1 class="page-note">
-      open the notebook from the <NuxtLink to="/">cover</NuxtLink> first
-    </h1>
+    <h1 class="page-note">open the notebook from the <NuxtLink to="/">cover</NuxtLink> first</h1>
   </NotebookShell>
 
   <NotebookShell v-else-if="profile.isPending.value">

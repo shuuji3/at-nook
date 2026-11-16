@@ -1,66 +1,66 @@
-import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { rotationFor, tapeHue, tapeTilt } from "../lib/format";
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { rotationFor, tapeHue, tapeTilt } from '../lib/format'
 
 interface VideoPrintProps {
-  thumbnail: string;
-  playlist?: string;
-  alt?: string;
-  width?: number;
-  height?: number;
-  seed: string;
+  thumbnail: string
+  playlist?: string
+  alt?: string
+  width?: number
+  height?: number
+  seed: string
 }
 
 /** A video taped in like a print; tap to play it in place, no enlargement. */
 export const VideoPrint = ({ thumbnail, playlist, alt, width, height, seed }: VideoPrintProps) => {
-  const [playing, setPlaying] = useState(false);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const label = alt && alt.trim().length > 0 ? alt : "video";
+  const [playing, setPlaying] = useState(false)
+  const videoRef = useRef<HTMLVideoElement | null>(null)
+  const label = alt && alt.trim().length > 0 ? alt : 'video'
 
   useEffect(() => {
-    const video = videoRef.current;
+    const video = videoRef.current
     if (!playing || !playlist || !video) {
-      return;
+      return
     }
 
     // the url is an HLS playlist, which only Safari plays natively
-    if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      video.src = playlist;
-      return;
+    if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = playlist
+      return
     }
 
-    let hls: { destroy: () => void } | null = null;
-    let cancelled = false;
+    let hls: { destroy: () => void } | null = null
+    let cancelled = false
 
-    void import("hls.js").then(({ default: Hls }) => {
+    void import('hls.js').then(({ default: Hls }) => {
       if (cancelled || !videoRef.current) {
-        return;
+        return
       }
       if (Hls.isSupported()) {
-        const instance = new Hls();
-        instance.loadSource(playlist);
-        instance.attachMedia(videoRef.current);
-        hls = instance;
+        const instance = new Hls()
+        instance.loadSource(playlist)
+        instance.attachMedia(videoRef.current)
+        hls = instance
       } else {
-        videoRef.current.src = playlist;
+        videoRef.current.src = playlist
       }
-    });
+    })
 
     return () => {
-      cancelled = true;
-      hls?.destroy();
-    };
-  }, [playing, playlist]);
+      cancelled = true
+      hls?.destroy()
+    }
+  }, [playing, playlist])
 
   return (
     <div className="photos">
-      <figure className="photo" style={{ "--tilt": `${rotationFor(seed, 0)}deg` } as CSSProperties}>
+      <figure className="photo" style={{ '--tilt': `${rotationFor(seed, 0)}deg` } as CSSProperties}>
         <span
           className="photo-tape"
           aria-hidden="true"
           style={
             {
-              "--tape-tilt": `${tapeTilt(seed, 0)}deg`,
-              "--tape-hue": tapeHue(seed, 0),
+              '--tape-tilt': `${tapeTilt(seed, 0)}deg`,
+              '--tape-hue': tapeHue(seed, 0),
             } as CSSProperties
           }
         />
@@ -99,5 +99,5 @@ export const VideoPrint = ({ thumbnail, playlist, alt, width, height, seed }: Vi
         )}
       </figure>
     </div>
-  );
-};
+  )
+}

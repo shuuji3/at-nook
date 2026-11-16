@@ -1,11 +1,11 @@
-import { Route, Routes } from "react-router";
-import { SessionProvider } from "./lib/session";
-import { CallbackRoute } from "./routes/callback";
-import { HashtagRoute } from "./routes/hashtag";
-import { HomeRoute } from "./routes/home";
-import { ListGridRoute } from "./routes/list-grid";
-import { NotebookRoute } from "./routes/notebook";
-import { NotFoundRoute } from "./routes/not-found";
+import { Route, Routes } from 'react-router'
+import { SessionProvider } from './lib/session'
+import { CallbackRoute } from './routes/callback'
+import { HashtagRoute } from './routes/hashtag'
+import { HomeRoute } from './routes/home'
+import { ListGridRoute } from './routes/list-grid'
+import { NotebookRoute } from './routes/notebook'
+import { NotFoundRoute } from './routes/not-found'
 
 export const App = () => (
   <SessionProvider>
@@ -18,4 +18,4 @@ export const App = () => (
       <Route path="*" element={<NotFoundRoute />} />
     </Routes>
   </SessionProvider>
-);
+)

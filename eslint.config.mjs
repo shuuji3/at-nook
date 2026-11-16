@@ -1,23 +1,23 @@
-import withNuxt from "./.nuxt/eslint.config.mjs";
+import withNuxt from './.nuxt/eslint.config.mjs'
 
 export default withNuxt(
-  { ignores: ["ref/**"] },
+  { ignores: ['ref/**'] },
   {
     // vitest hoists vi.mock above imports, so the import order is intentional
-    files: ["**/*.test.ts"],
-    rules: { "import/first": "off" },
+    files: ['**/*.test.ts'],
+    rules: { 'import/first': 'off' },
   },
   {
     // nuxt names components after their files; vue 3 allows fragment roots
-    files: ["app/**/*.vue"],
+    files: ['app/**/*.vue'],
     rules: {
-      "vue/multi-word-component-names": "off",
-      "vue/no-multiple-template-root": "off",
+      'vue/multi-word-component-names': 'off',
+      'vue/no-multiple-template-root': 'off',
     },
   },
   {
     // the plain script block exports the tile's prop type before setup imports
-    files: ["app/components/person-tile.vue"],
-    rules: { "import/first": "off" },
+    files: ['app/components/person-tile.vue'],
+    rules: { 'import/first': 'off' },
   },
-);
+)

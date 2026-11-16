@@ -1,109 +1,109 @@
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
-import { useLocation } from "react-router";
-import { Avatar } from "../components/avatar";
-import { startLogin } from "../lib/auth";
-import { stripAt } from "../lib/format";
-import { actorCandidatesQuery } from "../lib/queries";
-import { useDebouncedValue } from "../lib/use-debounced-value";
+import { useQuery } from '@tanstack/react-query'
+import { useEffect, useMemo, useState } from 'react'
+import { useLocation } from 'react-router'
+import { Avatar } from '../components/avatar'
+import { startLogin } from '../lib/auth'
+import { stripAt } from '../lib/format'
+import { actorCandidatesQuery } from '../lib/queries'
+import { useDebouncedValue } from '../lib/use-debounced-value'
 
 interface Candidate {
-  did: string;
-  handle: string;
-  displayName?: string;
-  avatar?: string;
+  did: string
+  handle: string
+  displayName?: string
+  avatar?: string
 }
 
 /** The closed notebook: sign in by handle, with the people it might be. */
 export const CoverRoute = () => {
-  const location = useLocation();
-  const [raw, setRaw] = useState("");
-  const [chosen, setChosen] = useState<Candidate | null>(null);
-  const [active, setActive] = useState(-1);
-  const [dismissed, setDismissed] = useState(false);
-  const [opening, setOpening] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const location = useLocation()
+  const [raw, setRaw] = useState('')
+  const [chosen, setChosen] = useState<Candidate | null>(null)
+  const [active, setActive] = useState(-1)
+  const [dismissed, setDismissed] = useState(false)
+  const [opening, setOpening] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  const typed = stripAt(raw);
-  const query = useDebouncedValue(typed, 300);
+  const typed = stripAt(raw)
+  const query = useDebouncedValue(typed, 300)
 
   const candidates = useQuery({
     ...actorCandidatesQuery(query),
     enabled: query.length >= 2,
-  });
+  })
 
   const people: Candidate[] = useMemo(
     () => (candidates.data?.actors ?? []).slice(0, 8),
     [candidates.data],
-  );
+  )
 
-  const open = people.length > 0 && !dismissed && !chosen;
-  const handle = chosen?.handle ?? typed;
-  const canOpen = handle.length > 0;
+  const open = people.length > 0 && !dismissed && !chosen
+  const handle = chosen?.handle ?? typed
+  const canOpen = handle.length > 0
 
   useEffect(() => {
-    setActive(-1);
-    setDismissed(false);
-  }, [raw]);
+    setActive(-1)
+    setDismissed(false)
+  }, [raw])
 
-  const loginFailed = Boolean((location.state as { loginFailed?: boolean } | null)?.loginFailed);
+  const loginFailed = Boolean((location.state as { loginFailed?: boolean } | null)?.loginFailed)
 
   const choose = (person: Candidate) => {
-    setChosen(person);
-    setRaw(person.handle);
-    setActive(-1);
-  };
+    setChosen(person)
+    setRaw(person.handle)
+    setActive(-1)
+  }
 
   const signIn = async () => {
-    const target = open && active >= 0 ? (people[active]?.handle ?? handle) : handle;
+    const target = open && active >= 0 ? (people[active]?.handle ?? handle) : handle
     if (!target) {
-      return;
+      return
     }
-    setOpening(true);
-    setError(null);
+    setOpening(true)
+    setError(null)
     try {
-      const url = await startLogin(target);
-      window.location.assign(url.toString());
+      const url = await startLogin(target)
+      window.location.assign(url.toString())
     } catch (cause) {
-      setOpening(false);
-      setError(cause instanceof Error ? cause.message : String(cause));
+      setOpening(false)
+      setError(cause instanceof Error ? cause.message : String(cause))
     }
-  };
+  }
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "ArrowDown") {
-      event.preventDefault();
+    if (event.key === 'ArrowDown') {
+      event.preventDefault()
       if (!open) {
-        setDismissed(false);
-        return;
+        setDismissed(false)
+        return
       }
-      setActive((index) => (index + 1) % people.length);
-      return;
+      setActive((index) => (index + 1) % people.length)
+      return
     }
 
-    if (event.key === "ArrowUp") {
-      event.preventDefault();
+    if (event.key === 'ArrowUp') {
+      event.preventDefault()
       if (open) {
-        setActive((index) => (index <= 0 ? people.length - 1 : index - 1));
+        setActive((index) => (index <= 0 ? people.length - 1 : index - 1))
       }
-      return;
+      return
     }
 
-    if (event.key === "Escape") {
-      setDismissed(true);
-      setActive(-1);
-      return;
+    if (event.key === 'Escape') {
+      setDismissed(true)
+      setActive(-1)
+      return
     }
 
-    if (event.key === "Enter") {
-      event.preventDefault();
+    if (event.key === 'Enter') {
+      event.preventDefault()
       if (open && active >= 0 && people[active]) {
-        choose(people[active]);
-        return;
+        choose(people[active])
+        return
       }
-      void signIn();
+      void signIn()
     }
-  };
+  }
 
   return (
     <section className="cover">
@@ -165,7 +165,7 @@ export const CoverRoute = () => {
                     <span>
                       <span className="cover-candidate-handle">@{person.handle}</span>
                       <span className="cover-candidate-name">
-                        {" "}
+                        {' '}
                         ({person.displayName ?? person.handle})
                       </span>
                     </span>
@@ -183,7 +183,7 @@ export const CoverRoute = () => {
           </div>
 
           <p className="cover-note">
-            {error ?? (loginFailed ? "sign-in did not finish. try again." : "")}
+            {error ?? (loginFailed ? 'sign-in did not finish. try again.' : '')}
           </p>
 
           <button
@@ -197,5 +197,5 @@ export const CoverRoute = () => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}

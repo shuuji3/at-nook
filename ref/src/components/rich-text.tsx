@@ -1,9 +1,9 @@
-import { Link } from "react-router";
-import { toFacetSegments } from "../lib/facets";
+import { Link } from 'react-router'
+import { toFacetSegments } from '../lib/facets'
 
 interface RichTextProps {
-  text: string;
-  facets?: unknown;
+  text: string
+  facets?: unknown
 }
 
 /** Post or bio text with mentions, links, and tags rendered as anchors. */
@@ -11,7 +11,7 @@ export const RichText = ({ text, facets }: RichTextProps) => (
   <>
     {toFacetSegments(text, facets).map((segment, index) =>
       segment.href ? (
-        segment.href.startsWith("/") ? (
+        segment.href.startsWith('/') ? (
           <Link className="rich-link" key={index} to={segment.href}>
             {segment.text}
           </Link>
@@ -25,4 +25,4 @@ export const RichText = ({ text, facets }: RichTextProps) => (
       ),
     )}
   </>
-);
+)

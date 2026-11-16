@@ -1,14 +1,14 @@
-import { type CSSProperties } from "react";
-import type { EmbedImage } from "../lib/embed";
-import { PhotoViewer } from "./photo-viewer";
+import { type CSSProperties } from 'react'
+import type { EmbedImage } from '../lib/embed'
+import { PhotoViewer } from './photo-viewer'
 
 interface PhotoProps {
-  image: EmbedImage;
+  image: EmbedImage
   /** per-photo values, spread apart within the post */
-  tilt: number;
-  nudge: number;
-  tapeTilt: number;
-  tapeHue: number;
+  tilt: number
+  nudge: number
+  tapeTilt: number
+  tapeHue: number
 }
 
 /** A photo taped into the page; tapping it moves the print into the viewer. */
@@ -22,10 +22,10 @@ export const Photo = ({ image, tilt, nudge, tapeTilt, tapeHue }: PhotoProps) => 
     caption={image.alt}
     style={
       {
-        "--nudge": `${nudge}px`,
-        "--tape-tilt": `${tapeTilt}deg`,
-        "--tape-hue": tapeHue,
+        '--nudge': `${nudge}px`,
+        '--tape-tilt': `${tapeTilt}deg`,
+        '--tape-hue': tapeHue,
       } as CSSProperties
     }
   />
-);
+)

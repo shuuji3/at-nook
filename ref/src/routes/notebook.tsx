@@ -1,41 +1,41 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
-import { Link, useParams } from "react-router";
-import { Entry } from "../components/entry";
-import { NotebookHeader } from "../components/notebook-header";
-import { NotebookShell } from "../components/notebook-shell";
-import { documentTitle, dayOf } from "../lib/format";
-import { authorFeedQuery, profileQuery } from "../lib/queries";
-import { useSession } from "../lib/session";
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
+import { Link, useParams } from 'react-router'
+import { Entry } from '../components/entry'
+import { NotebookHeader } from '../components/notebook-header'
+import { NotebookShell } from '../components/notebook-shell'
+import { documentTitle, dayOf } from '../lib/format'
+import { authorFeedQuery, profileQuery } from '../lib/queries'
+import { useSession } from '../lib/session'
 
 /** One person's notebook: header band plus written entries. */
 export const NotebookRoute = () => {
-  const { session, ready } = useSession();
+  const { session, ready } = useSession()
 
   if (!ready) {
-    return null;
+    return null
   }
 
-  const { actor = "" } = useParams<{ actor: string }>();
+  const { actor = '' } = useParams<{ actor: string }>()
 
-  const profile = useQuery(profileQuery(actor));
+  const profile = useQuery(profileQuery(actor))
   const feed = useInfiniteQuery({
     ...authorFeedQuery(actor),
     enabled: actor.length > 0,
-  });
+  })
 
   const title = profile.data
     ? documentTitle({
         displayName: profile.data.displayName,
         handle: profile.data.handle,
       })
-    : undefined;
+    : undefined
 
   useEffect(() => {
     if (title) {
-      document.title = title;
+      document.title = title
     }
-  }, [title]);
+  }, [title])
 
   if (!session) {
     return (
@@ -44,7 +44,7 @@ export const NotebookRoute = () => {
           open the notebook from the <Link to="/">cover</Link> first
         </h1>
       </NotebookShell>
-    );
+    )
   }
 
   if (profile.isPending) {
@@ -52,7 +52,7 @@ export const NotebookRoute = () => {
       <NotebookShell>
         <p className="page-note">finding the notebook…</p>
       </NotebookShell>
-    );
+    )
   }
 
   if (profile.isError || !profile.data) {
@@ -60,22 +60,22 @@ export const NotebookRoute = () => {
       <NotebookShell>
         <h1 className="page-note">this notebook could not be found</h1>
       </NotebookShell>
-    );
+    )
   }
 
   const entries = (feed.data?.pages ?? [])
     .flatMap((page) => page.feed)
-    .filter((item) => !item.reason);
+    .filter((item) => !item.reason)
 
   // the date is written once per day; same-day entries only carry the time
-  let previousDay = "";
+  let previousDay = ''
   const dated = entries.map((item) => {
-    const record = item.post.record as { createdAt?: unknown };
-    const day = typeof record.createdAt === "string" ? dayOf(record.createdAt) : "";
-    const showDate = day !== "" && day !== previousDay;
-    previousDay = day;
-    return { item, showDate };
-  });
+    const record = item.post.record as { createdAt?: unknown }
+    const day = typeof record.createdAt === 'string' ? dayOf(record.createdAt) : ''
+    const showDate = day !== '' && day !== previousDay
+    previousDay = day
+    return { item, showDate }
+  })
 
   return (
     <NotebookShell>
@@ -103,5 +103,5 @@ export const NotebookRoute = () => {
         </button>
       ) : null}
     </NotebookShell>
-  );
-};
+  )
+}

@@ -1,19 +1,19 @@
-import type { CSSProperties } from "react";
-import { Link } from "react-router";
-import { coverHue, spineShift } from "../lib/format";
-import { Avatar } from "./avatar";
+import type { CSSProperties } from 'react'
+import { Link } from 'react-router'
+import { coverHue, spineShift } from '../lib/format'
+import { Avatar } from './avatar'
 
 export interface TileProfile {
-  did: string;
-  handle: string;
-  displayName?: string;
-  avatar?: string;
+  did: string
+  handle: string
+  displayName?: string
+  avatar?: string
 }
 
 interface PersonTileProps {
-  profile: TileProfile;
-  href: string;
-  caption?: string;
+  profile: TileProfile
+  href: string
+  caption?: string
 }
 
 /** One person as a book spine lying flat on the shelf. */
@@ -23,8 +23,8 @@ export const PersonTile = ({ profile, href, caption }: PersonTileProps) => (
     to={href}
     style={
       {
-        "--spine-hue": coverHue(profile.did),
-        "--spine-shift": spineShift(profile.did),
+        '--spine-hue': coverHue(profile.did),
+        '--spine-shift': spineShift(profile.did),
       } as CSSProperties
     }
   >
@@ -42,4 +42,4 @@ export const PersonTile = ({ profile, href, caption }: PersonTileProps) => (
     </span>
     {caption ? <span className="spine-caption">{caption}</span> : null}
   </Link>
-);
+)
