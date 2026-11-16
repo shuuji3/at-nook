@@ -113,7 +113,7 @@ const onInput = (event: Event) => {
       <span class="cover-spine" aria-hidden="true" />
 
       <div class="cover-face">
-        <h1 class="cover-title">at-nook<sup class="cover-sup">α</sup></h1>
+        <h1 class="cover-title">📔at-nook<sup class="cover-sup">α</sup></h1>
 
         <div class="cover-name-line">
           <label class="cover-label" for="handle">handle</label>
@@ -244,8 +244,9 @@ const onInput = (event: Event) => {
 .cover-title {
   height: 96px;
   margin: 0;
+  text-align: center;
   font-family: var(--font-hand);
-  font-size: 72px;
+  font-size: 4rem;
   font-weight: 400;
   letter-spacing: 0.04em;
   text-shadow: 0 2px 0 rgba(0, 0, 0, 0.25);
@@ -253,12 +254,9 @@ const onInput = (event: Event) => {
 
 .cover-sup {
   font-family: var(--font-sans);
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  vertical-align: super;
-  margin-left: 4px;
+  font-size: 3rem;
+  font-weight: bold;
+  margin-inline-start: 0.25rem;
   opacity: 0.7;
 }
 
