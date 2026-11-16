@@ -41,7 +41,8 @@
     "oxfmt": "^0.78.0",
     "typescript": "~5.9.3",
     "vitest": "^4.1.12",
-    "vue-tsc": "^3.3.14"
+    "vue-tsc": "^3.3.14",
+    "wrangler": "^4.162.0"
   },
   "devEngines": {
     "packageManager": {
