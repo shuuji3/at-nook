@@ -24,6 +24,19 @@ function oauthClientMetadata(host: string) {
   }
 }
 
+// cancels tracking when the browser signals an opt-out. GPC is the current
+// signal (Firefox/Brave/DuckDuckGo); browsers without GPC (Chrome/Safari/Edge)
+// fall back to legacy Do Not Track. DNT is only consulted when GPC is absent,
+// so Firefox's stale DNT value cannot block a user who did not opt out.
+const privacyGate = `window.__privacyGate = function (type, payload) {
+  const gpc = navigator.globalPrivacyControl
+  if (typeof gpc === 'boolean') {
+    return gpc === true ? false : payload
+  }
+  const dnt = navigator.doNotTrack || navigator.msDoNotTrack
+  return dnt === 1 || dnt === '1' || dnt === 'yes' ? false : payload
+}`
+
 export default defineNuxtConfig({
   ssr: false,
   compatibilityDate: '2025-07-15',
@@ -88,13 +101,13 @@ export default defineNuxtConfig({
       script:
         umamiHost && umamiId
           ? [
+              { innerHTML: privacyGate },
               {
                 defer: true,
                 src: `${umamiHost}/script.js`,
                 'data-website-id': umamiId,
                 ...(siteHost && { 'data-domains': siteHost }),
-                // honor Do Not Track where the browser exposes it
-                'data-do-not-track': 'true',
+                'data-before-send': '__privacyGate',
                 // keep the OAuth authorization code in the callback fragment out of analytics
                 'data-exclude-hash': 'true',
                 'data-exclude-search': 'true',
