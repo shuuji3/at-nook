@@ -21,6 +21,9 @@ logs
 # cloudflare
 .wrangler
 
+# generated at build from SITE_HOST
+public/oauth-client-metadata.json
+
 # Local env files
 .env
 .env.*
