@@ -257,8 +257,7 @@ select:focus-visible {
   }
 
   .shelf-grid {
-    /* the mobile spine's real height: 8px padding either side plus the 52px avatar print */
-    --book-thickness: 68px;
+    --book-thickness: 60px;
     --shelf-pad: 8px;
     /* a phone's width alone leaves the title and @handle squeezed, so a book stands taller
        and the height stays fixed here instead of scaling with the shelf */

@@ -170,10 +170,10 @@ const spineExtra = computed(() => spineHeight(profile.did))
 }
 
 @media (max-width: 640px) {
-  /* compact book spines */
+  /* compact book spines; 4px vertical padding keeps the band at exactly the 60px column width */
   .spine-row {
     min-height: 58px;
-    padding: 8px 16px 8px 10px;
+    padding: 4px 16px 4px 10px;
   }
 
   .spine-label {
