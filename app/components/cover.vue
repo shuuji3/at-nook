@@ -400,6 +400,57 @@ function onInput(event: Event) {
   cursor: not-allowed;
 }
 
+@media (max-width: 640px) {
+  .cover-book {
+    width: min(100%, 540px);
+    height: auto;
+    max-height: 88svh;
+  }
+
+  .cover-face {
+    gap: 14px;
+    padding: 30px 24px;
+  }
+
+  .cover-title {
+    height: auto;
+    font-size: 2.6rem;
+  }
+
+  .cover-sup {
+    font-size: 1.9rem;
+  }
+
+  .cover-at,
+  .cover-input {
+    font-size: 22px;
+  }
+
+  .cover-label,
+  .cover-note {
+    font-size: 15px;
+  }
+
+  .cover-name {
+    height: 58px;
+    font-size: 24px;
+    line-height: 29px;
+  }
+
+  .cover-open {
+    font-size: 20px;
+  }
+
+  .cover-candidate-handle,
+  .cover-candidate-name {
+    font-size: 15px;
+  }
+
+  .cover .cover-credit {
+    font-size: 15px;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .cover-book {
     animation: cloth-hue 24s linear infinite;
