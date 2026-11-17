@@ -31,7 +31,7 @@ export function profileQuery(actor: MaybeRefOrGetter<string>) {
     queryKey: keyed('profile', actor),
     queryFn: () =>
       ok(
-        rpc().get('app.bsky.actor.getProfile', {
+        rpc.get('app.bsky.actor.getProfile', {
           params: { actor: toValue(actor) as ActorIdentifier },
         }),
       ),
@@ -45,7 +45,7 @@ export function followsQuery(did: MaybeRefOrGetter<string>) {
     queryKey: keyed('follows', did),
     queryFn: ({ pageParam }) =>
       ok(
-        rpc().get('app.bsky.graph.getFollows', {
+        rpc.get('app.bsky.graph.getFollows', {
           params: { actor: toValue(did) as ActorIdentifier, limit: 50, cursor: pageParam },
         }),
       ),
@@ -61,7 +61,7 @@ export function listsQuery(did: MaybeRefOrGetter<string>) {
     queryKey: keyed('lists', did),
     queryFn: ({ pageParam }) =>
       ok(
-        rpc().get('app.bsky.graph.getLists', {
+        rpc.get('app.bsky.graph.getLists', {
           params: {
             actor: toValue(did) as ActorIdentifier,
             purposes: ['curatelist'],
@@ -82,7 +82,7 @@ export function listQuery(uri: MaybeRefOrGetter<string>) {
     queryKey: keyed('list', uri),
     queryFn: ({ pageParam }) =>
       ok(
-        rpc().get('app.bsky.graph.getList', {
+        rpc.get('app.bsky.graph.getList', {
           params: { list: toValue(uri) as ResourceUri, limit: 50, cursor: pageParam },
         }),
       ),
@@ -98,7 +98,7 @@ export function authorFeedQuery(actor: MaybeRefOrGetter<string>) {
     queryKey: keyed('authorFeed', actor),
     queryFn: ({ pageParam }) =>
       ok(
-        rpc().get('app.bsky.feed.getAuthorFeed', {
+        rpc.get('app.bsky.feed.getAuthorFeed', {
           params: {
             actor: toValue(actor) as ActorIdentifier,
             limit: 50,
@@ -119,7 +119,7 @@ export function tagQuery(tag: MaybeRefOrGetter<string>) {
     queryKey: keyed('tag', tag),
     queryFn: ({ pageParam }) =>
       ok(
-        rpc().get('app.bsky.feed.searchPosts', {
+        rpc.get('app.bsky.feed.searchPosts', {
           params: {
             q: `#${toValue(tag)}`,
             tag: [toValue(tag)],

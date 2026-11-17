@@ -15,7 +15,7 @@ import {
   OAuthUserAgent,
 } from '@atcute/oauth-browser-client'
 import { OAUTH_SCOPE } from './oauth-scope'
-import { setReader } from './rpc'
+import { setHandler } from './rpc'
 
 const DID_STORAGE_KEY = 'at-nook:did'
 
@@ -133,10 +133,10 @@ export async function resumeSession(did: string): Promise<boolean> {
 
   try {
     const session = await getSession(did as Did)
-    setReader(new OAuthUserAgent(session))
+    setHandler(new OAuthUserAgent(session))
     return true
   } catch {
-    setReader(null)
+    setHandler(null)
     deleteStoredSession(did as Did)
     clearStoredDid()
     return false
@@ -154,7 +154,7 @@ export async function signOut(did: string): Promise<void> {
     // clearing local state is what matters when the server is unreachable
   }
 
-  setReader(null)
+  setHandler(null)
   deleteStoredSession(did as Did)
   clearStoredDid()
 }

@@ -25,7 +25,7 @@ const list = useInfiniteQuery({
   queryKey: listKey,
   queryFn: ({ pageParam }) =>
     ok(
-      rpc().get('app.bsky.graph.getList', {
+      rpc.get('app.bsky.graph.getList', {
         params: {
           list: (selected.value === FOLLOWING ? '' : selected.value) as ResourceUri,
           limit: 50,

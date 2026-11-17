@@ -7,7 +7,7 @@ const mocks = vi.hoisted(() => ({ startLogin: vi.fn(), get: vi.fn() }))
 
 mockNuxtImport('startLogin', () => mocks.startLogin)
 mockNuxtImport('publicRpc', () => ({ get: mocks.get }))
-mockNuxtImport('rpc', () => () => ({ get: mocks.get }))
+mockNuxtImport('rpc', () => ({ get: mocks.get }))
 
 import { renderWithProviders } from '../../utils/render'
 import Cover from '~/components/cover.vue'

@@ -17,7 +17,7 @@ mockNuxtImport('useSession', () => () => ({
 }))
 mockNuxtImport('followsQuery', () => mocks.followsQuery)
 mockNuxtImport('listsQuery', () => mocks.listsQuery)
-mockNuxtImport('rpc', () => () => ({ get: mocks.get }))
+mockNuxtImport('rpc', () => ({ get: mocks.get }))
 
 import { renderWithProviders } from '../../utils/render'
 import Shelf from '~/components/shelf.vue'
