@@ -6,6 +6,7 @@ import {
   XrpcHandleResolver,
 } from '@atcute/identity-resolver'
 import type { ActorIdentifier, Did } from '@atcute/lexicons'
+import { isLoopbackHost } from '@atcute/oauth-types'
 import {
   configureOAuth,
   createAuthorizationUrl,
@@ -18,8 +19,6 @@ import { OAUTH_SCOPE } from './oauth-scope'
 import { setHandler } from './rpc'
 
 const DID_STORAGE_KEY = 'at-nook:did'
-
-const LOOPBACK_HOSTS = new Set(['127.0.0.1', 'localhost'])
 
 export interface OAuthEndpoints {
   client_id: string
@@ -36,7 +35,7 @@ export interface OAuthEndpoints {
 export function oauthEndpoints(origin: string): OAuthEndpoints {
   const url = new URL(origin)
 
-  if (LOOPBACK_HOSTS.has(url.hostname)) {
+  if (isLoopbackHost(url.hostname)) {
     const redirect_uri = `http://127.0.0.1:${url.port}/oauth/callback`
     return {
       client_id: `http://localhost?redirect_uri=${encodeURIComponent(redirect_uri)}&scope=${encodeURIComponent(OAUTH_SCOPE)}`,
