@@ -119,8 +119,8 @@
   /* even margins for the shelf inside the page, and the shelf's own lip past the books */
   --shelf-pad: var(--page-pad);
   --shelf-lip: 16px;
-  /* one book's base length: the shelf's content width */
-  --shelf-width: calc(100cqw - 2 * var(--shelf-pad));
+  /* one book's base length: fixed per breakpoint so height never tracks the shelf width */
+  --shelf-width: 720px;
   /* the board is a real plank, not a line */
   --shelf-board: 28px;
   /* the shelf's own air: the 1.5rem hover lift plus a margin, so a lifted book can
@@ -260,8 +260,8 @@ select:focus-visible {
     /* the mobile spine's real height: 8px padding either side plus the 52px avatar print */
     --book-thickness: 68px;
     --shelf-pad: 8px;
-    /* a phone's width alone leaves the title and @handle squeezed, so a book stands half
-       again as tall there; desk widths keep the plain shelf width */
-    --shelf-width: calc((100cqw - 2 * var(--shelf-pad)) * 1.5);
+    /* a phone's width alone leaves the title and @handle squeezed, so a book stands taller
+       and the height stays fixed here instead of scaling with the shelf */
+    --shelf-width: 500px;
   }
 }
