@@ -1,4 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
+// analytics are optional: the tracker is only injected when the deploy
+// environment has these envs. forks that set nothing get no analytics.
+const umamiHost = process.env.NUXT_PUBLIC_UMAMI_HOST
+const umamiId = process.env.NUXT_PUBLIC_UMAMI_WEBSITE_ID
+const umamiDomains = process.env.NUXT_PUBLIC_UMAMI_DOMAINS
+
 export default defineNuxtConfig({
   ssr: false,
   compatibilityDate: '2025-07-15',
@@ -47,6 +54,22 @@ export default defineNuxtConfig({
     head: {
       title: 'at-nook',
       link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
+      script:
+        umamiHost && umamiId
+          ? [
+              {
+                defer: true,
+                src: `${umamiHost}/script.js`,
+                'data-website-id': umamiId,
+                ...(umamiDomains && { 'data-domains': umamiDomains }),
+                // honor Do Not Track where the browser exposes it
+                'data-do-not-track': 'true',
+                // keep the OAuth authorization code in the callback fragment out of analytics
+                'data-exclude-hash': 'true',
+                'data-exclude-search': 'true',
+              },
+            ]
+          : [],
     },
   },
   vite: {
