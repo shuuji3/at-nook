@@ -30,7 +30,7 @@ withDefaults(
   >
     <img class="avatar" :src="src" alt="" loading="lazy" decoding="async" />
   </span>
-  <PhotoViewer
+  <Photo
     v-else
     :src="src"
     :alt="alt"

@@ -39,11 +39,15 @@ const sameDay = computed(() => {
     <Photo
       v-for="(image, index) in embed.images"
       :key="`${image.thumb}-${index}`"
-      :image="image"
+      :src="image.fullsize"
+      :alt="image.alt"
+      :width="image.width"
+      :height="image.height"
       :tilt="tilts[index] ?? 0"
       :nudge="nudges[index] ?? 0"
       :tape-tilt="tapes[index] ?? 0"
       :tape-hue="tapeHue(seed, index)"
+      :caption="image.alt"
     />
   </div>
 

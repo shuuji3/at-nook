@@ -1,27 +1,560 @@
 <script setup lang="ts">
-defineProps<{
-  image: EmbedImage
-  tilt: number
-  nudge: number
-  tapeTilt: number
-  tapeHue: number
-}>()
+import type { CSSProperties } from 'vue'
+
+const MOVE_MS = 300
+const HALF_MS = MOVE_MS / 2
+const TAPE_MS = 180
+const EASE = 'cubic-bezier(0.22, 0.61, 0.36, 1)'
+
+interface Pose {
+  dx: number
+  dy: number
+  scaleX: number
+  scaleY: number
+  rotate: number
+}
+
+interface Plan {
+  pose: Pose
+  startPad: string
+  scaleY: number
+  pageFont: number
+  pageLine: number
+  startCaptionH: number
+  endCaptionH: number
+  startCapMargin: number
+  endCapMargin: number
+}
+
+type Phase = 'closed' | 'opening' | 'open' | 'closing'
+
+const props = withDefaults(
+  defineProps<{
+    src: string
+    alt: string
+    width?: number
+    height?: number
+    tilt?: number
+    nudge?: number
+    tapeTilt?: number
+    tapeHue?: number
+    tape?: boolean
+    caption?: string
+    style?: CSSProperties
+  }>(),
+  {
+    tilt: 0,
+    nudge: 0,
+    tapeTilt: 0,
+    tape: true,
+  },
+)
+
+/** The print's own variables; consumers pass numbers, not CSS variable names. */
+const printStyle = computed(
+  () =>
+    ({
+      ...props.style,
+      '--tilt': `${props.tilt}deg`,
+      '--nudge': `${props.nudge}px`,
+      '--tape-tilt': `${props.tapeTilt}deg`,
+      '--tape-hue': props.tapeHue,
+    }) as CSSProperties,
+)
+
+const phase = ref<Phase>('closed')
+const staged = ref(false)
+const printRef = ref<HTMLElement | null>(null)
+const viewerRef = ref<HTMLElement | null>(null)
+const backdropRef = ref<HTMLDivElement | null>(null)
+
+function centre(rect: DOMRect) {
+  return {
+    x: rect.left + rect.width / 2,
+    y: rect.top + rect.height / 2,
+  }
+}
+
+function poseTransform(pose: Pose) {
+  return `translate(${pose.dx}px, ${pose.dy}px) scale(${pose.scaleX}, ${pose.scaleY}) rotate(${pose.rotate}deg)`
+}
+
+function prefersReducedMotion() {
+  return (
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  )
+}
+
+function printTape(): HTMLElement | null {
+  return printRef.value?.querySelector<HTMLElement>('.photo-tape') ?? null
+}
+
+const plan = computed((): Plan | null => {
+  const print = printRef.value
+  const viewer = viewerRef.value
+  const printPicture = print?.querySelector<HTMLImageElement>('.pv-image')
+  const viewerPicture = viewer?.querySelector<HTMLImageElement>('.pv-image')
+  if (!print || !viewer || !printPicture || !viewerPicture) {
+    return null
+  }
+
+  const printW = printPicture.offsetWidth
+  const printH = printPicture.offsetHeight
+  const viewerW = viewerPicture.offsetWidth
+  const viewerH = viewerPicture.offsetHeight
+  if (printW === 0 || printH === 0 || viewerW === 0 || viewerH === 0) {
+    return null
+  }
+
+  const scaleX = printW / viewerW
+  const scaleY = printH / viewerH
+
+  const printStyle = getComputedStyle(print)
+  const printPadX = parseFloat(printStyle.paddingLeft)
+  const printPadY = parseFloat(printStyle.paddingTop)
+
+  const pageCaption = print.querySelector<HTMLElement>('.photo-caption')
+  const viewerCaption = viewer.querySelector<HTMLElement>('.photo-caption-viewer')
+  const viewerCaptionBox = viewer.querySelector<HTMLElement>('.photo-caption')
+  const pageCaptionStyle = pageCaption ? getComputedStyle(pageCaption) : null
+  const viewerCaptionStyle = viewerCaptionBox ? getComputedStyle(viewerCaptionBox) : null
+
+  const pageCaptionH = pageCaption?.offsetHeight ?? 0
+  const viewerCaptionH = viewerCaption?.offsetHeight ?? 0
+  const pageFont = pageCaptionStyle ? parseFloat(pageCaptionStyle.fontSize) : 18
+  const pageLine = pageCaptionStyle ? parseFloat(pageCaptionStyle.lineHeight) : 32
+  const pageMargin = pageCaptionStyle ? parseFloat(pageCaptionStyle.marginTop) : 12
+  const viewerMargin = viewerCaptionStyle ? parseFloat(viewerCaptionStyle.marginTop) : 12
+
+  const from = print.getBoundingClientRect()
+  const to = viewer.getBoundingClientRect()
+
+  return {
+    pose: {
+      dx: centre(from).x - centre(to).x,
+      dy: centre(from).y - centre(to).y,
+      scaleX,
+      scaleY,
+      rotate: props.tilt,
+    },
+    startPad: `${printPadY / scaleY}px ${printPadX / scaleX}px`,
+    scaleY,
+    pageFont,
+    pageLine,
+    startCaptionH: scaleY > 0 && pageCaptionH > 0 ? pageCaptionH / scaleY : viewerCaptionH,
+    endCaptionH: viewerCaptionH,
+    startCapMargin: scaleY > 0 ? pageMargin / scaleY : viewerMargin,
+    endCapMargin: viewerMargin,
+  }
+})
+
+function onOpen() {
+  if (phase.value === 'closed') {
+    phase.value = 'opening'
+  }
+}
+
+function close() {
+  if (phase.value !== 'open') return
+
+  const current = plan.value
+  const card = viewerRef.value
+
+  if (!current || !card || prefersReducedMotion()) {
+    phase.value = 'closed'
+    return
+  }
+
+  phase.value = 'closing'
+
+  const p = current.pose
+  const { scaleY, pageFont, pageLine, startCaptionH, endCaptionH, startCapMargin, endCapMargin } =
+    current
+  const backdrop = backdropRef.value
+  const tapeEl = printTape()
+  const captionBox = card.querySelector<HTMLElement>('.photo-caption')
+  const pageForm = card.querySelector<HTMLElement>('.photo-caption-page')
+  const viewerForm = card.querySelector<HTMLElement>('.photo-caption-viewer')
+  const captionAnimations: Animation[] = []
+
+  if (tapeEl) {
+    tapeEl.style.opacity = '0'
+  }
+
+  card.style.transform = 'none'
+  card.animate([{ transform: 'none' }, { transform: poseTransform(p) }], {
+    duration: MOVE_MS,
+    easing: EASE,
+    fill: 'forwards',
+  })
+  backdrop?.animate([{ opacity: 1 }, { opacity: 0 }], {
+    duration: MOVE_MS,
+    easing: 'linear',
+    fill: 'forwards',
+  })
+
+  if (captionBox) {
+    captionBox.style.height = `${endCaptionH}px`
+    captionBox.style.marginTop = `${endCapMargin}px`
+    captionAnimations.push(
+      captionBox.animate(
+        [
+          { height: `${endCaptionH}px`, marginTop: `${endCapMargin}px` },
+          { height: `${startCaptionH}px`, marginTop: `${startCapMargin}px` },
+        ],
+        { duration: MOVE_MS, easing: EASE, fill: 'forwards' },
+      ),
+    )
+  }
+  if (pageForm) {
+    pageForm.style.fontSize = `${pageFont / scaleY}px`
+    pageForm.style.lineHeight = `${pageLine / scaleY}px`
+    captionAnimations.push(
+      pageForm.animate([{ transform: `scale(${p.scaleX}, ${p.scaleY})` }, { transform: 'none' }], {
+        duration: MOVE_MS,
+        easing: EASE,
+        fill: 'forwards',
+      }),
+    )
+    captionAnimations.push(
+      pageForm.animate([{ opacity: 0 }, { opacity: 1 }], {
+        duration: HALF_MS,
+        easing: 'linear',
+        fill: 'both',
+      }),
+    )
+  }
+  if (viewerForm) {
+    captionAnimations.push(
+      viewerForm.animate([{ opacity: 0 }, { opacity: 1 }], {
+        duration: HALF_MS,
+        easing: 'linear',
+        fill: 'forwards',
+      }),
+    )
+  }
+
+  window.setTimeout(() => {
+    if (captionBox) {
+      captionBox.style.height = `${startCaptionH}px`
+      captionBox.style.marginTop = `${startCapMargin}px`
+    }
+    for (const ca of captionAnimations) {
+      ca.cancel()
+    }
+    phase.value = 'closed'
+
+    const tape = printTape()
+    if (!tape) return
+    const tapeBack = tape.animate([{ opacity: 0 }, { opacity: 1 }], {
+      duration: TAPE_MS,
+      easing: 'linear',
+      fill: 'forwards',
+    })
+    void tapeBack.finished
+      .then(() => {
+        tapeBack.cancel()
+        tape.style.opacity = ''
+      })
+      .catch(() => {
+        /* cleanup */
+      })
+  }, MOVE_MS)
+}
+
+// Opening animation — similar to the React useLayoutEffect
+watch(phase, async (newPhase) => {
+  if (newPhase !== 'opening') return
+
+  if (prefersReducedMotion()) {
+    if (backdropRef.value) {
+      backdropRef.value.style.opacity = '1'
+    }
+    staged.value = false
+    phase.value = 'open'
+    return
+  }
+
+  await nextTick()
+
+  // Wait for the Teleported DOM to be available
+  const current = plan.value
+  if (!current) {
+    phase.value = 'open'
+    return
+  }
+
+  const {
+    pose,
+    startPad,
+    scaleY,
+    pageFont,
+    pageLine,
+    startCaptionH,
+    endCaptionH,
+    startCapMargin,
+    endCapMargin,
+  } = current
+
+  const card = viewerRef.value
+  if (!card) return
+
+  card.style.padding = startPad
+  card.style.transform = poseTransform(pose)
+  staged.value = false
+
+  const captionBox = card.querySelector<HTMLElement>('.photo-caption')
+  const pageForm = card.querySelector<HTMLElement>('.photo-caption-page')
+  const viewerForm = card.querySelector<HTMLElement>('.photo-caption-viewer')
+  const captionAnimations: Animation[] = []
+
+  if (captionBox) {
+    captionBox.style.height = `${startCaptionH}px`
+    captionBox.style.marginTop = `${startCapMargin}px`
+  }
+  if (pageForm) {
+    pageForm.style.fontSize = `${pageFont / scaleY}px`
+    pageForm.style.lineHeight = `${pageLine / scaleY}px`
+  }
+
+  const tapeEl = printTape()
+  const backdrop = backdropRef.value
+
+  const animation = card.animate([{ transform: poseTransform(pose) }, { transform: 'none' }], {
+    duration: MOVE_MS,
+    easing: EASE,
+    fill: 'forwards',
+  })
+
+  tapeEl?.animate([{ opacity: 1 }, { opacity: 0 }], {
+    duration: MOVE_MS,
+    easing: 'linear',
+    fill: 'forwards',
+  })
+
+  backdrop?.animate([{ opacity: 0 }, { opacity: 1 }], {
+    duration: MOVE_MS,
+    easing: 'linear',
+  })
+
+  if (captionBox) {
+    captionAnimations.push(
+      captionBox.animate(
+        [
+          { height: `${startCaptionH}px`, marginTop: `${startCapMargin}px` },
+          { height: `${endCaptionH}px`, marginTop: `${endCapMargin}px` },
+        ],
+        { duration: MOVE_MS, easing: EASE, fill: 'forwards' },
+      ),
+    )
+  }
+  if (pageForm) {
+    captionAnimations.push(
+      pageForm.animate(
+        [{ transform: 'none' }, { transform: `scale(${pose.scaleX}, ${pose.scaleY})` }],
+        { duration: MOVE_MS, easing: EASE, fill: 'forwards' },
+      ),
+    )
+    captionAnimations.push(
+      pageForm.animate([{ opacity: 1 }, { opacity: 0 }], {
+        duration: HALF_MS,
+        easing: 'linear',
+        fill: 'forwards',
+      }),
+    )
+  }
+  if (viewerForm) {
+    captionAnimations.push(
+      viewerForm.animate([{ opacity: 0 }, { opacity: 1 }], {
+        duration: HALF_MS,
+        delay: HALF_MS,
+        easing: 'linear',
+        fill: 'both',
+      }),
+    )
+  }
+
+  void animation.finished
+    .then(() => {
+      animation.cancel()
+      for (const ca of captionAnimations) {
+        ca.cancel()
+      }
+      card.style.transform = ''
+      if (captionBox) {
+        captionBox.style.height = ''
+        captionBox.style.marginTop = ''
+      }
+      if (pageForm) {
+        pageForm.style.fontSize = ''
+        pageForm.style.lineHeight = ''
+      }
+      if (backdrop) {
+        backdrop.style.opacity = '1'
+      }
+      if (tapeEl) {
+        tapeEl.style.opacity = '0'
+      }
+      phase.value = 'open'
+    })
+    .catch(() => {
+      /* cleanup on cancel */
+    })
+})
 </script>
 
 <template>
-  <PhotoViewer
-    :src="image.fullsize"
-    :alt="image.alt"
-    :width="image.width"
-    :height="image.height"
-    :tilt="tilt"
-    :caption="image.alt"
-    :style="
-      {
-        '--nudge': `${nudge}px`,
-        '--tape-tilt': `${tapeTilt}deg`,
-        '--tape-hue': tapeHue,
-      } as any
-    "
-  />
+  <figure
+    ref="printRef"
+    :class="phase !== 'closed' ? 'photo is-away' : 'photo'"
+    :style="printStyle"
+    data-photo="print"
+  >
+    <span v-if="tape" class="photo-tape" aria-hidden="true" />
+    <button class="photo-button" type="button" :aria-label="alt || 'photo'" @click="onOpen">
+      <img
+        class="photo-image pv-image"
+        :src="src"
+        :alt="alt"
+        :width="width"
+        :height="height"
+        loading="lazy"
+        decoding="async"
+      />
+    </button>
+    <figcaption v-if="caption" class="photo-caption">
+      <span class="photo-caption-text">{{ caption }}</span>
+    </figcaption>
+  </figure>
+
+  <Teleport v-if="phase !== 'closed'" to="body">
+    <div class="photo-zoom" role="dialog" aria-label="photo" @click="close">
+      <div ref="backdropRef" class="photo-zoom-backdrop" aria-hidden="true" />
+      <figure
+        ref="viewerRef"
+        :class="staged ? 'photo photo-enlarged is-staged' : 'photo photo-enlarged'"
+        :style="{ '--tilt': `${tilt}deg` }"
+        data-photo="viewer"
+      >
+        <img class="photo-image pv-image" :src="src" :alt="alt" :width="width" :height="height" />
+        <figcaption v-if="caption" class="photo-caption photo-caption-stacked">
+          <span class="photo-caption-text photo-caption-page">{{ caption }}</span>
+          <span class="photo-caption-text photo-caption-viewer">{{ caption }}</span>
+        </figcaption>
+      </figure>
+      <button class="photo-zoom-close" type="button" aria-label="close photo" @click="close" />
+    </div>
+  </Teleport>
 </template>
+
+<style scoped>
+/* while its viewer copy is out, the print in the page keeps its place and its tape,
+   but its paper, picture and caption step aside */
+.photo.is-away {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.photo.is-away .photo-button,
+.photo.is-away .photo-caption {
+  visibility: hidden;
+}
+
+.photo-zoom {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  cursor: zoom-out;
+}
+
+/* the backdrop is its own layer, so fading it never fades the print */
+.photo-zoom-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: rgba(20, 20, 25, 0.72);
+  opacity: 0;
+}
+
+.photo-zoom-close {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  border: none;
+  background: transparent;
+  cursor: zoom-out;
+}
+
+.photo-zoom .photo-enlarged {
+  width: auto;
+  max-width: none;
+  margin-left: 0;
+  transform: none;
+  /* the backdrop already separates the print from the page */
+  box-shadow: none;
+}
+
+/* hidden until the taped pose has been written onto it, so it is never painted
+   anywhere but in the taped print's place */
+.photo-zoom .photo-enlarged.is-staged {
+  visibility: hidden;
+}
+
+/* the picture itself is the travelling part, so it is laid out and posed by script */
+.photo-zoom .photo-enlarged .photo-image {
+  width: auto;
+  max-width: min(88vw, 1100px);
+  max-height: 80vh;
+  height: auto;
+  object-fit: contain;
+  transform-origin: 50% 50%;
+}
+
+.photo-caption {
+  /* width:0 stops the caption's one-line max-content from sizing the shrink-to-fit
+     card (which widened it past the picture); min-width:100% then fills the width the
+     picture gives the card, so the text wraps there */
+  width: 0;
+  min-width: 100%;
+  margin-top: 0.75rem;
+  /* the box height is driven by script while the print travels, so the text can't
+     reflow the box; the text fades instead */
+  overflow: hidden;
+  font-family: var(--font-hand);
+  font-size: 18px;
+  line-height: var(--line-height);
+  color: var(--ink-soft);
+}
+
+.photo-caption-text {
+  display: block;
+}
+
+/* the viewer caption holds the caption twice: once at the page's size, once at the
+   viewer's; they cross-fade while the box height travels between the two heights */
+.photo-caption-stacked {
+  position: relative;
+}
+
+.photo-caption-stacked .photo-caption-page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transform-origin: top left;
+  /* rests hidden; the page form only shows while it is faded in */
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .photo-zoom .photo-enlarged {
+    will-change: transform;
+  }
+}
+</style>

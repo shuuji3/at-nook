@@ -73,7 +73,8 @@ describe('photo', () => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
     const { container } = await renderWithProviders(Photo, {
       props: {
-        image: { fullsize: 'f', thumb: 't', alt: 'a caption' },
+        src: 'f',
+        alt: 'a caption',
         tilt: 1.2,
         nudge: 6,
         tapeTilt: 3,
@@ -101,7 +102,8 @@ describe('photo', () => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
     await renderWithProviders(Photo, {
       props: {
-        image: { fullsize: 'f', thumb: 't', alt: 'a caption' },
+        src: 'f',
+        alt: 'a caption',
         tilt: 1.2,
         nudge: 6,
         tapeTilt: 3,
