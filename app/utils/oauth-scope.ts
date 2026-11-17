@@ -1,8 +1,6 @@
 import type { AtprotoAudience, Nsid } from '@atcute/lexicons/syntax'
 import { scope } from '@atcute/oauth-types'
-
-/** the AppView service the reads are proxied to */
-export const APPVIEW_AUDIENCE = 'did:web:api.bsky.app#bsky_appview'
+import { APPVIEW_AUDIENCE } from './endpoints'
 
 /** the published permission set for viewing Bluesky public content */
 export const VIEW_PERMISSION_SET = 'app.bsky.authViewAll'

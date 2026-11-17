@@ -6,13 +6,12 @@ import {
   type FetchHandlerObject,
 } from '@atcute/client'
 import type {} from '@atcute/bluesky'
-import { APPVIEW_AUDIENCE } from './oauth-scope'
+import { APPVIEW_AUDIENCE, PUBLIC_APPVIEW_URL } from './endpoints'
 
-// TODO: support configuring service endpoints; this AppView and APPVIEW_AUDIENCE
-// in oauth-scope.ts are currently hardcoded.
+// TODO: support configuring service endpoints
 /** the public AppView, used only by the cover for handle candidates */
 export const publicRpc = new Client({
-  handler: simpleFetchHandler({ service: 'https://public.api.bsky.app' }),
+  handler: simpleFetchHandler({ service: PUBLIC_APPVIEW_URL }),
 })
 
 let handler: FetchHandler | null = null

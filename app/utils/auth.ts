@@ -15,6 +15,7 @@ import {
   getSession,
   OAuthUserAgent,
 } from '@atcute/oauth-browser-client'
+import { PUBLIC_APPVIEW_URL } from './endpoints'
 import { OAUTH_SCOPE } from './oauth-scope'
 import { setHandler } from './rpc'
 
@@ -58,7 +59,7 @@ function ensureOAuth() {
 
   const identityResolver = new LocalActorResolver({
     handleResolver: new XrpcHandleResolver({
-      serviceUrl: 'https://public.api.bsky.app',
+      serviceUrl: PUBLIC_APPVIEW_URL,
     }),
     didDocumentResolver: new CompositeDidDocumentResolver({
       methods: {
