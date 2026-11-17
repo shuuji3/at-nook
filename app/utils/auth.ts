@@ -55,7 +55,6 @@ function ensureOAuth() {
   if (configured) {
     return
   }
-  configured = true
 
   const identityResolver = new LocalActorResolver({
     handleResolver: new XrpcHandleResolver({
@@ -73,6 +72,8 @@ function ensureOAuth() {
     metadata: oauthEndpoints(window.location.origin),
     identityResolver,
   })
+
+  configured = true
 }
 
 /** Reads the did of the signed-in account from local storage. */
