@@ -40,9 +40,10 @@ jobs:
         run: pnpm build
         env:
           NITRO_PRESET: cloudflare_module
+          # read from repository variables; forks set their own
+          SITE_HOST: ${{ vars.SITE_HOST }}
           NUXT_PUBLIC_UMAMI_HOST: ${{ vars.NUXT_PUBLIC_UMAMI_HOST }}
           NUXT_PUBLIC_UMAMI_WEBSITE_ID: ${{ vars.NUXT_PUBLIC_UMAMI_WEBSITE_ID }}
-          NUXT_PUBLIC_UMAMI_DOMAINS: ${{ vars.NUXT_PUBLIC_UMAMI_DOMAINS }}
 
       - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v4

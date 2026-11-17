@@ -1,10 +1,12 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
+// app domain
+const siteHost = process.env.SITE_HOST
+
 // analytics are optional: the tracker is only injected when the deploy
 // environment has these envs. forks that set nothing get no analytics.
 const umamiHost = process.env.NUXT_PUBLIC_UMAMI_HOST
 const umamiId = process.env.NUXT_PUBLIC_UMAMI_WEBSITE_ID
-const umamiDomains = process.env.NUXT_PUBLIC_UMAMI_DOMAINS
 
 export default defineNuxtConfig({
   ssr: false,
@@ -12,7 +14,7 @@ export default defineNuxtConfig({
   nitro: {
     preset: 'cloudflare_module',
     // Emit a static SPA shell (index.html) while keeping the client bundle; the
-    // Worker only serves assets since at-nook has no server routes.
+    // Worker serves assets plus the oauth-client-metadata route.
     prerender: { routes: ['/'] },
     cloudflare: {
       // Generate .output/server/wrangler.json during build.
@@ -22,20 +24,21 @@ export default defineNuxtConfig({
         // Don't assign a public *.workers.dev URL or per-deployment preview URLs.
         workers_dev: false,
         preview_urls: false,
-        // Single custom domain, Production and Preview. Previews are served at
-        // <preview-name>.at-nook.shuuji3.xyz; Cloudflare auto-creates the wildcard
-        // DNS/cert for previews (as in the reference project).
-        routes: [
-          {
-            pattern: 'at-nook.shuuji3.xyz',
-            custom_domain: true,
-            // @ts-expect-error valid cloudflare wrangler route field (Production and Preview, see
-            // developers.cloudflare.com/workers/previews/custom-domains/)
-            // nitropack's vendored route type lags and doesn't include previews_enabled yet.
-            // Removes itself once fixed.
-            previews_enabled: true,
-          },
-        ],
+        // Single custom domain, Production and Preview, from SITE_HOST. Cloudflare
+        // auto-creates the wildcard DNS/cert for previews.
+        routes: siteHost
+          ? [
+              {
+                pattern: siteHost,
+                custom_domain: true,
+                // @ts-expect-error valid cloudflare wrangler route field (Production and Preview, see
+                // developers.cloudflare.com/workers/previews/custom-domains/)
+                // nitropack's vendored route type lags and doesn't include previews_enabled yet.
+                // Removes itself once fixed.
+                previews_enabled: true,
+              },
+            ]
+          : [],
         assets: {
           // Serve index.html for unmatched requests so client-side routes work.
           not_found_handling: 'single-page-application',
@@ -61,7 +64,7 @@ export default defineNuxtConfig({
                 defer: true,
                 src: `${umamiHost}/script.js`,
                 'data-website-id': umamiId,
-                ...(umamiDomains && { 'data-domains': umamiDomains }),
+                ...(siteHost && { 'data-domains': siteHost }),
                 // honor Do Not Track where the browser exposes it
                 'data-do-not-track': 'true',
                 // keep the OAuth authorization code in the callback fragment out of analytics
@@ -74,7 +77,7 @@ export default defineNuxtConfig({
   },
   vite: {
     server: {
-      allowedHosts: ['at-nook.shuuji3.xyz'],
+      allowedHosts: siteHost ? [siteHost] : [],
     },
   },
   css: [
