@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type Hls from 'hls.js'
+
 const props = defineProps<{
   thumbnail: string
   playlist?: string
@@ -11,7 +13,7 @@ const props = defineProps<{
 const playing = ref(false)
 const videoRef = ref<HTMLVideoElement | null>(null)
 
-const label = props.alt && props.alt.trim().length > 0 ? props.alt : 'video'
+const label = props.alt?.trim() ? props.alt : 'video'
 
 function setPlaying(value: boolean) {
   playing.value = value
@@ -27,7 +29,7 @@ watch([playing, () => props.playlist], ([isPlaying, pl]) => {
     return
   }
 
-  let hls: { destroy: () => void } | null = null
+  let hls: Hls | null = null
   let cancelled = false
 
   void import('hls.js').then(({ default: Hls }) => {
@@ -42,7 +44,6 @@ watch([playing, () => props.playlist], ([isPlaying, pl]) => {
     }
   })
 
-  // cleanup via watch's return
   return () => {
     cancelled = true
     hls?.destroy()
