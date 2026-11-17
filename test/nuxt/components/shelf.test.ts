@@ -6,7 +6,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 const mocks = vi.hoisted(() => ({
   followsQuery: vi.fn(),
   listsQuery: vi.fn(),
-  get: vi.fn(),
+  listQuery: vi.fn(),
 }))
 
 mockNuxtImport('useSession', () => () => ({
@@ -17,7 +17,7 @@ mockNuxtImport('useSession', () => () => ({
 }))
 mockNuxtImport('followsQuery', () => mocks.followsQuery)
 mockNuxtImport('listsQuery', () => mocks.listsQuery)
-mockNuxtImport('rpc', () => ({ get: mocks.get }))
+mockNuxtImport('listQuery', () => mocks.listQuery)
 
 import { renderWithProviders } from '../../utils/render'
 import Shelf from '~/components/shelf.vue'
@@ -45,13 +45,12 @@ beforeEach(() => {
       ],
     }),
   )
-  mocks.get.mockResolvedValue({
-    ok: true,
-    data: {
+  mocks.listQuery.mockReturnValue(
+    page('list', {
       list: { name: 'for me', listItemCount: 1 },
       items: [{ subject: { did: 'did:plc:b', handle: 'bob.test', displayName: 'Bob' } }],
-    },
-  })
+    }),
+  )
 })
 
 describe('shelf', () => {

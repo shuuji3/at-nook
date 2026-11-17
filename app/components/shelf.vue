@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { useInfiniteQuery } from '@tanstack/vue-query'
-import { ok } from '@atcute/client'
-import type { ResourceUri } from '@atcute/lexicons'
 import type { Group } from './group-sidebar.vue'
 
-const FIVE_MINUTES = 60_000 * 5
 const FOLLOWING = 'following'
 
 const { session } = useSession()
@@ -19,24 +16,11 @@ const lists = useInfiniteQuery({
   enabled: () => Boolean(session.value),
 })
 
-const listKey = computed(() => ['list', selected.value === FOLLOWING ? '' : selected.value])
+const listUri = computed(() => (selected.value === FOLLOWING ? '' : selected.value))
 
 const list = useInfiniteQuery({
-  queryKey: listKey,
-  queryFn: ({ pageParam }) =>
-    ok(
-      rpc.get('app.bsky.graph.getList', {
-        params: {
-          list: (selected.value === FOLLOWING ? '' : selected.value) as ResourceUri,
-          limit: 50,
-          cursor: pageParam,
-        },
-      }),
-    ),
+  ...listQuery(listUri),
   enabled: () => Boolean(session.value) && selected.value !== FOLLOWING,
-  initialPageParam: undefined as string | undefined,
-  getNextPageParam: (last: { cursor?: string }) => last.cursor,
-  staleTime: FIVE_MINUTES,
 })
 
 const followsPeople = computed(
