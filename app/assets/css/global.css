@@ -3,6 +3,8 @@
   font-family: var(--font-ui, system-ui, sans-serif);
   color: var(--ink, #2b3a55);
   background: var(--paper-shadow, #e3d9c4);
+
+  /* TODO: need consistent font and size token */
 }
 
 * {
