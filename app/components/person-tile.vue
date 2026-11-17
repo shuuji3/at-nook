@@ -8,10 +8,9 @@ export interface TileProfile {
 </script>
 
 <script setup lang="ts">
-const { profile, caption = '' } = defineProps<{
+const { profile } = defineProps<{
   profile: TileProfile
   href: string
-  caption?: string
 }>()
 
 /** The book's random extra height in whole rem, from the old spine shift's math. */
@@ -34,7 +33,6 @@ const spineExtra = computed(() => spineHeight(profile.did))
           <span class="spine-name">{{ profile.displayName ?? profile.handle }}</span>
           <span class="spine-handle">@{{ profile.handle }}</span>
         </span>
-        <span v-if="caption" class="spine-caption">{{ caption }}</span>
       </NuxtLink>
     </span>
   </span>
@@ -142,17 +140,6 @@ const spineExtra = computed(() => spineHeight(profile.did))
   /* the imprint sits at the spine's foot, away from the name */
   margin-left: auto;
   font-size: 22px;
-  color: rgba(246, 234, 216, 0.82);
-  white-space: nowrap;
-}
-
-.spine-caption {
-  display: flex;
-  align-items: center;
-  margin-left: auto;
-  padding-left: 14px;
-  font-family: var(--font-hand);
-  font-size: 18px;
   color: rgba(246, 234, 216, 0.82);
   white-space: nowrap;
 }
