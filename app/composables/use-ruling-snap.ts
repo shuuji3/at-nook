@@ -26,6 +26,8 @@ export function useRulingSnap<T extends HTMLElement>(): Ref<T | null> {
   function schedule() {
     snap()
     requestAnimationFrame(snap)
+    // extra re-measures for layout that settles without resizing the element:
+    // image decode, reflow, then late font/asset shifts. the delays are heuristic.
     for (const delay of [60, 200, 600]) {
       const timer = window.setTimeout(() => {
         timers.delete(timer)
