@@ -13,27 +13,11 @@ const props = withDefaults(
 
 const post = computed(() => props.item.post)
 
-function readRecord(record: unknown): { text: string; createdAt?: string; facets?: unknown } {
-  if (typeof record !== 'object' || record === null) {
-    return { text: '' }
-  }
-  const fields = record as Record<string, unknown>
-  const createdAt =
-    typeof fields.createdAt === 'string' && !Number.isNaN(Date.parse(fields.createdAt))
-      ? fields.createdAt
-      : undefined
-  return {
-    text: typeof fields.text === 'string' ? fields.text : '',
-    createdAt,
-    facets: fields.facets,
-  }
-}
-
-const record = computed(() => readRecord(post.value.record))
+const record = computed(() => toPostRecord(post.value.record))
 const text = computed(() => record.value.text)
 const createdAt = computed(() => record.value.createdAt)
 const facets = computed(() => record.value.facets)
-const stamp = computed(() => (createdAt.value ? splitTimestamp(createdAt.value) : null))
+const timestamp = computed(() => (createdAt.value ? splitTimestamp(createdAt.value) : null))
 const embed = computed(() => toEmbedView(post.value.embed))
 const quote = computed(() => (embed.value?.kind === 'quote' ? embed.value : null))
 const media = computed(() => (embed.value && embed.value.kind !== 'quote' ? embed.value : null))
@@ -48,15 +32,15 @@ const entryRef = useRulingSnap<HTMLElement>()
 <template>
   <article ref="entryRef" class="entry" :data-entry="index">
     <a
-      v-if="stamp"
+      v-if="timestamp"
       class="entry-time"
       :href="`https://bsky.app/profile/${post.author.handle}/post/${rkeyFromUri(post.uri)}`"
       target="_blank"
       rel="noreferrer"
     >
       <time :datetime="createdAt">
-        <span v-if="showDate" class="entry-date">{{ stamp.date }}</span>
-        <span class="entry-clock">{{ stamp.time }}</span>
+        <span v-if="showDate" class="entry-date">{{ timestamp.date }}</span>
+        <span class="entry-clock">{{ timestamp.time }}</span>
       </time>
     </a>
 

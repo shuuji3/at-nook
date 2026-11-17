@@ -38,28 +38,56 @@ export type EmbedView =
   | { kind: 'unsupported' }
   | null
 
+export interface PostRecord {
+  text: string
+  createdAt?: string
+  facets?: unknown
+}
+
+/**
+ * Narrows an unvalidated post record to the fields the notebook renders.
+ * Responses are trusted by the client, so every field is read defensively.
+ */
+export function toPostRecord(record: unknown): PostRecord {
+  if (typeof record !== 'object' || record === null) {
+    return { text: '' }
+  }
+
+  const fields = record as Record<string, unknown>
+  const createdAt =
+    typeof fields.createdAt === 'string' && !Number.isNaN(Date.parse(fields.createdAt))
+      ? fields.createdAt
+      : undefined
+
+  return {
+    text: typeof fields.text === 'string' ? fields.text : '',
+    createdAt,
+    facets: fields.facets,
+  }
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null
 }
 
-function readString(value: unknown): string | undefined {
+function parseString(value: unknown): string | undefined {
   return typeof value === 'string' ? value : undefined
 }
 
-function readNumber(value: unknown): number | undefined {
+function parseNumber(value: unknown): number | undefined {
   return typeof value === 'number' ? value : undefined
 }
 
-function readImage(value: unknown): EmbedImage {
+function toEmbedImage(value: unknown): EmbedImage {
   const image = isRecord(value) ? value : {}
   const aspectRatio = isRecord(image.aspectRatio) ? image.aspectRatio : {}
 
   return {
-    fullsize: readString(image.fullsize) ?? '',
-    thumb: readString(image.thumb) ?? '',
-    alt: readString(image.alt) ?? '',
-    width: readNumber(aspectRatio.width),
-    height: readNumber(aspectRatio.height),
+    fullsize: parseString(image.fullsize) ?? '',
+    thumb: parseString(image.thumb) ?? '',
+    alt: parseString(image.alt) ?? '',
+    width: parseNumber(aspectRatio.width),
+    height: parseNumber(aspectRatio.height),
   }
 }
 
@@ -72,18 +100,18 @@ export function toEmbedView(embed: unknown): EmbedView {
   switch (embed.$type) {
     case 'app.bsky.embed.images#view': {
       const images = Array.isArray(embed.images) ? embed.images : []
-      return { kind: 'images', images: images.map(readImage) }
+      return { kind: 'images', images: images.map(toEmbedImage) }
     }
 
     case 'app.bsky.embed.video#view': {
       const aspectRatio = isRecord(embed.aspectRatio) ? embed.aspectRatio : {}
       return {
         kind: 'video',
-        thumbnail: readString(embed.thumbnail),
-        playlist: readString(embed.playlist),
-        alt: readString(embed.alt),
-        width: readNumber(aspectRatio.width),
-        height: readNumber(aspectRatio.height),
+        thumbnail: parseString(embed.thumbnail),
+        playlist: parseString(embed.playlist),
+        alt: parseString(embed.alt),
+        width: parseNumber(aspectRatio.width),
+        height: parseNumber(aspectRatio.height),
       }
     }
 
@@ -91,25 +119,25 @@ export function toEmbedView(embed: unknown): EmbedView {
       const external = isRecord(embed.external) ? embed.external : {}
       return {
         kind: 'external',
-        uri: readString(external.uri) ?? '',
-        title: readString(external.title) ?? '',
-        description: readString(external.description) ?? '',
-        thumb: readString(external.thumb),
+        uri: parseString(external.uri) ?? '',
+        title: parseString(external.title) ?? '',
+        description: parseString(external.description) ?? '',
+        thumb: parseString(external.thumb),
       }
     }
 
     case 'app.bsky.embed.record#view':
-      return readQuote(embed.record)
+      return toQuote(embed.record)
 
     case 'app.bsky.embed.recordWithMedia#view':
-      return readQuote(embed.record)
+      return toQuote(embed.record)
 
     default:
       return { kind: 'unsupported' }
   }
 }
 
-function readQuote(record: unknown): EmbedView {
+function toQuote(record: unknown): EmbedView {
   if (!isRecord(record)) {
     return { kind: 'unsupported' }
   }
@@ -125,16 +153,16 @@ function readQuote(record: unknown): EmbedView {
   }
 
   const author = isRecord(record.author) ? record.author : {}
-  const value = isRecord(record.value) ? record.value : {}
+  const value = toPostRecord(record.value)
 
   return {
     kind: 'quote',
     variant: 'quote',
-    uri: readString(record.uri) ?? '',
-    handle: readString(author.handle) ?? '',
-    displayName: readString(author.displayName),
-    createdAt: readString(value.createdAt),
-    text: readString(value.text) ?? '',
+    uri: parseString(record.uri) ?? '',
+    handle: parseString(author.handle) ?? '',
+    displayName: parseString(author.displayName),
+    createdAt: value.createdAt,
+    text: value.text,
     facets: value.facets,
   }
 }
@@ -160,16 +188,16 @@ export function toReplyView(reply: unknown): EmbedView {
   }
 
   const author = isRecord(parent.author) ? parent.author : {}
-  const value = isRecord(parent.record) ? parent.record : {}
+  const value = toPostRecord(parent.record)
 
   return {
     kind: 'quote',
     variant: 'reply',
-    uri: readString(parent.uri) ?? '',
-    handle: readString(author.handle) ?? '',
-    displayName: readString(author.displayName),
-    createdAt: readString(value.createdAt),
-    text: readString(value.text) ?? '',
+    uri: parseString(parent.uri) ?? '',
+    handle: parseString(author.handle) ?? '',
+    displayName: parseString(author.displayName),
+    createdAt: value.createdAt,
+    text: value.text,
     facets: value.facets,
   }
 }

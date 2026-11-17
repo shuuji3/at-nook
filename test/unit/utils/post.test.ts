@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { toEmbedView, toReplyView } from '../../../app/utils/embed'
+import { toEmbedView, toReplyView } from '../../../app/utils/post'
 
 describe('toEmbedView', () => {
   it('returns null when there is no embed', () => {
