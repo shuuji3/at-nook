@@ -8,12 +8,13 @@ const ONE_MINUTE = 60_000
 const FIVE_MINUTES = ONE_MINUTE * 5
 
 /** A query key that re-reads its input, so route params stay live. */
-const keyed = (prefix: string, input: MaybeRefOrGetter<string>) =>
-  computed(() => [prefix, toValue(input)])
+function keyed(prefix: string, input: MaybeRefOrGetter<string>) {
+  return computed(() => [prefix, toValue(input)])
+}
 
 /** Handle candidates for the cover's input. A public read, no session needed. */
-export const actorCandidatesQuery = (q: MaybeRefOrGetter<string>) =>
-  queryOptions({
+export function actorCandidatesQuery(q: MaybeRefOrGetter<string>) {
+  return queryOptions({
     queryKey: keyed('actorCandidates', q),
     queryFn: () =>
       ok(
@@ -23,9 +24,10 @@ export const actorCandidatesQuery = (q: MaybeRefOrGetter<string>) =>
       ),
     staleTime: ONE_MINUTE,
   })
+}
 
-export const profileQuery = (actor: MaybeRefOrGetter<string>) =>
-  queryOptions({
+export function profileQuery(actor: MaybeRefOrGetter<string>) {
+  return queryOptions({
     queryKey: keyed('profile', actor),
     queryFn: () =>
       ok(
@@ -36,9 +38,10 @@ export const profileQuery = (actor: MaybeRefOrGetter<string>) =>
     staleTime: FIVE_MINUTES,
     placeholderData: keepPreviousData,
   })
+}
 
-export const followsQuery = (did: MaybeRefOrGetter<string>) =>
-  infiniteQueryOptions({
+export function followsQuery(did: MaybeRefOrGetter<string>) {
+  return infiniteQueryOptions({
     queryKey: keyed('follows', did),
     queryFn: ({ pageParam }) =>
       ok(
@@ -51,9 +54,10 @@ export const followsQuery = (did: MaybeRefOrGetter<string>) =>
     staleTime: FIVE_MINUTES,
     placeholderData: keepPreviousData,
   })
+}
 
-export const listsQuery = (did: MaybeRefOrGetter<string>) =>
-  infiniteQueryOptions({
+export function listsQuery(did: MaybeRefOrGetter<string>) {
+  return infiniteQueryOptions({
     queryKey: keyed('lists', did),
     queryFn: ({ pageParam }) =>
       ok(
@@ -71,9 +75,10 @@ export const listsQuery = (did: MaybeRefOrGetter<string>) =>
     staleTime: FIVE_MINUTES,
     placeholderData: keepPreviousData,
   })
+}
 
-export const listQuery = (uri: MaybeRefOrGetter<string>) =>
-  infiniteQueryOptions({
+export function listQuery(uri: MaybeRefOrGetter<string>) {
+  return infiniteQueryOptions({
     queryKey: keyed('list', uri),
     queryFn: ({ pageParam }) =>
       ok(
@@ -86,9 +91,10 @@ export const listQuery = (uri: MaybeRefOrGetter<string>) =>
     staleTime: FIVE_MINUTES,
     placeholderData: keepPreviousData,
   })
+}
 
-export const authorFeedQuery = (actor: MaybeRefOrGetter<string>) =>
-  infiniteQueryOptions({
+export function authorFeedQuery(actor: MaybeRefOrGetter<string>) {
+  return infiniteQueryOptions({
     queryKey: keyed('authorFeed', actor),
     queryFn: ({ pageParam }) =>
       ok(
@@ -106,9 +112,10 @@ export const authorFeedQuery = (actor: MaybeRefOrGetter<string>) =>
     staleTime: ONE_MINUTE,
     placeholderData: keepPreviousData,
   })
+}
 
-export const tagQuery = (tag: MaybeRefOrGetter<string>) =>
-  infiniteQueryOptions({
+export function tagQuery(tag: MaybeRefOrGetter<string>) {
+  return infiniteQueryOptions({
     queryKey: keyed('tag', tag),
     queryFn: ({ pageParam }) =>
       ok(
@@ -127,3 +134,4 @@ export const tagQuery = (tag: MaybeRefOrGetter<string>) =>
     staleTime: ONE_MINUTE,
     placeholderData: keepPreviousData,
   })
+}

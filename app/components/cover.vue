@@ -38,17 +38,17 @@ watch(raw, () => {
   dismissed.value = false
 })
 
-const choose = (person: Candidate) => {
+function choose(person: Candidate) {
   chosen.value = person
   raw.value = person.handle
   active.value = -1
 }
 
-const setActive = (index: number) => {
+function setActive(index: number) {
   active.value = index
 }
 
-const signIn = async () => {
+async function signIn() {
   const target =
     open.value && active.value >= 0
       ? (people.value[active.value]?.handle ?? handle.value)
@@ -66,7 +66,7 @@ const signIn = async () => {
   }
 }
 
-const onKeyDown = (event: KeyboardEvent) => {
+function onKeyDown(event: KeyboardEvent) {
   if (event.key === 'ArrowDown') {
     event.preventDefault()
     if (!open.value) {
@@ -102,7 +102,7 @@ const onKeyDown = (event: KeyboardEvent) => {
   }
 }
 
-const onInput = (event: Event) => {
+function onInput(event: Event) {
   raw.value = (event.target as HTMLInputElement).value
 }
 </script>

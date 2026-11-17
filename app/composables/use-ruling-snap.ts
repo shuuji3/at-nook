@@ -9,12 +9,12 @@ const RULING_PERIOD = 32
  * the ruling. Re-snaps when the element resizes, on window resize, and shortly
  * after, because the browser re-lays out a resized image asynchronously.
  */
-export const useRulingSnap = <T extends HTMLElement>(): Ref<T | null> => {
+export function useRulingSnap<T extends HTMLElement>(): Ref<T | null> {
   const elRef: Ref<T | null> = ref(null)
 
   const observerRef = ref<ResizeObserver | null>(null)
   const timers: number[] = []
-  const snap = () => {
+  function snap() {
     const element = elRef.value
     if (!element) return
 
@@ -24,7 +24,7 @@ export const useRulingSnap = <T extends HTMLElement>(): Ref<T | null> => {
     element.style.marginBottom = `${remainder === 0 ? 0 : RULING_PERIOD - remainder}px`
   }
 
-  const schedule = () => {
+  function schedule() {
     snap()
     requestAnimationFrame(snap)
     for (const delay of [60, 200, 600]) {

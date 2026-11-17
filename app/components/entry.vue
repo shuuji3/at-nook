@@ -13,7 +13,7 @@ const props = withDefaults(
 
 const post = computed(() => props.item.post)
 
-const readRecord = (record: unknown): { text: string; createdAt?: string; facets?: unknown } => {
+function readRecord(record: unknown): { text: string; createdAt?: string; facets?: unknown } {
   if (typeof record !== 'object' || record === null) {
     return { text: '' }
   }

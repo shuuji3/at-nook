@@ -13,12 +13,12 @@ let reader: Client | null = null
  * Points the reader at the signed-in account's PDS, proxying reads to the
  * AppView. Pass null to drop it on sign out.
  */
-export const setReader = (handler: FetchHandlerObject | null): void => {
+export function setReader(handler: FetchHandlerObject | null): void {
   reader = handler ? new Client({ handler, proxy: APPVIEW_AUDIENCE }) : null
 }
 
 /** The authenticated reader. Every atproto read goes through it. */
-export const rpc = (): Client => {
+export function rpc(): Client {
   if (!reader) {
     throw new Error('read attempted before sign-in')
   }

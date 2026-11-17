@@ -15,11 +15,12 @@ let prevComputed: typeof window.getComputedStyle
 
 // jsdom has no Element.animate, but the photo-viewer uses it on every
 // open/close cycle.
-const mockAnimation = (): Animation =>
-  ({
+function mockAnimation(): Animation {
+  return {
     finished: Promise.resolve(),
     cancel: () => {},
-  }) as unknown as Animation
+  } as unknown as Animation
+}
 
 beforeAll(() => {
   Element.prototype.animate = () => mockAnimation()

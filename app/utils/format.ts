@@ -1,4 +1,4 @@
-const hash = (input: string): number => {
+function hash(input: string): number {
   let value = 0x811c9dc5
   for (const character of input) {
     value ^= character.codePointAt(0) ?? 0
@@ -7,22 +7,28 @@ const hash = (input: string): number => {
   return value >>> 0
 }
 
-export const stripAt = (input: string): string => {
+export function stripAt(input: string): string {
   const trimmed = input.trim()
   return trimmed.startsWith('@') ? trimmed.slice(1) : trimmed
 }
 
-export const profileHref = (actor: string): string => `/profile/${encodeURIComponent(actor)}`
+export function profileHref(actor: string): string {
+  return `/profile/${encodeURIComponent(actor)}`
+}
 
-export const listHref = (actor: string, rkey: string): string =>
-  `/profile/${encodeURIComponent(actor)}/list/${encodeURIComponent(rkey)}`
+export function listHref(actor: string, rkey: string): string {
+  return `/profile/${encodeURIComponent(actor)}/list/${encodeURIComponent(rkey)}`
+}
 
-export const listUri = (did: string, rkey: string): string =>
-  `at://${did}/app.bsky.graph.list/${rkey}`
+export function listUri(did: string, rkey: string): string {
+  return `at://${did}/app.bsky.graph.list/${rkey}`
+}
 
-export const rkeyFromUri = (uri: string): string => uri.split('/').at(-1) ?? ''
+export function rkeyFromUri(uri: string): string {
+  return uri.split('/').at(-1) ?? ''
+}
 
-export const splitTimestamp = (iso: string, timeZone?: string): { date: string; time: string } => {
+export function splitTimestamp(iso: string, timeZone?: string): { date: string; time: string } {
   const date = new Date(iso)
   return {
     date: `${dayOf(iso, timeZone)} (${new Intl.DateTimeFormat('en-US', {
@@ -39,21 +45,23 @@ export const splitTimestamp = (iso: string, timeZone?: string): { date: string; 
 }
 
 /** The calendar day of a timestamp, used to show the date once per day. */
-export const dayOf = (iso: string, timeZone?: string): string =>
-  new Intl.DateTimeFormat('en-CA', {
+export function dayOf(iso: string, timeZone?: string): string {
+  return new Intl.DateTimeFormat('en-CA', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
     timeZone,
   }).format(new Date(iso))
+}
 
-export const rotationFor = (seed: string, index: number): number => {
+export function rotationFor(seed: string, index: number): number {
   const value = hash(`${seed}:${index}`) / 0xffffffff
   return Math.round((value * 4 - 2) * 10) / 10
 }
 
-const roundTo = (value: number, step: number): number =>
-  Number((Math.round(value / step) * step).toFixed(2))
+function roundTo(value: number, step: number): number {
+  return Number((Math.round(value / step) * step).toFixed(2))
+}
 
 interface SpreadOptions {
   min: number
@@ -67,7 +75,7 @@ interface SpreadOptions {
  * One value per key, deterministic yet spread apart: a value is re-drawn until it
  * is at least `gap` away from every value already picked for this group.
  */
-export const pickSpread = (seed: string, keys: string[], options: SpreadOptions): number[] => {
+export function pickSpread(seed: string, keys: string[], options: SpreadOptions): number[] {
   const { min, max, step, gap } = options
   const span = max - min
   const picked: number[] = []
@@ -89,32 +97,37 @@ export const pickSpread = (seed: string, keys: string[], options: SpreadOptions)
 }
 
 /** A hand-pasted tape angle, in degrees, deterministic per photo. */
-export const tapeTilt = (seed: string, index: number): number => {
+export function tapeTilt(seed: string, index: number): number {
   const value = hash(`${seed}:tape:${index}`) / 0xffffffff
   return Math.round((value * 16 - 8) * 10) / 10
 }
 
 /** A pastel hue for the tape, deterministic per photo. */
-export const tapeHue = (seed: string, index: number): number => hash(`${seed}:hue:${index}`) % 360
+export function tapeHue(seed: string, index: number): number {
+  return hash(`${seed}:hue:${index}`) % 360
+}
 
 /** A small horizontal nudge for the print, in pixels. */
-export const offsetFor = (seed: string, index: number): number => {
+export function offsetFor(seed: string, index: number): number {
   const value = hash(`${seed}:x:${index}`) / 0xffffffff
   return Math.round((value * 16 - 8) * 10) / 10
 }
 
-export const coverHue = (did: string): number => hash(did) % 360
+export function coverHue(did: string): number {
+  return hash(did) % 360
+}
 
 /**
  * The old spine shift's math (seven whole-rem buckets), now used to give each book
  * extra height on top of the shelf's width, so books never stand level.
  */
-export const spineHeight = (seed: string): number => {
+export function spineHeight(seed: string): number {
   const value = hash(`${seed}:spine`) / 0xffffffff
   return Math.floor(value * 7)
 }
 
-export const documentTitle = (profile: { displayName?: string; handle: string }): string =>
-  profile.displayName
+export function documentTitle(profile: { displayName?: string; handle: string }): string {
+  return profile.displayName
     ? `at-nook — ${profile.displayName} (@${profile.handle})`
     : `at-nook — @${profile.handle}`
+}

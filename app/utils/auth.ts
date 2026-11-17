@@ -33,7 +33,7 @@ export interface OAuthEndpoints {
  * atproto spec only allows with a loopback redirect; every other origin must
  * serve its own client metadata document over https.
  */
-export const oauthEndpoints = (origin: string): OAuthEndpoints => {
+export function oauthEndpoints(origin: string): OAuthEndpoints {
   const url = new URL(origin)
 
   if (LOOPBACK_HOSTS.has(url.hostname)) {
@@ -52,7 +52,7 @@ export const oauthEndpoints = (origin: string): OAuthEndpoints => {
 
 let configured = false
 
-const ensureOAuth = () => {
+function ensureOAuth() {
   if (configured) {
     return
   }
@@ -77,7 +77,7 @@ const ensureOAuth = () => {
 }
 
 /** Reads the did of the signed-in account from local storage. */
-export const getStoredDid = (): string | null => {
+export function getStoredDid(): string | null {
   try {
     return localStorage.getItem(DID_STORAGE_KEY)
   } catch {
@@ -86,7 +86,7 @@ export const getStoredDid = (): string | null => {
 }
 
 /** Remembers the signed-in account across reloads. */
-export const storeDid = (did: string): void => {
+export function storeDid(did: string): void {
   try {
     localStorage.setItem(DID_STORAGE_KEY, did)
   } catch {
@@ -95,7 +95,7 @@ export const storeDid = (did: string): void => {
 }
 
 /** Forgets the signed-in account. */
-export const clearStoredDid = (): void => {
+export function clearStoredDid(): void {
   try {
     localStorage.removeItem(DID_STORAGE_KEY)
   } catch {
@@ -104,7 +104,7 @@ export const clearStoredDid = (): void => {
 }
 
 /** Builds the authorization url for a handle. the caller performs the navigation. */
-export const startLogin = async (identifier: string): Promise<URL> => {
+export async function startLogin(identifier: string): Promise<URL> {
   ensureOAuth()
 
   return await createAuthorizationUrl({
@@ -114,7 +114,7 @@ export const startLogin = async (identifier: string): Promise<URL> => {
 }
 
 /** Completes the OAuth flow from the callback fragment and stores the resulting did. */
-export const finishLogin = async (hash: string): Promise<{ did: string }> => {
+export async function finishLogin(hash: string): Promise<{ did: string }> {
   ensureOAuth()
 
   const { session } = await finalizeAuthorization(new URLSearchParams(hash.slice(1)))
@@ -128,7 +128,7 @@ export const finishLogin = async (hash: string): Promise<{ did: string }> => {
  * Resumes a stored session and arms the authenticated reader with it, dropping
  * the session when it is no longer usable.
  */
-export const resumeSession = async (did: string): Promise<boolean> => {
+export async function resumeSession(did: string): Promise<boolean> {
   ensureOAuth()
 
   try {
@@ -144,7 +144,7 @@ export const resumeSession = async (did: string): Promise<boolean> => {
 }
 
 /** Revokes the session and forgets the account locally, even if revocation fails. */
-export const signOut = async (did: string): Promise<void> => {
+export async function signOut(did: string): Promise<void> {
   ensureOAuth()
 
   try {

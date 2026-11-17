@@ -1,7 +1,7 @@
 import { ref, watch, type Ref } from 'vue'
 
 /** Returns `value` once it has stopped changing for `delay` milliseconds. */
-export const useDebouncedValue = <T>(source: Ref<T>, delay: number): Ref<T> => {
+export function useDebouncedValue<T>(source: Ref<T>, delay: number): Ref<T> {
   const debounced = ref(source.value) as Ref<T>
 
   watch(source, (newValue, _oldValue, onCleanup) => {

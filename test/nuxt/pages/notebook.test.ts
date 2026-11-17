@@ -19,13 +19,15 @@ mockNuxtImport('authorFeedQuery', () => mocks.authorFeedQuery)
 import { renderWithProviders } from '../../utils/render'
 import Notebook from '~/pages/profile/[actor].vue'
 
-const post = (uri: string) => ({
-  uri,
-  cid: 'cid',
-  author: { did: 'did:plc:a', handle: 'bsky.app' },
-  record: { text: 'hello', createdAt: '2026-11-08T12:33:58.545Z' },
-  indexedAt: '2026-11-08T12:33:58.545Z',
-})
+function post(uri: string) {
+  return {
+    uri,
+    cid: 'cid',
+    author: { did: 'did:plc:a', handle: 'bsky.app' },
+    record: { text: 'hello', createdAt: '2026-11-08T12:33:58.545Z' },
+    indexedAt: '2026-11-08T12:33:58.545Z',
+  }
+}
 
 const profile = {
   did: 'did:plc:a',
@@ -35,12 +37,14 @@ const profile = {
   avatar: undefined,
 }
 
-const feedPage = (feed: unknown[], cursor?: string) => ({
-  queryKey: ['authorFeed'],
-  queryFn: async () => ({ feed, cursor }),
-  initialPageParam: undefined,
-  getNextPageParam: () => undefined,
-})
+function feedPage(feed: unknown[], cursor?: string) {
+  return {
+    queryKey: ['authorFeed'],
+    queryFn: async () => ({ feed, cursor }),
+    initialPageParam: undefined,
+    getNextPageParam: () => undefined,
+  }
+}
 
 beforeEach(() => {
   vi.clearAllMocks()

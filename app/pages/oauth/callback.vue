@@ -11,7 +11,7 @@ onMounted(() => {
   // the fragment carries the authorization code, so drop it from the address bar
   window.history.replaceState(null, '', window.location.pathname + window.location.search)
 
-  const complete = async () => {
+  async function complete() {
     try {
       await finishLogin(hash)
       refresh()

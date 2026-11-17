@@ -11,11 +11,13 @@ import {
 
 // the vue-query option types carry the response data in the key type, which
 // makes direct reads of queryKey/initialPageParam awkward in assertions
-const keyOf = (options: unknown): unknown =>
-  toValue((options as { queryKey: MaybeRefOrGetter<unknown> }).queryKey)
+function keyOf(options: unknown): unknown {
+  return toValue((options as { queryKey: MaybeRefOrGetter<unknown> }).queryKey)
+}
 
-const firstPageParamOf = (options: unknown): unknown =>
-  (options as { initialPageParam?: unknown }).initialPageParam
+function firstPageParamOf(options: unknown): unknown {
+  return (options as { initialPageParam?: unknown }).initialPageParam
+}
 
 describe('query options', () => {
   it('uses stable keys', () => {

@@ -33,7 +33,9 @@ const Probe = defineComponent({
   },
 })
 
-const renderSession = () => renderWithProviders(Probe)
+function renderSession() {
+  return renderWithProviders(Probe)
+}
 
 beforeEach(() => {
   vi.clearAllMocks()

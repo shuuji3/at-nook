@@ -9,15 +9,13 @@ const FOLLOWING = 'following'
 
 const { session } = useSession()
 const selected = ref(FOLLOWING)
-const sessionDid = () => session.value?.did ?? ''
-
 const follows = useInfiniteQuery({
-  ...followsQuery(sessionDid),
+  ...followsQuery(() => session.value?.did ?? ''),
   enabled: () => Boolean(session.value),
 })
 
 const lists = useInfiniteQuery({
-  ...listsQuery(sessionDid),
+  ...listsQuery(() => session.value?.did ?? ''),
   enabled: () => Boolean(session.value),
 })
 
@@ -87,12 +85,12 @@ const activeFetchingNext = computed(() => {
   return q.isFetchingNextPage.value
 })
 
-const fetchNext = () => {
+function fetchNext() {
   const q = selected.value !== FOLLOWING ? list : follows
   void q.fetchNextPage()
 }
 
-const setSelected = (id: string) => {
+function setSelected(id: string) {
   selected.value = id
 }
 </script>

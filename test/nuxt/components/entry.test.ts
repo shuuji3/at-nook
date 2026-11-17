@@ -4,12 +4,8 @@ import { describe, expect, it } from 'vitest'
 import { renderWithProviders } from '../../utils/render'
 import Entry from '~/components/entry.vue'
 
-const makeItem = (
-  record: unknown,
-  embed?: unknown,
-  reply?: unknown,
-): AppBskyFeedDefs.FeedViewPost =>
-  ({
+function makeItem(record: unknown, embed?: unknown, reply?: unknown): AppBskyFeedDefs.FeedViewPost {
+  return {
     post: {
       uri: 'at://did:plc:a/app.bsky.feed.post/1',
       cid: 'cid',
@@ -19,7 +15,8 @@ const makeItem = (
       embed,
     },
     reply,
-  }) as unknown as AppBskyFeedDefs.FeedViewPost
+  } as unknown as AppBskyFeedDefs.FeedViewPost
+}
 
 const imageEmbed = {
   $type: 'app.bsky.embed.images#view',

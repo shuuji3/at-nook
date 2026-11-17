@@ -17,7 +17,7 @@ interface SessionContextValue {
 }
 
 /** Keeps the signed-in account in memory, resumes a stored oauth session on mount. */
-export const useSession = (): SessionContextValue => {
+export function useSession(): SessionContextValue {
   const queryClient = useQueryClient()
   const did = useState<string | null>('session-did', () => getStoredDid())
 
@@ -45,7 +45,7 @@ export const useSession = (): SessionContextValue => {
     staleTime: 5 * 60_000,
   })
 
-  const end = async () => {
+  async function end() {
     if (did.value) {
       await signOut(did.value)
     }
@@ -53,7 +53,7 @@ export const useSession = (): SessionContextValue => {
     did.value = null
   }
 
-  const refresh = () => {
+  function refresh() {
     did.value = getStoredDid()
   }
 

@@ -17,10 +17,11 @@ type FacetFeature = {
   tag?: string
 }
 
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null
+}
 
-const readFeature = (feature: unknown): { kind: FacetKind; href: string } | null => {
+function readFeature(feature: unknown): { kind: FacetKind; href: string } | null {
   if (!isRecord(feature)) {
     return null
   }
@@ -45,11 +46,14 @@ const readFeature = (feature: unknown): { kind: FacetKind; href: string } | null
  * Splits post text with atcute's richtext segmenter and maps each facet to the
  * anchor the notebook draws it as.
  */
-export const toFacetSegments = (text: string, facets: unknown): FacetSegment[] =>
-  segmentize(text, Array.isArray(facets) ? (facets as Facet[]) : undefined).map((segment) => {
-    const feature = segment.features?.map(readFeature).find((value) => value !== null) ?? null
+export function toFacetSegments(text: string, facets: unknown): FacetSegment[] {
+  return segmentize(text, Array.isArray(facets) ? (facets as Facet[]) : undefined).map(
+    (segment) => {
+      const feature = segment.features?.map(readFeature).find((value) => value !== null) ?? null
 
-    return feature
-      ? { text: segment.text, href: feature.href, kind: feature.kind }
-      : { text: segment.text }
-  })
+      return feature
+        ? { text: segment.text, href: feature.href, kind: feature.kind }
+        : { text: segment.text }
+    },
+  )
+}

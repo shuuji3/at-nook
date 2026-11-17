@@ -37,16 +37,19 @@ export type EmbedView =
   | { kind: 'unsupported' }
   | null
 
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null
+}
 
-const readString = (value: unknown): string | undefined =>
-  typeof value === 'string' ? value : undefined
+function readString(value: unknown): string | undefined {
+  return typeof value === 'string' ? value : undefined
+}
 
-const readNumber = (value: unknown): number | undefined =>
-  typeof value === 'number' ? value : undefined
+function readNumber(value: unknown): number | undefined {
+  return typeof value === 'number' ? value : undefined
+}
 
-const readImage = (value: unknown): EmbedImage => {
+function readImage(value: unknown): EmbedImage {
   const image = isRecord(value) ? value : {}
   const aspectRatio = isRecord(image.aspectRatio) ? image.aspectRatio : {}
 
@@ -60,7 +63,7 @@ const readImage = (value: unknown): EmbedImage => {
 }
 
 /** Turns a post's raw embed into the small shape the notebook knows how to draw. */
-export const toEmbedView = (embed: unknown): EmbedView => {
+export function toEmbedView(embed: unknown): EmbedView {
   if (!isRecord(embed)) {
     return null
   }
@@ -105,7 +108,7 @@ export const toEmbedView = (embed: unknown): EmbedView => {
   }
 }
 
-const readQuote = (record: unknown): EmbedView => {
+function readQuote(record: unknown): EmbedView {
   if (!isRecord(record) || record.$type !== 'app.bsky.embed.record#viewRecord') {
     return { kind: 'unsupported' }
   }
@@ -126,7 +129,7 @@ const readQuote = (record: unknown): EmbedView => {
 }
 
 /** Reads the post a feed item replies to, so it can be clipped into the entry. */
-export const toReplyView = (reply: unknown): EmbedView => {
+export function toReplyView(reply: unknown): EmbedView {
   if (!isRecord(reply)) {
     return null
   }

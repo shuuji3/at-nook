@@ -31,16 +31,18 @@ const alice = {
 }
 const bob = { did: 'did:plc:b', handle: 'bob.test', displayName: 'Bob' }
 
-const listPage = (items: unknown[]) => ({
-  queryKey: ['list'],
-  queryFn: async () => ({
-    list: { name: 'for me', listItemCount: items.length },
-    items: items.map((subject) => ({ subject })),
-    cursor: undefined,
-  }),
-  initialPageParam: undefined,
-  getNextPageParam: () => undefined,
-})
+function listPage(items: unknown[]) {
+  return {
+    queryKey: ['list'],
+    queryFn: async () => ({
+      list: { name: 'for me', listItemCount: items.length },
+      items: items.map((subject) => ({ subject })),
+      cursor: undefined,
+    }),
+    initialPageParam: undefined,
+    getNextPageParam: () => undefined,
+  }
+}
 
 beforeEach(() => {
   vi.clearAllMocks()

@@ -13,7 +13,7 @@ const videoRef = ref<HTMLVideoElement | null>(null)
 
 const label = props.alt && props.alt.trim().length > 0 ? props.alt : 'video'
 
-const setPlaying = (value: boolean) => {
+function setPlaying(value: boolean) {
   playing.value = value
 }
 

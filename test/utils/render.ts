@@ -10,14 +10,15 @@ interface RenderOptions {
 }
 
 /** Renders a component inside the Nuxt test app with a fresh Vue Query client. */
-export const renderWithProviders = (
+export function renderWithProviders(
   component: Component,
   { route = '/', props }: RenderOptions = {},
-) =>
-  renderSuspended(component, {
+) {
+  return renderSuspended(component, {
     route,
     props,
     global: {
       plugins: [[VueQueryPlugin, { queryClient: createTestQueryClient() }]],
     },
   })
+}

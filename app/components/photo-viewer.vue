@@ -51,21 +51,28 @@ const printRef = ref<HTMLElement | null>(null)
 const viewerRef = ref<HTMLElement | null>(null)
 const backdropRef = ref<HTMLDivElement | null>(null)
 
-const centre = (rect: DOMRect) => ({
-  x: rect.left + rect.width / 2,
-  y: rect.top + rect.height / 2,
-})
+function centre(rect: DOMRect) {
+  return {
+    x: rect.left + rect.width / 2,
+    y: rect.top + rect.height / 2,
+  }
+}
 
-const poseTransform = (pose: Pose) =>
-  `translate(${pose.dx}px, ${pose.dy}px) scale(${pose.scaleX}, ${pose.scaleY}) rotate(${pose.rotate}deg)`
+function poseTransform(pose: Pose) {
+  return `translate(${pose.dx}px, ${pose.dy}px) scale(${pose.scaleX}, ${pose.scaleY}) rotate(${pose.rotate}deg)`
+}
 
-const prefersReducedMotion = () =>
-  typeof window !== 'undefined' &&
-  typeof window.matchMedia === 'function' &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches
+function prefersReducedMotion() {
+  return (
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  )
+}
 
-const printTape = (): HTMLElement | null =>
-  printRef.value?.querySelector<HTMLElement>('.photo-tape') ?? null
+function printTape(): HTMLElement | null {
+  return printRef.value?.querySelector<HTMLElement>('.photo-tape') ?? null
+}
 
 const plan = computed((): Plan | null => {
   const print = printRef.value
@@ -126,13 +133,13 @@ const plan = computed((): Plan | null => {
   }
 })
 
-const onOpen = () => {
+function onOpen() {
   if (phase.value === 'closed') {
     phase.value = 'opening'
   }
 }
 
-const close = () => {
+function close() {
   if (phase.value !== 'open') return
 
   const current = plan.value

@@ -22,12 +22,14 @@ mockNuxtImport('rpc', () => () => ({ get: mocks.get }))
 import { renderWithProviders } from '../../utils/render'
 import Shelf from '~/components/shelf.vue'
 
-const page = (key: string, value: unknown) => ({
-  queryKey: [key],
-  queryFn: async () => value,
-  initialPageParam: undefined,
-  getNextPageParam: () => undefined,
-})
+function page(key: string, value: unknown) {
+  return {
+    queryKey: [key],
+    queryFn: async () => value,
+    initialPageParam: undefined,
+    getNextPageParam: () => undefined,
+  }
+}
 
 beforeEach(() => {
   vi.clearAllMocks()

@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { toFacetSegments } from '../../../app/utils/facets'
 
-const facet = (byteStart: number, byteEnd: number, feature: unknown) => ({
-  index: { byteStart, byteEnd },
-  features: [feature],
-})
+function facet(byteStart: number, byteEnd: number, feature: unknown) {
+  return {
+    index: { byteStart, byteEnd },
+    features: [feature],
+  }
+}
 
 describe('toFacetSegments', () => {
   it('returns plain text when there are no facets', () => {

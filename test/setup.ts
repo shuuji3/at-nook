@@ -29,7 +29,8 @@ afterEach(() => {
   document.title = ''
 })
 
-export const createTestQueryClient = () =>
-  new QueryClient({
+export function createTestQueryClient() {
+  return new QueryClient({
     defaultOptions: { queries: { retry: false } },
   })
+}
