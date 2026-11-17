@@ -264,7 +264,6 @@ function close() {
   }, MOVE_MS)
 }
 
-// Opening animation — similar to the React useLayoutEffect
 watch(phase, async (newPhase) => {
   if (newPhase !== 'opening') return
 
@@ -430,6 +429,7 @@ watch(phase, async (newPhase) => {
   </figure>
 
   <Teleport v-if="phase !== 'closed'" to="body">
+    <!-- TODO: can photo be closed by keyboard? -->
     <div class="photo-zoom" role="dialog" aria-label="photo" @click="close">
       <div ref="backdropRef" class="photo-zoom-backdrop" aria-hidden="true" />
       <figure
