@@ -37,7 +37,7 @@ export default defineNuxtConfig({
     },
   },
   devtools: { enabled: true },
-  modules: ['@nuxt/eslint'],
+  modules: ['@nuxt/eslint', '@vueuse/nuxt'],
   typescript: {
     tsConfig: {
       include: ['@/test/setup.ts', '@/test/utils/**/*'],

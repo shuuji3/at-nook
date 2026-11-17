@@ -12,8 +12,7 @@ const RULING_PERIOD = 32
 export function useRulingSnap<T extends HTMLElement>(): Ref<T | null> {
   const elRef: Ref<T | null> = ref(null)
 
-  const observerRef = ref<ResizeObserver | null>(null)
-  const timers: number[] = []
+  const timers = new Set<number>()
   function snap() {
     const element = elRef.value
     if (!element) return
@@ -28,37 +27,36 @@ export function useRulingSnap<T extends HTMLElement>(): Ref<T | null> {
     snap()
     requestAnimationFrame(snap)
     for (const delay of [60, 200, 600]) {
-      timers.push(window.setTimeout(snap, delay))
+      const timer = window.setTimeout(() => {
+        timers.delete(timer)
+        snap()
+      }, delay)
+      timers.add(timer)
     }
   }
+
+  useResizeObserver(elRef, () => schedule())
+  useEventListener(window, 'resize', schedule)
 
   onMounted(() => {
     const element = elRef.value
     if (!element) return
 
-    const images = [...element.querySelectorAll('img')]
-    for (const image of images) {
+    for (const image of element.querySelectorAll('img')) {
       image.addEventListener('load', schedule)
     }
 
-    const observer =
-      typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(() => schedule())
-    observer?.observe(element)
-    observerRef.value = observer
-    window.addEventListener('resize', schedule)
     snap()
   })
 
   onUnmounted(() => {
-    observerRef.value?.disconnect()
-    window.removeEventListener('resize', schedule)
     for (const timer of timers) {
       clearTimeout(timer)
     }
+
     const element = elRef.value
     if (element) {
-      const images = [...element.querySelectorAll('img')]
-      for (const image of images) {
+      for (const image of element.querySelectorAll('img')) {
         image.removeEventListener('load', schedule)
       }
     }

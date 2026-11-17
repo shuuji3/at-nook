@@ -17,7 +17,7 @@ const opening = ref(false)
 const error = ref<string | null>(null)
 
 const typed = computed(() => stripAt(raw.value))
-const query = useDebouncedValue(typed, 300)
+const query = refDebounced(typed, 300)
 
 const { data: candidatesData } = useQuery({
   ...actorCandidatesQuery(query),
