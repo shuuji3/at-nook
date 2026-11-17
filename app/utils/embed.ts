@@ -34,6 +34,7 @@ export type EmbedView =
       facets?: unknown
       media?: EmbedView
     }
+  | { kind: 'notFound' }
   | { kind: 'unsupported' }
   | null
 
@@ -109,7 +110,17 @@ export function toEmbedView(embed: unknown): EmbedView {
 }
 
 function readQuote(record: unknown): EmbedView {
-  if (!isRecord(record) || record.$type !== 'app.bsky.embed.record#viewRecord') {
+  if (!isRecord(record)) {
+    return { kind: 'unsupported' }
+  }
+
+  if (record.$type === 'app.bsky.embed.record#viewNotFound') {
+    return { kind: 'notFound' }
+  }
+
+  // TODO: distinguish blocked, detached, and non-post records (lists, feeds,
+  // labelers, starter packs) instead of collapsing them into unsupported.
+  if (record.$type !== 'app.bsky.embed.record#viewRecord') {
     return { kind: 'unsupported' }
   }
 
@@ -135,7 +146,16 @@ export function toReplyView(reply: unknown): EmbedView {
   }
 
   const parent = reply.parent
-  if (!isRecord(parent) || parent.$type !== 'app.bsky.feed.defs#postView') {
+  if (!isRecord(parent)) {
+    return null
+  }
+
+  if (parent.$type === 'app.bsky.feed.defs#notFoundPost') {
+    return { kind: 'notFound' }
+  }
+
+  // TODO: distinguish blocked replies from replies that are simply absent.
+  if (parent.$type !== 'app.bsky.feed.defs#postView') {
     return null
   }
 

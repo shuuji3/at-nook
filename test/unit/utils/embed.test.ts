@@ -101,7 +101,18 @@ describe('toEmbedView', () => {
       facets: undefined,
     })
     expect(toReplyView(undefined)).toBeNull()
-    expect(toReplyView({ parent: { $type: 'app.bsky.feed.defs#notFoundPost' } })).toBeNull()
+    expect(toReplyView({ parent: { $type: 'app.bsky.feed.defs#notFoundPost' } })).toEqual({
+      kind: 'notFound',
+    })
+  })
+
+  it('reports a deleted record as not found', () => {
+    expect(
+      toEmbedView({
+        $type: 'app.bsky.embed.record#view',
+        record: { $type: 'app.bsky.embed.record#viewNotFound', notFound: true },
+      }),
+    ).toEqual({ kind: 'notFound' })
   })
 
   it('marks records that cannot be shown as unsupported', () => {

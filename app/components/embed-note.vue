@@ -111,6 +111,10 @@ const sameDay = computed(() => {
     </p>
   </blockquote>
 
+  <p v-else-if="embed.kind === 'notFound'" class="note note-unsupported">
+    this post could not be found
+  </p>
+
   <p v-else-if="embed.kind === 'unsupported'" class="note note-unsupported">
     a clipping that could not be pasted
   </p>
