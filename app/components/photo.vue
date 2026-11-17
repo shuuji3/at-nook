@@ -221,6 +221,7 @@ function close() {
     captionAnimations.push(
       pageForm.animate([{ opacity: 0 }, { opacity: 1 }], {
         duration: HALF_MS,
+        delay: HALF_MS,
         easing: 'linear',
         fill: 'both',
       }),
@@ -228,7 +229,7 @@ function close() {
   }
   if (viewerForm) {
     captionAnimations.push(
-      viewerForm.animate([{ opacity: 0 }, { opacity: 1 }], {
+      viewerForm.animate([{ opacity: 1 }, { opacity: 0 }], {
         duration: HALF_MS,
         easing: 'linear',
         fill: 'forwards',
