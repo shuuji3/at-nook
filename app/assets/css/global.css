@@ -2,7 +2,12 @@
   color-scheme: light;
   font-family: var(--font-ui, system-ui, sans-serif);
   color: var(--ink, #2b3a55);
-  background: var(--paper-shadow, #e3d9c4);
+  /* the nook photo, shared by every page's backdrop */
+  --nook-cover-backdrop:
+    linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)) fixed,
+    url(/images/5580663027_deeb68abf8_o-flickr-kharlamovaa-cc-by-2.0.jpg) center / cover no-repeat
+      fixed;
+  background: var(--nook-cover-backdrop);
 
   /* TODO: need consistent font and size token */
 }

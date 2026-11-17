@@ -22,17 +22,17 @@ const { session, ready } = useSession()
   display: grid;
   place-items: center;
   padding: 48px 24px;
-  background: var(--paper-shadow);
+  background: var(--nook-cover-backdrop);
 }
 
 .shelf-gate-title {
   font-family: var(--font-hand);
   font-size: clamp(24px, 4vw, 36px);
   font-weight: 400;
-  color: var(--ink);
+  color: var(--paper);
 }
 
 .shelf-gate-title a {
-  color: var(--ink);
+  color: var(--paper);
 }
 </style>

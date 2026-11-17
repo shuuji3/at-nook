@@ -37,6 +37,6 @@ onMounted(() => {
   text-align: center;
   font-family: var(--font-hand);
   font-size: 28px;
-  color: var(--ink);
+  color: var(--paper);
 }
 </style>

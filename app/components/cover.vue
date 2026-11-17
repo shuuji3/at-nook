@@ -202,9 +202,7 @@ function onInput(event: Event) {
   display: grid;
   place-items: center;
   padding: 48px 24px;
-  background:
-    linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
-    url(/images/5580663027_deeb68abf8_o-flickr-kharlamovaa-cc-by-2.0.jpg) center / cover no-repeat;
+  background: var(--nook-cover-backdrop);
 }
 
 /* a closed book standing on the desk */

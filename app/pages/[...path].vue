@@ -14,8 +14,8 @@
   align-items: center;
   justify-content: center;
   gap: 18px;
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--nook-cover-backdrop);
+  color: var(--paper);
 }
 
 .not-found-title {
@@ -28,6 +28,6 @@
 .not-found-link {
   font-family: var(--font-hand);
   font-size: 22px;
-  color: var(--ink);
+  color: var(--paper);
 }
 </style>

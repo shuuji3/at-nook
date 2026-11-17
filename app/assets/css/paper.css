@@ -1,7 +1,6 @@
 :root {
   --paper: rgb(247, 241, 227);
   --placeholder: rgba(43, 58, 85, 0.04);
-  --paper-shadow: rgb(227, 217, 196);
   --ink: rgb(43, 58, 85);
   --ink-soft: rgb(107, 118, 144);
   --cloth: rgb(122, 63, 58);
@@ -28,11 +27,15 @@
 }
 
 /* the open notebook */
+.notebook-root {
+  margin-block: 2rem;
+}
+
 .notebook {
   min-height: 100vh;
   display: grid;
   grid-template-columns: 1fr;
-  background: var(--paper-shadow);
+  background: var(--nook-cover-backdrop);
 }
 
 .page {
@@ -262,5 +265,9 @@ select:focus-visible {
     /* a phone's width alone leaves the title and @handle squeezed, so a book stands taller
        and the height stays fixed here instead of scaling with the shelf */
     --shelf-width: 500px;
+  }
+
+  .notebook-root {
+    margin-block: auto;
   }
 }

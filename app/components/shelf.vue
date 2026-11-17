@@ -117,7 +117,7 @@ function setSelected(id: string) {
 .shelf {
   min-height: 100vh;
   padding: 48px 24px 96px;
-  background: var(--paper-shadow);
+  background: var(--nook-cover-backdrop);
 }
 
 .notebook-root {
