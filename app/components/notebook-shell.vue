@@ -1,5 +1,5 @@
 <template>
   <div class="notebook">
-    <main class="page"><slot /></main>
+    <section class="page"><slot /></section>
   </div>
 </template>

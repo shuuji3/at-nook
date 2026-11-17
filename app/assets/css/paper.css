@@ -26,8 +26,7 @@
   initial-value: 0;
 }
 
-/* the open notebook */
-.notebook-root {
+section {
   margin-block: 2rem;
 }
 
