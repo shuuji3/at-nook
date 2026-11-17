@@ -121,7 +121,6 @@ const sameDay = computed(() => {
 </template>
 
 <style scoped>
-/* clippings: links and quotes */
 .note {
   display: block;
   margin: calc(var(--line-height) - 1.25rem) 0 calc(var(--line-height) - 0.75rem) 0;
@@ -187,8 +186,7 @@ const sameDay = computed(() => {
   border-left-color: var(--indent-accent-color);
 }
 
-.note-quote-author,
-.entry-author {
+.note-quote-author {
   display: flex;
   justify-content: space-between;
   flex-wrap: nowrap;
@@ -202,19 +200,8 @@ const sameDay = computed(() => {
   white-space: nowrap;
 }
 
-.note-quote-handle {
-  color: var(--ink-soft);
-}
-
 .note-quote-time {
   color: var(--ink-soft);
-}
-
-.note-quote-who {
-  flex: 0 1 auto;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .note-quote-time {

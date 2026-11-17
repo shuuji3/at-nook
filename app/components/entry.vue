@@ -155,7 +155,6 @@ const entryRef = useRulingSnap<HTMLElement>()
   text-underline-offset: 3px;
 }
 
-.note-quote-author,
 .entry-author {
   display: flex;
   justify-content: space-between;
