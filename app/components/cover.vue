@@ -181,17 +181,6 @@ function onInput(event: Event) {
         </button>
       </div>
     </div>
-    <span class="cover-credit">
-      credit:
-      <a
-        href="https://www.flickr.com/photos/kharlamovaa/5580663027/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        photo "nook" by kharlamovaa
-      </a>
-      (<a target="_blank" href="https://creativecommons.org/licenses/by/2.0/deed.en">cc-by-2.0</a>)
-    </span>
   </section>
 </template>
 
@@ -443,10 +432,6 @@ function onInput(event: Event) {
   .cover-candidate-name {
     font-size: 15px;
   }
-
-  .cover .cover-credit {
-    font-size: 15px;
-  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -461,21 +446,6 @@ function onInput(event: Event) {
     to {
       --cloth-hue: 360;
     }
-  }
-}
-
-/* photo credit */
-.cover-credit {
-  position: fixed;
-  bottom: 1rem;
-  right: 1rem;
-  white-space: nowrap;
-  color: var(--paper);
-  font-family: var(--font-hand);
-  font-size: 22px;
-
-  & a {
-    color: var(--paper);
   }
 }
 </style>
