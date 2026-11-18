@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { rmSync, writeFileSync } from 'node:fs'
+import { oauthClientMetadata } from './oauth-metadata'
 
 // app domain
 const siteHost = process.env.SITE_HOST
@@ -8,21 +9,6 @@ const siteHost = process.env.SITE_HOST
 // environment has these envs. forks that set nothing get no analytics.
 const umamiHost = process.env.NUXT_PUBLIC_UMAMI_HOST
 const umamiId = process.env.NUXT_PUBLIC_UMAMI_WEBSITE_ID
-
-/** atproto client metadata for a deploy, keyed to the origin it is served from. */
-function oauthClientMetadata(host: string) {
-  return {
-    client_id: `https://${host}/oauth-client-metadata.json`,
-    client_name: 'at-nook',
-    application_type: 'web',
-    grant_types: ['authorization_code', 'refresh_token'],
-    response_types: ['code'],
-    scope: 'atproto include?nsid=app.bsky.authViewAll&aud=did:web:api.bsky.app%23bsky_appview',
-    redirect_uris: [`https://${host}/oauth/callback`],
-    token_endpoint_auth_method: 'none',
-    dpop_bound_access_tokens: true,
-  }
-}
 
 // cancels tracking when the browser signals an opt-out. GPC is the current
 // signal (Firefox/Brave/DuckDuckGo); browsers without GPC (Chrome/Safari/Edge)

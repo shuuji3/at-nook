@@ -1,5 +1,5 @@
-import { readFileSync } from 'node:fs'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { oauthClientMetadata } from '../../../oauth-metadata'
 
 // vi.hoisted must not reference any imported variables — use global vi
 const mocks = vi.hoisted(() => ({
@@ -106,12 +106,8 @@ describe('oauth endpoints', () => {
     })
   })
 
-  it('keeps the published client metadata in sync with its own origin', () => {
-    const metadata = JSON.parse(readFileSync('public/oauth-client-metadata.json', 'utf8')) as {
-      client_id: string
-      redirect_uris: string[]
-      scope: string
-    }
+  it('keeps the built client metadata in sync with the client origin', () => {
+    const metadata = oauthClientMetadata('at-nook.shuuji3.xyz')
     const endpoints = oauthEndpoints('https://at-nook.shuuji3.xyz')
 
     expect(metadata.client_id).toBe(endpoints.client_id)
