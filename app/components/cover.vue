@@ -187,7 +187,9 @@ function onInput(event: Event) {
 <style scoped>
 /* the closed notebook */
 .cover {
-  min-height: 100vh;
+  flex: 1;
+  min-height: 0;
+  margin-block: 0;
   display: grid;
   place-items: center;
   padding: 48px 24px;
@@ -198,7 +200,7 @@ function onInput(event: Event) {
 .cover-book {
   position: relative;
   width: min(540px, 92vw);
-  height: min(720px, 88svh);
+  height: min(720px, calc(100svh - 160px));
   display: flex;
   border-radius: 4px 14px 14px 4px;
   background-color: hsl(from var(--cloth) calc(h + 120 + var(--cloth-hue)) s l);
