@@ -31,7 +31,6 @@ section {
 }
 
 .notebook {
-  min-height: 100vh;
   display: grid;
   grid-template-columns: 1fr;
   background: var(--nook-cover-backdrop);
