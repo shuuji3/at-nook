@@ -2,7 +2,8 @@
   <NotebookShell>
     <h1 class="list-title">terms</h1>
     <div class="entries">
-      <p class="note-text">TBW. at-nook is an alpha release, provided as is.</p>
+      <p class="note-text">TBW.</p>
+      <p class="note-text">at-nook is an alpha version, provided as is.</p>
     </div>
   </NotebookShell>
 </template>
