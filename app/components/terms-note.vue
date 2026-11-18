@@ -2,7 +2,7 @@
   <NotebookShell>
     <h1 class="list-title">terms</h1>
     <div class="entries">
-      <p class="note-text">placeholder: the terms of service will be written here.</p>
+      <p class="note-text">TBW. at-nook is an alpha release, provided as is.</p>
     </div>
   </NotebookShell>
 </template>
