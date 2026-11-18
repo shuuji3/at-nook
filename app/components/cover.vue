@@ -113,7 +113,7 @@ function onInput(event: Event) {
       <span class="cover-spine" aria-hidden="true" />
 
       <div class="cover-face">
-        <h1 class="cover-title">📔at-nook<sup class="cover-sup">α</sup></h1>
+        <h1 class="cover-title"><span aria-hidden="true">📔</span>at-nook<sup class="cover-sup" aria-hidden="true">α</sup></h1>
 
         <div class="cover-name-line">
           <label class="cover-label" for="handle">handle</label>
