@@ -26,13 +26,16 @@ this is currently an **alpha** version. this means:
 
 - [ ] find a good way to present reply threads: single-user notebook vs. multi-user exchanges?
 - [ ] fix seemingly unstable session management?
+- [ ] writing feature
 - [ ] integrate margin.at using highlighter or sticky note expressions?
+- [ ] integrate standard.site to read long posts?
 - [ ] experiment with FedCM login experience?
-- [ ] integrate masto.js for Mastodon?
+- [ ] integrate masto.js for Mastodon? (but maybe need to limit some features requiring pds?)
 - [ ] offer an option for pageless (current) vs. paginated views?
 - [ ] per-author theme customization?
 - [ ] find a way to chunk posts chronologically? (feasible without client-side store and many fetch? experience may vary depending on author posting frequency)
 - [ ] liveness delay option: only show posts written up to a specific time (e.g., posts written up to 6am can be read starting from noon, a 6-hour wait). this can reduce the "random reward" expectation triggered by constant reloading, similar to gambling mechanics.
+- [ ] freedom of choice for your favorite background photo?
 
 ## development
 
