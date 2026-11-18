@@ -24,12 +24,16 @@
 
 <style scoped>
 .site-footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: baseline;
   gap: 0 0.9em;
-  margin-block-start: 2rem;
   padding: 0.6rem 1rem;
   color: var(--paper);
   font-family: var(--font-hand);

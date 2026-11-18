@@ -8,6 +8,11 @@
 </template>
 
 <style scoped>
+.entries {
+  flex: 1;
+  align-content: start;
+}
+
 .note-text {
   margin: 0;
   font-family: var(--font-hand);

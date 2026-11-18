@@ -33,6 +33,11 @@
 </template>
 
 <style scoped>
+.entries {
+  flex: 1;
+  align-content: start;
+}
+
 .note-list {
   margin: 0;
   padding-inline-start: 1.5em;
