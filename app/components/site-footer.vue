@@ -1,5 +1,10 @@
+<script setup lang="ts"></script>
 <template>
   <footer class="site-footer">
+    <NuxtLink class="site-footer-link" to="/">home</NuxtLink>
+    <NuxtLink class="site-footer-link" to="/privacy">privacy</NuxtLink>
+    <NuxtLink class="site-footer-link" to="/terms">terms</NuxtLink>
+    <NuxtLink class="site-footer-link" to="/credits">credits</NuxtLink>
     <a
       class="site-footer-link"
       href="https://github.com/shuuji3/at-nook"
@@ -16,19 +21,12 @@
     >
       tangled
     </a>
-    <NuxtLink class="site-footer-link" to="/privacy">privacy</NuxtLink>
-    <NuxtLink class="site-footer-link" to="/terms">terms</NuxtLink>
-    <NuxtLink class="site-footer-link" to="/credits">credits</NuxtLink>
   </footer>
 </template>
 
 <style scoped>
 .site-footer {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 40;
+  margin-block-start: auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
