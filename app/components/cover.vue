@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query'
 
-interface Candidate {
+interface CandidateActor {
   did: string
   handle: string
   displayName?: string
@@ -9,59 +9,63 @@ interface Candidate {
 }
 
 const route = useRoute()
-const raw = ref('')
-const chosen = ref<Candidate | null>(null)
-const active = ref(-1)
-const dismissed = ref(false)
-const opening = ref(false)
+const inputText = ref('')
+const chosenActor = ref<CandidateActor | null>(null)
+const activeIndex = ref(-1)
+const menuDismissed = ref(false)
+const submitting = ref(false)
 const error = ref<string | null>(null)
 
-const typed = computed(() => stripAt(raw.value))
-const query = refDebounced(typed, 300)
+const typedHandle = computed(() => stripAt(inputText.value))
+const query = refDebounced(typedHandle, 300)
 
 const { data: candidatesData } = useQuery({
   ...actorCandidatesQuery(query),
   enabled: computed(() => query.value.length >= 2),
 })
 
-const people = computed<Candidate[]>(() => (candidatesData.value?.actors ?? []).slice(0, 8))
+const candidates = computed<CandidateActor[]>(() =>
+  (candidatesData.value?.actors ?? []).slice(0, 8),
+)
 
-const open = computed(() => people.value.length > 0 && !dismissed.value && !chosen.value)
+const open = computed(
+  () => candidates.value.length > 0 && !menuDismissed.value && !chosenActor.value,
+)
 
-const handle = computed(() => chosen.value?.handle ?? typed.value)
-const canOpen = computed(() => handle.value.length > 0)
+const handle = computed(() => chosenActor.value?.handle ?? typedHandle.value)
+const canSubmit = computed(() => handle.value.length > 0)
 
 const loginFailed = computed(() => Boolean((route.query as { loginFailed?: string })?.loginFailed))
 
-watch(raw, () => {
-  active.value = -1
-  dismissed.value = false
+watch(inputText, () => {
+  activeIndex.value = -1
+  menuDismissed.value = false
 })
 
-function choose(person: Candidate) {
-  chosen.value = person
-  raw.value = person.handle
-  active.value = -1
+function selectActor(actor: CandidateActor) {
+  chosenActor.value = actor
+  inputText.value = actor.handle
+  activeIndex.value = -1
 }
 
-function setActive(index: number) {
-  active.value = index
+function setActiveIndex(index: number) {
+  activeIndex.value = index
 }
 
 async function signIn() {
   const target =
-    open.value && active.value >= 0
-      ? (people.value[active.value]?.handle ?? handle.value)
+    open.value && activeIndex.value >= 0
+      ? (candidates.value[activeIndex.value]?.handle ?? handle.value)
       : handle.value
   if (!target) return
 
-  opening.value = true
+  submitting.value = true
   error.value = null
   try {
     const url = await startLogin(target)
     window.location.assign(url.toString())
   } catch (cause) {
-    opening.value = false
+    submitting.value = false
     error.value = cause instanceof Error ? cause.message : String(cause)
   }
 }
@@ -70,32 +74,33 @@ function onKeyDown(event: KeyboardEvent) {
   if (event.key === 'ArrowDown') {
     event.preventDefault()
     if (!open.value) {
-      dismissed.value = false
+      menuDismissed.value = false
       return
     }
-    active.value = (active.value + 1) % people.value.length
+    activeIndex.value = (activeIndex.value + 1) % candidates.value.length
     return
   }
 
   if (event.key === 'ArrowUp') {
     event.preventDefault()
     if (open.value) {
-      active.value = active.value <= 0 ? people.value.length - 1 : active.value - 1
+      activeIndex.value =
+        activeIndex.value <= 0 ? candidates.value.length - 1 : activeIndex.value - 1
     }
     return
   }
 
   if (event.key === 'Escape') {
-    dismissed.value = true
-    active.value = -1
+    menuDismissed.value = true
+    activeIndex.value = -1
     return
   }
 
   if (event.key === 'Enter') {
     event.preventDefault()
-    if (open.value && active.value >= 0 && people.value[active.value]) {
-      const person = people.value[active.value]!
-      choose(person)
+    if (open.value && activeIndex.value >= 0 && candidates.value[activeIndex.value]) {
+      const person = candidates.value[activeIndex.value]!
+      selectActor(person)
       return
     }
     void signIn()
@@ -103,7 +108,7 @@ function onKeyDown(event: KeyboardEvent) {
 }
 
 function onInput(event: Event) {
-  raw.value = (event.target as HTMLInputElement).value
+  inputText.value = (event.target as HTMLInputElement).value
 }
 </script>
 
@@ -126,11 +131,13 @@ function onInput(event: Event) {
               :aria-expanded="open"
               aria-controls="cover-candidates"
               aria-autocomplete="list"
-              :aria-activedescendant="open && active >= 0 ? `cover-candidate-${active}` : undefined"
+              :aria-activedescendant="
+                open && activeIndex >= 0 ? `cover-candidate-${activeIndex}` : undefined
+              "
               autocomplete="off"
               autofocus
               :spellcheck="false"
-              :value="raw"
+              :value="inputText"
               @input="onInput"
               @keydown="onKeyDown"
             />
@@ -141,18 +148,18 @@ function onInput(event: Event) {
             id="cover-candidates"
             class="cover-candidates"
             role="listbox"
-            aria-label="people"
+            aria-label="candidates"
           >
             <li
-              v-for="(person, index) in people"
+              v-for="(person, index) in candidates"
               :id="`cover-candidate-${index}`"
               :key="person.did"
               class="cover-candidate"
               role="option"
-              :aria-selected="index === active"
+              :aria-selected="index === activeIndex"
               @mousedown.prevent
-              @mouseenter="setActive(index)"
-              @click="choose(person)"
+              @mouseenter="setActiveIndex(index)"
+              @click="selectActor(person)"
             >
               <Avatar :src="person.avatar" :alt="person.displayName ?? person.handle" :size="28" />
               <span>
@@ -168,7 +175,7 @@ function onInput(event: Event) {
         <div class="cover-name-field">
           <span class="cover-label">name</span>
           <p class="cover-name" aria-live="polite">
-            {{ chosen ? (chosen.displayName ?? chosen.handle) : '' }}
+            {{ chosenActor ? (chosenActor.displayName ?? chosenActor.handle) : '' }}
           </p>
         </div>
 
@@ -176,7 +183,12 @@ function onInput(event: Event) {
           {{ error ?? (loginFailed ? 'sign-in did not finish. try again.' : '') }}
         </p>
 
-        <button class="cover-open" type="button" :disabled="!canOpen || opening" @click="signIn">
+        <button
+          class="cover-open"
+          type="button"
+          :disabled="!canSubmit || submitting"
+          @click="signIn"
+        >
           open notebook
         </button>
       </div>
