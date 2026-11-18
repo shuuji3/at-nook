@@ -9,59 +9,59 @@ interface Candidate {
 }
 
 const route = useRoute()
-const inputText = ref('')
+const raw = ref('')
 const chosen = ref<Candidate | null>(null)
-const activeIndex = ref(-1)
-const menuDismissed = ref(false)
-const submitting = ref(false)
+const active = ref(-1)
+const dismissed = ref(false)
+const opening = ref(false)
 const error = ref<string | null>(null)
 
-const typedHandle = computed(() => stripAt(inputText.value))
-const searchQuery = refDebounced(typedHandle, 300)
+const typed = computed(() => stripAt(raw.value))
+const query = refDebounced(typed, 300)
 
 const { data: candidatesData } = useQuery({
-  ...actorCandidatesQuery(searchQuery),
-  enabled: computed(() => searchQuery.value.length >= 2),
+  ...actorCandidatesQuery(query),
+  enabled: computed(() => query.value.length >= 2),
 })
 
-const candidates = computed<Candidate[]>(() => (candidatesData.value?.actors ?? []).slice(0, 8))
+const people = computed<Candidate[]>(() => (candidatesData.value?.actors ?? []).slice(0, 8))
 
-const menuOpen = computed(() => candidates.value.length > 0 && !menuDismissed.value && !chosen.value)
+const open = computed(() => people.value.length > 0 && !dismissed.value && !chosen.value)
 
-const handle = computed(() => chosen.value?.handle ?? typedHandle.value)
-const canSubmit = computed(() => handle.value.length > 0)
+const handle = computed(() => chosen.value?.handle ?? typed.value)
+const canOpen = computed(() => handle.value.length > 0)
 
 const loginFailed = computed(() => Boolean((route.query as { loginFailed?: string })?.loginFailed))
 
-watch(inputText, () => {
-  activeIndex.value = -1
-  menuDismissed.value = false
+watch(raw, () => {
+  active.value = -1
+  dismissed.value = false
 })
 
 function choose(person: Candidate) {
   chosen.value = person
-  inputText.value = person.handle
-  activeIndex.value = -1
+  raw.value = person.handle
+  active.value = -1
 }
 
-function setActiveIndex(index: number) {
-  activeIndex.value = index
+function setActive(index: number) {
+  active.value = index
 }
 
 async function signIn() {
   const target =
-    menuOpen.value && activeIndex.value >= 0
-      ? (candidates.value[activeIndex.value]?.handle ?? handle.value)
+    open.value && active.value >= 0
+      ? (people.value[active.value]?.handle ?? handle.value)
       : handle.value
   if (!target) return
 
-  submitting.value = true
+  opening.value = true
   error.value = null
   try {
     const url = await startLogin(target)
     window.location.assign(url.toString())
   } catch (cause) {
-    submitting.value = false
+    opening.value = false
     error.value = cause instanceof Error ? cause.message : String(cause)
   }
 }
@@ -69,32 +69,32 @@ async function signIn() {
 function onKeyDown(event: KeyboardEvent) {
   if (event.key === 'ArrowDown') {
     event.preventDefault()
-    if (!menuOpen.value) {
-      menuDismissed.value = false
+    if (!open.value) {
+      dismissed.value = false
       return
     }
-    activeIndex.value = (activeIndex.value + 1) % candidates.value.length
+    active.value = (active.value + 1) % people.value.length
     return
   }
 
   if (event.key === 'ArrowUp') {
     event.preventDefault()
-    if (menuOpen.value) {
-      activeIndex.value = activeIndex.value <= 0 ? candidates.value.length - 1 : activeIndex.value - 1
+    if (open.value) {
+      active.value = active.value <= 0 ? people.value.length - 1 : active.value - 1
     }
     return
   }
 
   if (event.key === 'Escape') {
-    menuDismissed.value = true
-    activeIndex.value = -1
+    dismissed.value = true
+    active.value = -1
     return
   }
 
   if (event.key === 'Enter') {
     event.preventDefault()
-    if (menuOpen.value && activeIndex.value >= 0 && candidates.value[activeIndex.value]) {
-      const person = candidates.value[activeIndex.value]!
+    if (open.value && active.value >= 0 && people.value[active.value]) {
+      const person = people.value[active.value]!
       choose(person)
       return
     }
@@ -103,7 +103,7 @@ function onKeyDown(event: KeyboardEvent) {
 }
 
 function onInput(event: Event) {
-  inputText.value = (event.target as HTMLInputElement).value
+  raw.value = (event.target as HTMLInputElement).value
 }
 </script>
 
@@ -113,7 +113,7 @@ function onInput(event: Event) {
       <span class="cover-spine" aria-hidden="true" />
 
       <div class="cover-face">
-        <h1 class="cover-title"><span aria-hidden="true">📔</span>at-nook<sup class="cover-sup" aria-hidden="true">α</sup></h1>
+        <h1 class="cover-title">📔at-nook<sup class="cover-sup">α</sup></h1>
 
         <div class="cover-name-line">
           <label class="cover-label" for="handle">handle</label>
@@ -123,35 +123,35 @@ function onInput(event: Event) {
               id="handle"
               class="cover-input"
               role="combobox"
-              :aria-expanded="menuOpen"
+              :aria-expanded="open"
               aria-controls="cover-candidates"
               aria-autocomplete="list"
-              :aria-activedescendant="menuOpen && activeIndex >= 0 ? `cover-candidate-${activeIndex}` : undefined"
+              :aria-activedescendant="open && active >= 0 ? `cover-candidate-${active}` : undefined"
               autocomplete="off"
               autofocus
               :spellcheck="false"
-              :value="inputText"
+              :value="raw"
               @input="onInput"
               @keydown="onKeyDown"
             />
           </div>
 
           <ul
-            v-if="menuOpen"
+            v-if="open"
             id="cover-candidates"
             class="cover-candidates"
             role="listbox"
-            aria-label="candidates"
+            aria-label="people"
           >
             <li
-              v-for="(person, index) in candidates"
+              v-for="(person, index) in people"
               :id="`cover-candidate-${index}`"
               :key="person.did"
               class="cover-candidate"
               role="option"
-              :aria-selected="index === activeIndex"
+              :aria-selected="index === active"
               @mousedown.prevent
-              @mouseenter="setActiveIndex(index)"
+              @mouseenter="setActive(index)"
               @click="choose(person)"
             >
               <Avatar :src="person.avatar" :alt="person.displayName ?? person.handle" :size="28" />
@@ -176,7 +176,7 @@ function onInput(event: Event) {
           {{ error ?? (loginFailed ? 'sign-in did not finish. try again.' : '') }}
         </p>
 
-        <button class="cover-open" type="button" :disabled="!canSubmit || submitting" @click="signIn">
+        <button class="cover-open" type="button" :disabled="!canOpen || opening" @click="signIn">
           open notebook
         </button>
       </div>
