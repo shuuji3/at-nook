@@ -48,29 +48,35 @@ const spineExtra = computed(() => spineHeight(profile.did))
   padding-bottom: var(--shelf-board, 10px);
 }
 
-/* the shelf turns a book upright: the rotation lives here, never in the spine rules */
+/* the shelf cell a book stands in: a real upright box, width = spine thickness,
+   height = book length, standing on the board. no rotation lives here. */
 .book-frame {
+  position: relative;
   display: block;
   flex: 0 0 auto;
   --spine-height: v-bind(spineExtra);
   /* the shelf's width plus the old shift's whole-rem extra, so a book is only ever taller */
   --book-length: calc(var(--shelf-width) + var(--spine-height, 0) * 1rem);
-  width: var(--book-length);
-  transform: translateY(calc(var(--book-thickness, 72px) / 2 - var(--book-length) / 2))
-    rotate(90deg);
+  width: var(--book-thickness, 72px);
+  height: var(--book-length);
 }
 
 /* the book lifts straight up off the shelf bar when pointed at, held, or tapped */
 .book-frame:hover,
 .book-frame:active,
 .book-frame:has(.spine-row:active) {
-  transform: translateY(calc(var(--book-thickness, 72px) / 2 - var(--book-length) / 2 - 1.5rem))
-    rotate(90deg);
+  transform: translateY(-1.5rem);
 }
 
-/* a person as a book spine lying flat on the shelf */
+/* the spine content laid out along the book's long axis, then turned upright to
+   fill the vertical frame; the rotation lives here so the frame stays vertical */
 .spine-row {
-  position: relative;
+  position: absolute;
+  top: calc(50% - var(--book-thickness, 72px) / 2);
+  left: calc(50% - var(--book-length) / 2);
+  width: var(--book-length);
+  height: var(--book-thickness, 72px);
+  transform: rotate(90deg);
   display: flex;
   align-items: center;
   gap: 14px;
