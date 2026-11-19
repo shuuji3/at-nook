@@ -1,6 +1,6 @@
 # 📔 at-nook
 
-**at-nook** /ət ˈnʊk/ is a social posts reader web app designed to provide a calm, comfortable experience of reading social media without distractions. it aims to make users feel as if they are reading (or writing) at their own cozy nook at home.
+**at-nook** /ət ˈnʊk/ is an atproto posts reader web app designed to provide a calm, comfortable experience without distractions. it aims to make users feel as if they are reading (or writing) at their own cozy nook at home.
 
 the main guiding principles of at-nook include:
 
