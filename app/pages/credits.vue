@@ -20,6 +20,27 @@
           >)
         </li>
         <li>
+          fonts:
+          <a
+            href="https://fonts.google.com/specimen/Shadows+Into+Light+Two"
+            target="_blank"
+            rel="noopener noreferrer"
+            >"Shadows Into Light Two"</a
+          >
+          by
+          <a href="https://kimberlygeswein.com" target="_blank" rel="noopener noreferrer"
+            >Kimberly Geswein</a
+          >
+          (SIL Open Font License 1.1), and
+          <a
+            href="https://fonts.google.com/specimen/Zen+Kurenaido"
+            target="_blank"
+            rel="noopener noreferrer"
+            >"Zen Kurenaido"</a
+          >
+          by Yoshimichi Ohira (SIL Open Font License 1.1)
+        </li>
+        <li>
           built with
           <a href="https://npmx.dev/package/nuxt" target="_blank" rel="noopener">Nuxt</a>
           and
