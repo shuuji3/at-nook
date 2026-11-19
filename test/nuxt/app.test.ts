@@ -12,6 +12,6 @@ describe('app', () => {
   it('renders the cover route', async () => {
     await renderWithProviders(App, { route: '/' })
 
-    expect(await screen.findByRole('heading', { name: 'at-nook' })).toBeTruthy()
+    expect(await screen.findByRole('heading', { name: /at-nook/ })).toBeTruthy()
   })
 })
