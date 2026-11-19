@@ -1,5 +1,5 @@
 import { segmentize, type Facet } from '@atcute/bluesky-richtext-segmenter'
-import { profileHref } from './format'
+import { profileHref } from '~/utils/format'
 
 export type FacetKind = 'link' | 'mention' | 'tag'
 

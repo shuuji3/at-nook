@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
-import { getStoredDid, resumeSession, signOut } from '../utils/auth'
-import { profileQuery } from '../utils/queries'
+import { getStoredDid, resumeSession, signOut } from '~/utils/auth'
+import { profileQuery } from '~/utils/queries'
 
 export interface Session {
   did: string

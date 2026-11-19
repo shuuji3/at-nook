@@ -2,7 +2,7 @@ import { ok } from '@atcute/client'
 import type { ActorIdentifier, ResourceUri } from '@atcute/lexicons'
 import { infiniteQueryOptions, queryOptions, keepPreviousData } from '@tanstack/vue-query'
 import { computed, toValue, type MaybeRefOrGetter } from 'vue'
-import { publicRpc, rpc } from './rpc'
+import { publicRpc, rpc } from '~/utils/rpc'
 
 const ONE_MINUTE = 60_000
 const FIVE_MINUTES = ONE_MINUTE * 5

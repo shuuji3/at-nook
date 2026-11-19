@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useInfiniteQuery } from '@tanstack/vue-query'
-import type { Group } from './group-sidebar.vue'
+import type { Group } from '~/components/group-sidebar.vue'
 
 const FOLLOWING = 'following'
 

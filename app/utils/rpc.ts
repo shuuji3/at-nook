@@ -6,7 +6,7 @@ import {
   type FetchHandlerObject,
 } from '@atcute/client'
 import type {} from '@atcute/bluesky'
-import { APPVIEW_AUDIENCE, PUBLIC_APPVIEW_URL } from './endpoints'
+import { APPVIEW_AUDIENCE, PUBLIC_APPVIEW_URL } from '~/utils/endpoints'
 
 // TODO: support configuring service endpoints
 /** the public AppView, used only by the cover for handle candidates */

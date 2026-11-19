@@ -15,9 +15,9 @@ import {
   getSession,
   OAuthUserAgent,
 } from '@atcute/oauth-browser-client'
-import { PUBLIC_APPVIEW_URL } from './endpoints'
-import { OAUTH_SCOPE } from './oauth-scope'
-import { setHandler } from './rpc'
+import { PUBLIC_APPVIEW_URL } from '~/utils/endpoints'
+import { OAUTH_SCOPE } from '~/utils/oauth-scope'
+import { setHandler } from '~/utils/rpc'
 
 const DID_STORAGE_KEY = 'at-nook:did'
 
