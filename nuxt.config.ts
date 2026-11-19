@@ -83,7 +83,7 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      title: 'at-nook',
+      title: `at-nook${process.env.NODE_ENV === 'development' ? ' (dev)' : ''}`,
       link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
       script:
         umamiHost && umamiId
