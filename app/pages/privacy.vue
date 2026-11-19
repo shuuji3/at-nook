@@ -13,7 +13,7 @@ const umamiHost = runtimeConfig.public.umamiHost
       <p class="note-text">
         at-nook uses self-hosted Umami analytics, running on a small server in my home, to measure
         access counts and understand the app's usage. no data is shared with any other parties. if
-        you want to this first party tracking, you could do it by blocking `https://{{
+        you want to this first party tracking, you could do it by blocking `{{
           umamiHost
         }}/script.js` .
       </p>
