@@ -5,6 +5,9 @@ import { oauthClientMetadata } from './app/utils/oauth-metadata'
 // app domain
 const siteHost = process.env.SITE_HOST
 
+// shown in link previews alongside the static og image in public/og.png
+const description = 'a calm, comfortable atproto posts reader without distractions'
+
 // analytics are optional: the tracker is only injected when the deploy
 // environment has these envs. forks that set nothing get no analytics.
 const umamiHost = process.env.NUXT_PUBLIC_UMAMI_HOST
@@ -71,6 +74,21 @@ export default defineNuxtConfig({
     head: {
       title: `at-nook${process.env.NODE_ENV === 'development' ? ' (dev)' : ''}`,
       link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
+      // og:image must be an absolute URL, so it is only emitted when the deploy
+      // origin (SITE_HOST) is known; the image itself is a static asset.
+      meta: [
+        { name: 'description', content: description },
+        { property: 'og:title', content: 'at-nook' },
+        { property: 'og:description', content: description },
+        { property: 'og:type', content: 'website' },
+        ...(siteHost
+          ? [
+              { property: 'og:image', content: `https://${siteHost}/og.png` },
+              { property: 'og:image:width', content: '1200' },
+              { property: 'og:image:height', content: '630' },
+            ]
+          : []),
+      ],
       script:
         umamiHost && umamiId
           ? [
