@@ -1,4 +1,7 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const { version, commitHash } = useRuntimeConfig().public
+const build = version && commitHash ? `${version} (${commitHash})` : version || commitHash
+</script>
 <template>
   <footer class="site-footer">
     <NuxtLink class="site-footer-link" to="/">home</NuxtLink>
@@ -21,6 +24,7 @@
     >
       tangled
     </a>
+    <span v-if="build" class="site-footer-version">{{ build }}</span>
   </footer>
 </template>
 

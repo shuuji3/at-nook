@@ -15,6 +15,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          # full history + tags so `git describe --tags` resolves the version
+          fetch-depth: 0
 
       - name: Setup mise
         uses: jdx/mise-action@v5

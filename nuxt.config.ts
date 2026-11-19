@@ -1,9 +1,26 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { execSync } from 'node:child_process'
 import { rmSync, writeFileSync } from 'node:fs'
 import { oauthClientMetadata } from './app/utils/oauth-metadata'
 
 // app domain
 const siteHost = process.env.SITE_HOST
+
+// build metadata shown in the footer. git may be unavailable in some build
+// environments (e.g. tarball builds), so fall back to benign defaults.
+const git = (args: string) => {
+  try {
+    return execSync(`git ${args}`, { stdio: ['ignore', 'pipe', 'ignore'] })
+      .toString()
+      .trim()
+  } catch {
+    return ''
+  }
+}
+// full describe output (e.g. v0.1.0 or v0.1.0-3-gb209818), empty when git or
+// tags are unavailable; the footer omits missing parts instead of showing junk.
+const version = git('describe --tags')
+const commitHash = git('rev-parse --short=7 HEAD')
 
 // shown in link previews alongside the static og image in public/og.png
 const description = 'a calm, comfortable atproto posts reader without distractions'
@@ -108,6 +125,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       umamiHost,
+      version,
+      commitHash,
     },
   },
   vite: {
