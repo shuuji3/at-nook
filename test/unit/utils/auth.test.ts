@@ -1,4 +1,3 @@
-import { readFileSync } from 'node:fs'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 // vi.hoisted must not reference any imported variables — use global vi
@@ -22,6 +21,7 @@ vi.mock('@atcute/oauth-browser-client', () => ({
   },
 }))
 
+import { oauthClientMetadata } from '../../../app/utils/oauth-metadata'
 import { OAUTH_SCOPE } from '../../../app/utils/oauth-scope'
 import {
   clearStoredDid,
@@ -107,11 +107,7 @@ describe('oauth endpoints', () => {
   })
 
   it('keeps the published client metadata in sync with its own origin', () => {
-    const metadata = JSON.parse(readFileSync('public/oauth-client-metadata.json', 'utf8')) as {
-      client_id: string
-      redirect_uris: string[]
-      scope: string
-    }
+    const metadata = oauthClientMetadata('at-nook.shuuji3.xyz')
     const endpoints = oauthEndpoints('https://at-nook.shuuji3.xyz')
 
     expect(metadata.client_id).toBe(endpoints.client_id)
