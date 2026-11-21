@@ -59,13 +59,9 @@ const entryRef = useRulingSnap<HTMLElement>()
       </p>
 
       <p v-if="replyTarget" class="entry-reply">
-        <a
-          :href="`https://bsky.app/profile/${replyTarget.handle}/post/${rkeyFromUri(replyTarget.uri)}`"
-          target="_blank"
-          rel="noreferrer"
-        >
+        <NuxtLink class="note-quote-handle" :to="profileHref(replyTarget.handle)">
           @{{ replyTarget.handle }}
-        </a>
+        </NuxtLink>
         ({{ replyTarget.displayName }})
       </p>
 
