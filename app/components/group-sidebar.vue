@@ -67,9 +67,9 @@ defineEmits<{
 
 @media (max-width: 900px) {
   .groups {
-    flex-direction: row;
-    overflow-x: auto;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px 8px;
   }
 }
 </style>
