@@ -2,14 +2,47 @@
   color-scheme: light;
   font-family: var(--font-ui, system-ui, sans-serif);
   color: var(--ink, #2b3a55);
-  /* the nook photo, shared by every page's backdrop */
+  /* the nook photo, shared by every page's backdrop. css cannot choose a
+     background by viewport width (image-set() only accepts resolution and
+     type()), so mobile gets the 800px file and wider screens swap in 1600px
+     below. image-set() adds avif/webp; the plain jpg keeps browsers that lack
+     it working. */
+  --nook-cover-image: url(/images/5580663027_deeb68abf8_o-flickr-kharlamovaa-cc-by-2.0-800.jpg);
   --nook-cover-backdrop:
     linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)) fixed,
-    url(/images/5580663027_deeb68abf8_o-flickr-kharlamovaa-cc-by-2.0.jpg) center / cover no-repeat
-      fixed;
+    var(--nook-cover-image) center / cover no-repeat fixed;
   background: var(--nook-cover-backdrop);
 
   /* TODO: need consistent font and size token */
+}
+
+@media (min-width: 900px) {
+  :root {
+    --nook-cover-image: url(/images/5580663027_deeb68abf8_o-flickr-kharlamovaa-cc-by-2.0-1600.jpg);
+  }
+}
+
+@supports (background-image: image-set(url(x.jpg) type('image/jpeg'))) {
+  :root {
+    --nook-cover-image: image-set(
+      url(/images/5580663027_deeb68abf8_o-flickr-kharlamovaa-cc-by-2.0-800.avif) type('image/avif'),
+      url(/images/5580663027_deeb68abf8_o-flickr-kharlamovaa-cc-by-2.0-800.webp) type('image/webp'),
+      url(/images/5580663027_deeb68abf8_o-flickr-kharlamovaa-cc-by-2.0-800.jpg) type('image/jpeg')
+    );
+  }
+
+  @media (min-width: 900px) {
+    :root {
+      --nook-cover-image: image-set(
+        url(/images/5580663027_deeb68abf8_o-flickr-kharlamovaa-cc-by-2.0-1600.avif)
+          type('image/avif'),
+        url(/images/5580663027_deeb68abf8_o-flickr-kharlamovaa-cc-by-2.0-1600.webp)
+          type('image/webp'),
+        url(/images/5580663027_deeb68abf8_o-flickr-kharlamovaa-cc-by-2.0-1600.jpg)
+          type('image/jpeg')
+      );
+    }
+  }
 }
 
 * {
