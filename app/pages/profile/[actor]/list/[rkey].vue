@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useInfiniteQuery, useQuery } from '@tanstack/vue-query'
 
-const { session, ready } = useSession()
+const { ready } = useSession()
 
 const route = useRoute()
 const actor = computed(() => (route.params.actor as string) ?? '')
@@ -9,14 +9,14 @@ const rkey = computed(() => (route.params.rkey as string) ?? '')
 
 const profile = useQuery({
   ...profileQuery(actor),
-  enabled: () => actor.value.length > 0,
+  enabled: () => ready.value && actor.value.length > 0,
 })
 
 const uri = computed(() => (profile.data.value ? listUri(profile.data.value.did, rkey.value) : ''))
 
 const list = useInfiniteQuery({
   ...listQuery(uri),
-  enabled: () => Boolean(uri.value),
+  enabled: () => ready.value && Boolean(uri.value),
 })
 
 const name = computed(() => list.data.value?.pages[0]?.list.name ?? 'list')
@@ -27,12 +27,8 @@ const members = computed(() =>
 </script>
 
 <template>
-  <!-- session is loading — showing the gate here would be wrong -->
+  <!-- a stored session is resuming, so reads can use it -->
   <div v-if="!ready" />
-
-  <NotebookShell v-else-if="!session">
-    <h1 class="page-note">open the notebook from the <NuxtLink to="/">cover</NuxtLink> first</h1>
-  </NotebookShell>
 
   <NotebookShell v-else-if="profile.isPending.value">
     <p class="page-note">finding the notebook…</p>

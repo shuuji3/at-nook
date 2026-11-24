@@ -9,8 +9,16 @@ const mocks = vi.hoisted(() => ({
   listQuery: vi.fn(),
 }))
 
+const sessionState = vi.hoisted(() => ({
+  current: { did: 'did:plc:me', handle: 'me.test' } as { did: string; handle: string } | null,
+}))
+
 mockNuxtImport('useSession', () => () => ({
-  session: { value: { did: 'did:plc:me', handle: 'me.test' } },
+  session: {
+    get value() {
+      return sessionState.current
+    },
+  },
   ready: { value: true },
   end: vi.fn(),
   refresh: vi.fn(),
@@ -33,6 +41,7 @@ function page(key: string, value: unknown) {
 
 beforeEach(() => {
   vi.clearAllMocks()
+  sessionState.current = { did: 'did:plc:me', handle: 'me.test' }
   mocks.followsQuery.mockReturnValue(
     page('follows', {
       follows: [{ did: 'did:plc:a', handle: 'alice.test', displayName: 'Alice' }],
@@ -75,6 +84,16 @@ describe('shelf', () => {
 
     expect(await screen.findByText('Bob')).toBeTruthy()
     expect(screen.queryByText('Alice')).toBeNull()
+  })
+
+  it('shelves atproto.com when signed out', async () => {
+    sessionState.current = null
+
+    await renderWithProviders(Shelf)
+
+    expect(await screen.findByText('Alice')).toBeTruthy()
+    const [actor] = mocks.followsQuery.mock.calls[0] as [() => string]
+    expect(actor()).toBe('did:plc:ewvi7nxzyoun6zhxrhs64oiz')
   })
 
   it('reports an unreachable shelf', async () => {

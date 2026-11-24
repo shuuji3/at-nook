@@ -6,8 +6,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 const mocks = vi.hoisted(() => ({ startLogin: vi.fn(), get: vi.fn() }))
 
 mockNuxtImport('startLogin', () => mocks.startLogin)
-mockNuxtImport('publicRpc', () => ({ get: mocks.get }))
-mockNuxtImport('rpc', () => ({ get: mocks.get }))
+mockNuxtImport('getClient', () => () => ({ get: mocks.get }))
 
 import { renderWithProviders } from '../../utils/render'
 import Cover from '~/components/cover.vue'
@@ -66,6 +65,15 @@ describe('cover', () => {
 
     await user.click(screen.getByRole('button', { name: 'open notebook' }))
     expect(mocks.startLogin).toHaveBeenCalledWith('bsky.app')
+  })
+
+  it('links to the guest shelf without signing in', async () => {
+    await renderWithProviders(Cover)
+
+    expect(screen.getByRole('link', { name: 'or enter as a guest' })).toHaveAttribute(
+      'href',
+      '/shelf',
+    )
   })
 
   it('keeps the button shut with nothing typed', async () => {

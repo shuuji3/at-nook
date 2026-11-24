@@ -2,7 +2,7 @@ import { ok } from '@atcute/client'
 import type { ActorIdentifier, ResourceUri } from '@atcute/lexicons'
 import { infiniteQueryOptions, queryOptions, keepPreviousData } from '@tanstack/vue-query'
 import { computed, toValue, type MaybeRefOrGetter } from 'vue'
-import { publicRpc, rpc } from '~/utils/rpc'
+import { getClient, rpc } from '~/utils/rpc'
 
 const ONE_MINUTE = 60_000
 const FIVE_MINUTES = ONE_MINUTE * 5
@@ -18,7 +18,7 @@ export function actorCandidatesQuery(q: MaybeRefOrGetter<string>) {
     queryKey: keyed('actorCandidates', q),
     queryFn: () =>
       ok(
-        publicRpc.get('app.bsky.actor.searchActorsTypeahead', {
+        getClient().get('app.bsky.actor.searchActorsTypeahead', {
           params: { q: toValue(q), limit: 8 },
         }),
       ),
@@ -31,7 +31,7 @@ export function profileQuery(actor: MaybeRefOrGetter<string>) {
     queryKey: keyed('profile', actor),
     queryFn: () =>
       ok(
-        rpc.get('app.bsky.actor.getProfile', {
+        getClient().get('app.bsky.actor.getProfile', {
           params: { actor: toValue(actor) as ActorIdentifier },
         }),
       ),
@@ -45,7 +45,7 @@ export function followsQuery(did: MaybeRefOrGetter<string>) {
     queryKey: keyed('follows', did),
     queryFn: ({ pageParam }) =>
       ok(
-        rpc.get('app.bsky.graph.getFollows', {
+        getClient().get('app.bsky.graph.getFollows', {
           params: { actor: toValue(did) as ActorIdentifier, limit: 50, cursor: pageParam },
         }),
       ),
@@ -61,7 +61,7 @@ export function listsQuery(did: MaybeRefOrGetter<string>) {
     queryKey: keyed('lists', did),
     queryFn: ({ pageParam }) =>
       ok(
-        rpc.get('app.bsky.graph.getLists', {
+        getClient().get('app.bsky.graph.getLists', {
           params: {
             actor: toValue(did) as ActorIdentifier,
             purposes: ['curatelist'],
@@ -82,7 +82,7 @@ export function listQuery(uri: MaybeRefOrGetter<string>) {
     queryKey: keyed('list', uri),
     queryFn: ({ pageParam }) =>
       ok(
-        rpc.get('app.bsky.graph.getList', {
+        getClient().get('app.bsky.graph.getList', {
           params: { list: toValue(uri) as ResourceUri, limit: 50, cursor: pageParam },
         }),
       ),
@@ -98,7 +98,7 @@ export function authorFeedQuery(actor: MaybeRefOrGetter<string>) {
     queryKey: keyed('authorFeed', actor),
     queryFn: ({ pageParam }) =>
       ok(
-        rpc.get('app.bsky.feed.getAuthorFeed', {
+        getClient().get('app.bsky.feed.getAuthorFeed', {
           params: {
             actor: toValue(actor) as ActorIdentifier,
             limit: 50,

@@ -1,26 +1,28 @@
 <script setup lang="ts">
 import { useInfiniteQuery } from '@tanstack/vue-query'
 import type { Group } from '~/components/group-sidebar.vue'
+import { PUBLIC_SHELF_DID } from '~/utils/endpoints'
 
 const FOLLOWING = 'following'
 
 const { session } = useSession()
+const shelfDid = computed(() => session.value?.did ?? PUBLIC_SHELF_DID)
 const selected = ref(FOLLOWING)
 const follows = useInfiniteQuery({
-  ...followsQuery(() => session.value?.did ?? ''),
-  enabled: () => Boolean(session.value),
+  ...followsQuery(() => shelfDid.value),
+  enabled: () => Boolean(shelfDid.value),
 })
 
 const lists = useInfiniteQuery({
-  ...listsQuery(() => session.value?.did ?? ''),
-  enabled: () => Boolean(session.value),
+  ...listsQuery(() => shelfDid.value),
+  enabled: () => Boolean(shelfDid.value),
 })
 
 const listUri = computed(() => (selected.value === FOLLOWING ? '' : selected.value))
 
 const list = useInfiniteQuery({
   ...listQuery(listUri),
-  enabled: () => Boolean(session.value) && selected.value !== FOLLOWING,
+  enabled: () => Boolean(shelfDid.value) && selected.value !== FOLLOWING,
 })
 
 const followsPeople = computed(

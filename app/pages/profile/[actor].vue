@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import { useInfiniteQuery, useQuery } from '@tanstack/vue-query'
 
-const { session, ready } = useSession()
+const { ready } = useSession()
 
 const route = useRoute()
 const actor = computed(() => (route.params.actor as string) ?? '')
 
 const profile = useQuery({
   ...profileQuery(actor),
-  enabled: () => actor.value.length > 0,
+  enabled: () => ready.value && actor.value.length > 0,
 })
 
 const feed = useInfiniteQuery({
   ...authorFeedQuery(actor),
-  enabled: () => actor.value.length > 0,
+  enabled: () => ready.value && actor.value.length > 0,
 })
 
 const title = computed(() =>
@@ -41,9 +41,7 @@ const notFound = computed(
   () => profile.isError.value || (!profile.isLoading.value && !profile.data.value),
 )
 
-const headerProfile = computed(() =>
-  !session.value ? null : profile.isError.value ? null : (profile.data.value ?? null),
-)
+const headerProfile = computed(() => (profile.isError.value ? null : (profile.data.value ?? null)))
 
 const entries = computed(() =>
   (feed.data.value?.pages ?? []).flatMap((page) => page.feed).filter((item) => !item.reason),
@@ -65,12 +63,8 @@ const dated = computed(() => {
 <template>
   <NotebookShell>
     <template v-if="!ready">
-      <!-- session is loading — showing the gate here would be wrong -->
+      <!-- a stored session is resuming, so reads can use it -->
     </template>
-    <template v-else-if="!session">
-      <h1 class="page-note">open the notebook from the <NuxtLink to="/">cover</NuxtLink> first</h1>
-    </template>
-
     <template v-else-if="notFound && !placeholderProfile">
       <h1 class="page-note">this notebook could not be found</h1>
     </template>

@@ -179,7 +179,7 @@ function onInput(event: Event) {
           </p>
         </div>
 
-        <p class="cover-note">
+        <p class="cover-note" v-if="error || loginFailed">
           {{ error ?? (loginFailed ? 'sign-in did not finish. try again.' : '') }}
         </p>
 
@@ -191,6 +191,8 @@ function onInput(event: Event) {
         >
           open notebook
         </button>
+
+        <NuxtLink class="cover-visit" to="/shelf">or enter as a guest</NuxtLink>
       </div>
     </div>
   </section>
@@ -360,6 +362,7 @@ function onInput(event: Event) {
 .cover-name-field {
   display: grid;
   gap: 4px;
+  margin-block-end: 2rem;
   border-bottom: 2px solid rgba(246, 234, 216, 0.6);
 }
 
@@ -394,11 +397,19 @@ function onInput(event: Event) {
   font-family: var(--font-hand);
   font-size: 26px;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .cover-open:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+
+.cover-visit {
+  justify-self: center;
+  font-family: var(--font-hand);
+  font-size: 20px;
+  color: #ffe9b8;
 }
 
 @media (max-width: 640px) {

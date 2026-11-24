@@ -31,6 +31,14 @@ export const rpc = new Client({
   proxy: APPVIEW_AUDIENCE,
 })
 
+/**
+ * The reader for public AppView queries. Uses the signed-in account once its
+ * handler is armed, so authenticated reads avoid the public host's limits.
+ */
+export function getClient(): Client {
+  return handler ? rpc : publicRpc
+}
+
 /** Sets the handler behind rpc, or null on sign out. */
 export function setHandler(next: FetchHandlerObject | null): void {
   handler = next ? buildFetchHandler(next) : null
