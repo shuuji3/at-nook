@@ -1,6 +1,6 @@
 <script setup lang="ts">
-const { version, commitHash } = useRuntimeConfig().public
-const build = version && commitHash ? `${version} (${commitHash})` : version || commitHash
+const { version } = useRuntimeConfig().public
+const build = version
 </script>
 <template>
   <footer class="site-footer">
