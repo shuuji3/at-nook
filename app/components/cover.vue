@@ -192,7 +192,7 @@ function onInput(event: Event) {
           open notebook
         </button>
 
-        <NuxtLink class="cover-visit" to="/shelf">or enter as a guest</NuxtLink>
+        <NuxtLink class="cover-visit" to="/profile/atproto.com/shelf">or enter as a guest</NuxtLink>
       </div>
     </div>
   </section>

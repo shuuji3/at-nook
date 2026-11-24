@@ -72,7 +72,7 @@ describe('cover', () => {
 
     expect(screen.getByRole('link', { name: 'or enter as a guest' })).toHaveAttribute(
       'href',
-      '/shelf',
+      '/profile/atproto.com/shelf',
     )
   })
 

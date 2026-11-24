@@ -17,7 +17,7 @@ mockNuxtImport('profileQuery', () => mocks.profileQuery)
 mockNuxtImport('authorFeedQuery', () => mocks.authorFeedQuery)
 
 import { renderWithProviders } from '../../utils/render'
-import Notebook from '~/pages/profile/[actor].vue'
+import Notebook from '~/pages/profile/[actor]/index.vue'
 
 function post(uri: string) {
   return {

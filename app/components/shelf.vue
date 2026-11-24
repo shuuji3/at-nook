@@ -5,24 +5,27 @@ import { PUBLIC_SHELF_DID } from '~/utils/endpoints'
 
 const FOLLOWING = 'following'
 
+/** Owner of the shelf: a handle or did, an explicit actor, else the visitor's own. */
+const props = defineProps<{ actor?: string }>()
+
 const { session } = useSession()
-const shelfDid = computed(() => session.value?.did ?? PUBLIC_SHELF_DID)
+const shelfActor = computed(() => props.actor || session.value?.did || PUBLIC_SHELF_DID)
 const selected = ref(FOLLOWING)
 const follows = useInfiniteQuery({
-  ...followsQuery(() => shelfDid.value),
-  enabled: () => Boolean(shelfDid.value),
+  ...followsQuery(() => shelfActor.value),
+  enabled: () => Boolean(shelfActor.value),
 })
 
 const lists = useInfiniteQuery({
-  ...listsQuery(() => shelfDid.value),
-  enabled: () => Boolean(shelfDid.value),
+  ...listsQuery(() => shelfActor.value),
+  enabled: () => Boolean(shelfActor.value),
 })
 
 const listUri = computed(() => (selected.value === FOLLOWING ? '' : selected.value))
 
 const list = useInfiniteQuery({
   ...listQuery(listUri),
-  enabled: () => Boolean(shelfDid.value) && selected.value !== FOLLOWING,
+  enabled: () => Boolean(shelfActor.value) && selected.value !== FOLLOWING,
 })
 
 const followsPeople = computed(
