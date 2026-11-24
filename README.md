@@ -24,6 +24,7 @@ this is currently an **alpha** version. this means:
 
 ## future ideas
 
+- [ ] allow public view without login? but whose shelf should be used?
 - [ ] find a good way to present reply threads: single-user notebook vs. multi-user exchanges?
 - [ ] fix seemingly unstable session management?
 - [ ] writing feature
