@@ -11,6 +11,10 @@ const umamiHost = runtimeConfig.public.umamiHost
         at-nook is still in alpha, so this privacy policy is subject to change at any time.
       </p>
       <p class="note-text">
+        currently, at-nook is a client-only web application consisting of static files delivered
+        from Cloudflare Workers, and auth information is not stored on the server.
+      </p>
+      <p class="note-text">
         at-nook uses self-hosted Umami analytics, running on a small server in my home, to measure
         access counts and understand the app's usage. no data is shared with any other parties. if
         you want to block this first party tracking, you could do it by blocking `{{
