@@ -13,6 +13,7 @@ the main guiding principles of at-nook include:
 
 - built with [Nuxt](https://npmx.dev/package/nuxt) and [atcute](https://npmx.dev/package/@atcute/client)
 - cover photo credit: ["nook" by kharlamovaa / cc-by-2.0](https://www.flickr.com/photos/kharlamovaa/5580663027/)
+- fonts: ["Shadows Into Light Two"](https://fonts.google.com/specimen/Shadows+Into+Light+Two) by [Kimberly Geswein](https://kimberlygeswein.com) (SIL Open Font License 1.1), and ["Zen Kurenaido"](https://fonts.google.com/specimen/Zen+Kurenaido) by Yoshimichi Ohira (SIL Open Font License 1.1)
 
 ## alpha version
 
