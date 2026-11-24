@@ -51,7 +51,7 @@ describe('profile shelf', () => {
     await renderWithProviders(ProfileShelf, { route: '/profile/atproto.com/shelf' })
 
     expect(await screen.findByText('Alice')).toBeTruthy()
-    expect(screen.getByText('shelf of @atproto.com')).toBeTruthy()
+    expect(screen.getByText('@atproto.com')).toBeTruthy()
     const [actor] = mocks.followsQuery.mock.calls[0] as [() => string]
     expect(actor()).toBe('atproto.com')
   })
