@@ -1,15 +1,23 @@
 <script setup lang="ts">
-import { useInfiniteQuery } from '@tanstack/vue-query'
+import { useInfiniteQuery, useQuery } from '@tanstack/vue-query'
 import type { Group } from '~/components/group-sidebar.vue'
 import { PUBLIC_SHELF_DID } from '~/utils/endpoints'
 
 const FOLLOWING = 'following'
 
-/** Owner of the shelf: a handle or did, an explicit actor, else the visitor's own. */
 const props = defineProps<{ actor?: string }>()
 
 const { session } = useSession()
 const shelfActor = computed(() => props.actor || session.value?.did || PUBLIC_SHELF_DID)
+
+const owner = useQuery({
+  ...profileQuery(() => shelfActor.value),
+  enabled: () => Boolean(shelfActor.value),
+})
+const ownerName = computed(
+  () => owner.data.value?.displayName ?? owner.data.value?.handle ?? shelfActor.value,
+)
+
 const selected = ref(FOLLOWING)
 const follows = useInfiniteQuery({
   ...followsQuery(() => shelfActor.value),
@@ -87,6 +95,19 @@ function setSelected(id: string) {
 <template>
   <section class="shelf">
     <div class="notebook-root">
+      <div class="shelf-owner">
+        <Avatar :src="owner.data.value?.avatar" :alt="ownerName" :size="88" />
+        <span class="owner-words">
+          <span class="owner-name">{{ ownerName }}</span>
+          <span v-if="owner.data.value" class="owner-shelf"
+            >shelf by
+            <NuxtLink class="owner-handle" :to="profileHref(owner.data.value.handle)"
+              >@{{ owner.data.value.handle }}</NuxtLink
+            ></span
+          >
+        </span>
+      </div>
+
       <GroupSidebar :groups="groups" :selected="selected" @select="setSelected" />
 
       <div class="shelf-page">
@@ -135,6 +156,42 @@ function setSelected(id: string) {
   background: var(--paper);
   border-radius: 6px;
   box-shadow: 0 20px 44px rgba(43, 58, 85, 0.28);
+}
+
+/* whose shelf this is, a front-page line above both columns */
+.shelf-owner {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  align-items: center;
+  padding-bottom: 1rem;
+}
+
+.owner-words {
+  display: grid;
+  min-width: 0;
+}
+
+.owner-name {
+  font-family: var(--font-hand);
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: var(--line-height);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.owner-shelf {
+  font-family: var(--font-hand);
+  font-size: 22px;
+  line-height: var(--line-height);
+  color: var(--ink-soft);
+  overflow-wrap: anywhere;
+}
+
+.owner-handle {
+  color: var(--ink-soft);
 }
 
 .shelf-page {

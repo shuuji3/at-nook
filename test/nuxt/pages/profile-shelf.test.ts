@@ -3,6 +3,7 @@ import { mockNuxtImport } from '@nuxt/test-utils/runtime'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const mocks = vi.hoisted(() => ({
+  profileQuery: vi.fn(),
   followsQuery: vi.fn(),
   listsQuery: vi.fn(),
   listQuery: vi.fn(),
@@ -14,6 +15,7 @@ mockNuxtImport('useSession', () => () => ({
   end: vi.fn(),
   refresh: vi.fn(),
 }))
+mockNuxtImport('profileQuery', () => mocks.profileQuery)
 mockNuxtImport('followsQuery', () => mocks.followsQuery)
 mockNuxtImport('listsQuery', () => mocks.listsQuery)
 mockNuxtImport('listQuery', () => mocks.listQuery)
@@ -32,6 +34,9 @@ function page(key: string, value: unknown) {
 
 beforeEach(() => {
   vi.clearAllMocks()
+  mocks.profileQuery.mockReturnValue(
+    page('profile', { did: 'did:plc:a', handle: 'atproto.com', displayName: 'AT Protocol' }),
+  )
   mocks.followsQuery.mockReturnValue(
     page('follows', {
       follows: [{ did: 'did:plc:a', handle: 'alice.test', displayName: 'Alice' }],
@@ -46,6 +51,7 @@ describe('profile shelf', () => {
     await renderWithProviders(ProfileShelf, { route: '/profile/atproto.com/shelf' })
 
     expect(await screen.findByText('Alice')).toBeTruthy()
+    expect(screen.getByText('shelf of @atproto.com')).toBeTruthy()
     const [actor] = mocks.followsQuery.mock.calls[0] as [() => string]
     expect(actor()).toBe('atproto.com')
   })

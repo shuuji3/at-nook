@@ -4,6 +4,7 @@ import { mockNuxtImport } from '@nuxt/test-utils/runtime'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const mocks = vi.hoisted(() => ({
+  profileQuery: vi.fn(),
   followsQuery: vi.fn(),
   listsQuery: vi.fn(),
   listQuery: vi.fn(),
@@ -23,6 +24,7 @@ mockNuxtImport('useSession', () => () => ({
   end: vi.fn(),
   refresh: vi.fn(),
 }))
+mockNuxtImport('profileQuery', () => mocks.profileQuery)
 mockNuxtImport('followsQuery', () => mocks.followsQuery)
 mockNuxtImport('listsQuery', () => mocks.listsQuery)
 mockNuxtImport('listQuery', () => mocks.listQuery)
@@ -42,6 +44,9 @@ function page(key: string, value: unknown) {
 beforeEach(() => {
   vi.clearAllMocks()
   sessionState.current = { did: 'did:plc:me', handle: 'me.test' }
+  mocks.profileQuery.mockReturnValue(
+    page('profile', { did: 'did:plc:me', handle: 'me.test', displayName: 'Me' }),
+  )
   mocks.followsQuery.mockReturnValue(
     page('follows', {
       follows: [{ did: 'did:plc:a', handle: 'alice.test', displayName: 'Alice' }],
