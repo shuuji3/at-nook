@@ -96,10 +96,7 @@ describe('entry', () => {
       },
     })
 
-    expect(screen.getByRole('link', { name: '@p.test' })).toHaveAttribute(
-      'href',
-      'https://bsky.app/profile/p.test/post/9',
-    )
+    expect(screen.getByRole('link', { name: '@p.test' })).toHaveAttribute('href', '/profile/p.test')
     expect(screen.queryByText('parent text')).toBeNull()
     expect(screen.getByText('my reply')).toBeTruthy()
   })
