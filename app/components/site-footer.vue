@@ -5,6 +5,7 @@ const build = version && commitHash ? `${version} (${commitHash})` : version || 
 <template>
   <footer class="site-footer">
     <NuxtLink class="site-footer-link" to="/">home</NuxtLink>
+    <NuxtLink class="site-footer-link" to="/about">about</NuxtLink>
     <NuxtLink class="site-footer-link" to="/privacy">privacy</NuxtLink>
     <NuxtLink class="site-footer-link" to="/terms">terms</NuxtLink>
     <NuxtLink class="site-footer-link" to="/credits">credits</NuxtLink>
