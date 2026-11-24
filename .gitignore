@@ -18,6 +18,9 @@ logs
 .fleet
 .idea
 
+# local playwright-cli artifacts
+.playwright-cli
+
 # cloudflare
 .wrangler
 
