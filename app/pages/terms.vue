@@ -1,6 +1,6 @@
 <template>
   <NotebookShell>
-    <h1 class="list-title">terms</h1>
+    <h1 class="list-title">terms of use</h1>
     <div class="entries">
       <p class="note-text">TBW.</p>
       <p class="note-text">at-nook is an alpha version, provided as is.</p>
