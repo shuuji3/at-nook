@@ -118,7 +118,10 @@ function onInput(event: Event) {
       <span class="cover-spine" aria-hidden="true" />
 
       <div class="cover-face">
-        <h1 class="cover-title">📔at-nook<sup class="cover-sup">α</sup></h1>
+        <h1 class="cover-title">
+          <img class="cover-title-icon" src="/favicon.svg" alt="" aria-hidden="true" />
+          <span>at-nook<sup class="cover-sup">α</sup></span>
+        </h1>
 
         <div class="cover-name-line">
           <label class="cover-label" for="handle">handle</label>
@@ -245,6 +248,10 @@ function onInput(event: Event) {
 }
 
 .cover-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15em;
   height: 96px;
   margin: 0;
   text-align: center;
@@ -253,6 +260,11 @@ function onInput(event: Event) {
   font-weight: 400;
   letter-spacing: 0.04em;
   text-shadow: 0 2px 0 rgba(0, 0, 0, 0.25);
+}
+
+.cover-title-icon {
+  width: auto;
+  height: 0.95em;
 }
 
 .cover-sup {
