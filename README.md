@@ -2,18 +2,13 @@
 
 **at-nook** /ət ˈnʊk/ is an atproto posts reader web app designed to provide a calm, comfortable experience without distractions. it aims to make users feel as if they are reading (or writing) at their own cozy nook at home.
 
-the main guiding principles of at-nook include:
+built with [Nuxt](https://npmx.dev/package/nuxt) and [atcute](https://npmx.dev/package/@atcute/client). also check [credits page](https://at-nook.shuuji3.xyz/credits).
+
+## guiding principles
 
 - **pseudo-physical experience**: using physical cues such as paper, photos, books, stationery, and handwritten fonts
 - **single author-centered continuous view**: presenting an author's posts like a handwritten notebook, rather than a typical timeline or feed mixing multiple authors into a single column
 - **time to reflect**: helping users pause to reflect on their thoughts while reading or writing
-- others?
-
-## credits
-
-- built with [Nuxt](https://npmx.dev/package/nuxt) and [atcute](https://npmx.dev/package/@atcute/client)
-- cover photo credit: ["nook" by kharlamovaa / cc-by-2.0](https://www.flickr.com/photos/kharlamovaa/5580663027/)
-- fonts: ["Shadows Into Light Two"](https://fonts.google.com/specimen/Shadows+Into+Light+Two) by [Kimberly Geswein](https://kimberlygeswein.com) (SIL Open Font License 1.1), and ["Zen Kurenaido"](https://fonts.google.com/specimen/Zen+Kurenaido) by Yoshimichi Ohira (SIL Open Font License 1.1)
 
 ## alpha version
 
@@ -41,6 +36,8 @@ this is currently an **alpha** version. this means:
 
 ## development
 
+### run dev server
+
 ```shell
 pnpm install
 pnpm dev
@@ -48,7 +45,7 @@ pnpm dev
 
 you may need to configure oauth flow to use `localhost` callback and ensure `public/oauth-client-metadata.json` is publicly accessible from your pds.
 
-build the application for production and preview it locally:
+### run prod build preview
 
 ```shell
 pnpm build
