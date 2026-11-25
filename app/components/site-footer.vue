@@ -9,27 +9,29 @@ const build = version
     <NuxtLink class="site-footer-link" to="/privacy">privacy</NuxtLink>
     <NuxtLink class="site-footer-link" to="/terms">terms</NuxtLink>
     <NuxtLink class="site-footer-link" to="/credits">credits</NuxtLink>
-    <a
-      class="site-footer-link"
-      href="https://github.com/shuuji3/at-nook"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="source on github"
-      title="source on github"
-    >
-      <Icon class="site-footer-icon" name="simple-icons:github" />
-    </a>
-    <a
-      class="site-footer-link"
-      href="https://tangled.org/shuuji3.xyz/at-nook"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="source on tangled"
-      title="source on tangled"
-    >
-      <Icon class="site-footer-icon" name="simple-icons:tangled" />
-    </a>
-    <span v-if="build" class="site-footer-version">{{ build }}</span>
+    <span class="site-footer-icons">
+      <a
+        class="site-footer-link"
+        href="https://github.com/shuuji3/at-nook"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="source on github"
+        title="source on github"
+      >
+        <Icon class="site-footer-icon" name="simple-icons:github" />
+      </a>
+      <a
+        class="site-footer-link"
+        href="https://tangled.org/shuuji3.xyz/at-nook"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="source on tangled"
+        title="source on tangled"
+      >
+        <Icon class="site-footer-icon" name="simple-icons:tangled" />
+      </a>
+      <span v-if="build" class="site-footer-version">{{ build }}</span>
+    </span>
   </footer>
 </template>
 
@@ -56,5 +58,18 @@ const build = version
   width: 1em;
   height: 1em;
   vertical-align: middle;
+}
+
+.site-footer-icons {
+  display: flex;
+  align-items: center;
+  gap: 0 1em;
+}
+
+@media (max-width: 640px) {
+  .site-footer-icons {
+    flex-basis: 100%;
+    justify-content: center;
+  }
 }
 </style>
