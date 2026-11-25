@@ -14,16 +14,20 @@ const build = version
       href="https://github.com/shuuji3/at-nook"
       target="_blank"
       rel="noopener noreferrer"
+      aria-label="source on github"
+      title="source on github"
     >
-      github
+      <Icon class="site-footer-icon" name="simple-icons:github" />
     </a>
     <a
       class="site-footer-link"
       href="https://tangled.org/shuuji3.xyz/at-nook"
       target="_blank"
       rel="noopener noreferrer"
+      aria-label="source on tangled"
+      title="source on tangled"
     >
-      tangled
+      <Icon class="site-footer-icon" name="simple-icons:tangled" />
     </a>
     <span v-if="build" class="site-footer-version">{{ build }}</span>
   </footer>
@@ -45,5 +49,12 @@ const build = version
 
 .site-footer-link {
   color: inherit;
+}
+
+.site-footer-icon {
+  display: inline-flex;
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
 }
 </style>

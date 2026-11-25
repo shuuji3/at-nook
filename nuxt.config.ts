@@ -80,7 +80,14 @@ export default defineNuxtConfig({
       }
     },
   },
-  modules: ['@nuxt/eslint', '@vueuse/nuxt'],
+  modules: ['@nuxt/eslint', '@vueuse/nuxt', '@nuxt/icon'],
+  icon: {
+    provider: 'none',
+    mode: 'svg',
+    clientBundle: {
+      scan: true,
+    },
+  },
   typescript: {
     tsConfig: {
       include: ['@/test/setup.ts', '@/test/utils/**/*'],

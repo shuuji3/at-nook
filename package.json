@@ -29,7 +29,9 @@
     "vue-router": "^5.4.0"
   },
   "devDependencies": {
+    "@iconify-json/simple-icons": "^1.2.104",
     "@nuxt/eslint": "^1.17.0",
+    "@nuxt/icon": "^2.6.3",
     "@nuxt/test-utils": "^4.4.0",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",
