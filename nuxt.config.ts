@@ -17,9 +17,9 @@ const git = (args: string) => {
     return ''
   }
 }
-// full describe output (e.g. v0.1.0 or v0.1.0-3-gb209818), empty when git or
-// tags are unavailable; the footer omits missing parts instead of showing junk.
+// full describe output (example: `v0.1.0` or `v0.1.0-3-gb209818`), empty when git
 const version = git('describe --tags')
+const commit = git('rev-parse --short HEAD')
 
 // shown in link previews alongside the static og image in public/og.png
 const description = 'a calm, comfortable atproto posts reader without distractions'
@@ -132,6 +132,7 @@ export default defineNuxtConfig({
     public: {
       umamiHost,
       version,
+      commit,
     },
   },
   vite: {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { version } = useRuntimeConfig().public
+const { version, commit } = useRuntimeConfig().public
 const build = version
 </script>
 <template>
@@ -30,7 +30,18 @@ const build = version
       >
         <Icon class="site-footer-icon" name="simple-icons:tangled" />
       </a>
-      <span v-if="build" class="site-footer-version">{{ build }}</span>
+      <span v-if="build" class="site-footer-version">
+        <a
+          v-if="commit"
+          class="site-footer-link"
+          :href="`https://github.com/shuuji3/at-nook/commit/${commit}`"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="view this commit"
+          title="view this commit"
+        >{{ build }}</a>
+        <template v-else>{{ build }}</template>
+      </span>
     </span>
   </footer>
 </template>
