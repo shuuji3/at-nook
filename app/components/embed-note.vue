@@ -127,6 +127,7 @@ const sameDay = computed(() => {
 <style scoped>
 .note {
   display: block;
+  min-width: 0;
   margin: calc(var(--line-height) - 1.25rem) 0 calc(var(--line-height) - 0.75rem) 0;
   padding: 1.25rem 1rem 0.75rem;
   border-left: 3px solid var(--note-accent);
