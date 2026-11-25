@@ -1,6 +1,6 @@
 // not reviewed
 import { createTestQueryClient } from '../setup'
-import { VueQueryPlugin } from '@tanstack/vue-query'
+import { VUE_QUERY_CLIENT } from '@tanstack/vue-query'
 import { renderSuspended } from '@nuxt/test-utils/runtime'
 import type { Component } from 'vue'
 
@@ -18,7 +18,7 @@ export function renderWithProviders(
     route,
     props,
     global: {
-      plugins: [[VueQueryPlugin, { queryClient: createTestQueryClient() }]],
+      provide: { [VUE_QUERY_CLIENT]: createTestQueryClient() },
     },
   })
 }
